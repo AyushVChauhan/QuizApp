@@ -5,15 +5,19 @@ const app = express();
 const models = require('./models');
 const bodyParser = require("body-parser");
 
+const adminRoutes = require("./routes/admin");
+app.use("/admin",adminRoutes);
+
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect("mongodb://0.0.0.0:27017/QuizApp");
 
-app.get("/",(req,res)=>{
-    res.render("./admin/admin_dashboard.ejs");
-})
+
+// app.get("/",(req,res)=>{
+//     res.render("./admin/admin_dashboard.ejs");
+// })
 
 app.listen(process.env.PORT,()=>{
     console.log("Listening at port 3000");
