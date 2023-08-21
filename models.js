@@ -106,5 +106,9 @@ const courseOutcomesModel = mongoose.model("course_outcomes", cousrseOutcomesSch
 const questionsModel = mongoose.model("questions", questionsSchema);
 const quizModel = mongoose.model("quiz", quizSchema);
 const sessionsModel = mongoose.model("sessions", sessionSchema);
+const studentModel=mongoose.model("students",studentSchema);
+const teacherModel=mongoose.model("teachers",teacherSchema);
+const departmentModel=mongoose.model("departments",departmentSchema);
+const groupModel=mongoose.model("groups",groupSchema);
 
 module.exports = { subjectsModel: subjectsModel, courseOutcomesModel: courseOutcomesModel, questionsModel: questionsModel, quizModel: quizModel, sessionsModel: sessionsModel };
