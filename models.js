@@ -41,6 +41,7 @@ const subjectsSchema = new mongoose.Schema({
     name: String,
     course_outcomes: Number,
     semester: Number,
+    departments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "departments" }],
     is_active: Number,
 });
 
@@ -65,7 +66,6 @@ const questionsSchema = new mongoose.Schema({
 
 const quizSchema = new mongoose.Schema({
     name: String,
-    created_on: Date,
     created_by: { type: mongoose.SchemaTypes.ObjectId, ref: "teachers" },
     valid_from: Date,
     valid_to: Date,
@@ -77,9 +77,8 @@ const quizSchema = new mongoose.Schema({
     compulsary_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
     random_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
     group_id: { type: mongoose.SchemaTypes.ObjectId, ref: "groups" },
-    students: [{ type: mongoose.SchemaTypes.ObjectId, ref: "students" }],
     is_active: Number,
-});
+}, { timestamps: true });
 
 
 const sessionSchema = new mongoose.Schema({
@@ -106,9 +105,9 @@ const courseOutcomesModel = mongoose.model("course_outcomes", cousrseOutcomesSch
 const questionsModel = mongoose.model("questions", questionsSchema);
 const quizModel = mongoose.model("quiz", quizSchema);
 const sessionsModel = mongoose.model("sessions", sessionSchema);
-const studentModel=mongoose.model("students",studentSchema);
-const teacherModel=mongoose.model("teachers",teacherSchema);
-const departmentModel=mongoose.model("departments",departmentSchema);
-const groupModel=mongoose.model("groups",groupSchema);
+const studentModel = mongoose.model("students", studentSchema);
+const teacherModel = mongoose.model("teachers", teacherSchema);
+const departmentModel = mongoose.model("departments", departmentSchema);
+const groupModel = mongoose.model("groups", groupSchema);
 
 module.exports = { subjectsModel: subjectsModel, courseOutcomesModel: courseOutcomesModel, questionsModel: questionsModel, quizModel: quizModel, sessionsModel: sessionsModel };
