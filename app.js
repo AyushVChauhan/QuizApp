@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const models = require('./models');
-mongoose.connect("mongodb://0.0.0.0:27017/QuizTry");
+mongoose.connect("mongodb://0.0.0.0:27017/QuizApp");
 run1();
 async function run1(){
     // const subject = new models.subjectsModel({code:"3140701",course_outcomes:2,name:"OOP",semester:4});
