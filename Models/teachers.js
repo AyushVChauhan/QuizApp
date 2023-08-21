@@ -12,6 +12,7 @@ const teacherSchema = new mongoose.Schema({
   role: Number,
   subjects: [{ type: mongoose.SchemaTypes.ObjectId, ref: "subjects" }],
   is_active: Number,
+  role: Number,
 });
 
 const teachersModel = mongoose.model("teachers", teacherSchema);
