@@ -23,11 +23,11 @@ app.get("/",(req,res)=>{
         {
             res.redirect("/student");
         }
-        else if(data.role === 2)
+        else if(data.role === 1)
         {
             res.redirect("/teacher");
         }
-        else if(data.role === 1)
+        else if(data.role === 2)
         {
             res.redirect("/admin");
         }
@@ -51,6 +51,9 @@ app.listen(process.env.PORT,()=>{
 
 // run1();
 // async function run1(){
+//     const teacher = new models({
+//         email:"avcthehero@gmail.com",department_id:null,subjects:null,first_name:"admin",is_active:1,last_name:"admin",middle_name:"admin",password:"1bbd886460827015e5d605ed44252251",phone:"8200125511",role:0,username:"admin"
+//     });
     // const teacher = new models({
     //     email:"avcthehero@gmail.com",department_id:null,subjects:null,first_name:"admin",is_active:1,last_name:"admin",middle_name:"admin",password:"1bbd886460827015e5d605ed44252251",phone:"8200125511",role:1,username:"admin"
     // });

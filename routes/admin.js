@@ -12,7 +12,7 @@ function middleware(req, res, next) {
   let cookie = req.cookies.auth;
   if (cookie) {
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
-    if (data.role === 1) {
+    if (data.role === 2) {
       console.log("Next");
       next();
     } else {

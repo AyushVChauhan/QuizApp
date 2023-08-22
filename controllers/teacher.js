@@ -12,10 +12,10 @@ async function login(req, res) {
         password: req.body.password,
         role: data.role + 1,
       },
-      process.env.JWT_SeCRET
+      process.env.JWT_SECRET
     );
     res.cookie("auth", token);
-    if (data.role === 1) {
+    if (data.role === 0) {
       console.log("login");
       res.redirect("/teacher");
     } else {
