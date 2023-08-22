@@ -6,30 +6,68 @@
     </div>
 
     <div class="sidebar">
-        <a href="#" id="newTeacher">ADD TEACHER</a>
-        <div id="addTeacher" class="modal">
-            <div class="modal-content">
-                <p>HI</p>
+        <div class="department ">
+            <!-- Button trigger modal -->
+            <a  data-bs-toggle="modal" data-bs-target="#deptModal">
+                ADD DEPARTMENT
+            </a>
+
+            <!-- Modal -->
+            <div class="modal fade " id="deptModal" tabindex="-1" aria-labelledby="deptModalLabel"
+                aria-hidden="true" >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deptModalLabel">ADD DEPARTMENT</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/admin/abc" method="POST">
+                        <div class="modal-body">
+                            <input type="text" placeholder="Add Department" id="name" name="name">
+                        </div>
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
             </div>
 
-        </div>
-        <a href="#" id="newDept">ADD DEPARTMENT</a>
-        <div id="addDept" class="modal">
-            <div class="modal-content">
-                <p>HI</p>
+           
+
+        <!-- <div class="teacher">
+            <a href="#" id="newTeacher">ADD TEACHER</a>
+            <div id="addTeacher" class="modal">
+                <div class="modal-content">
+                    <h1>abc</h1>
+                </div>
+
             </div>
-
-        </div>
-
-
-        <a href="#" id="newSub">ADD SUBJECT</a>
-        <div id="addSub" class="modal">
-            <div class="modal-content">
-                <p>HI</p>
+        </div> -->
+        <div clas="subject">
+            <a  data-bs-toggle="modal" data-bs-target="#subModal">
+                ADD SUBJECT
+            </a>
+            <div class="modal fade " id="subModal" tabindex="-1" aria-labelledby="subModalLabel"
+                aria-hidden="true" >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="subModalLabel">ADD SUBJECT</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" placeholder="Add Department">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-
     </div>
     </div>
     <div class="flex-container">
@@ -38,45 +76,9 @@
         <div class="item">TEACHERS</div>
         <div class="item">QUIZZES</div>
         <div class="item">STUDENTS</div>
-
     </div>
     </div>
 
-    <script>
-
-        var modal = document.getElementById("addDept");
-        var click = document.getElementById("newDept");
-        click.onclick = function () {
-            modal.style.display = "block";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-        var modal = document.getElementById("addTeacher");
-        var click = document.getElementById("newTeacher");
-        click.onclick = function () {
-            modal.style.display = "block";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-        var modal = document.getElementById("addSub");
-        var click = document.getElementById("newSub");
-        click.onclick = function () {
-            modal.style.display = "block";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+    
 
     <%- include('../partials/footer') -%>

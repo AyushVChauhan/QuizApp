@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const models = require('./models/teachers');
+const deptmodels = require('./models/departments');
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -34,7 +35,7 @@ app.get("/",(req,res)=>{
     }
     else
     {
-        res.redirect("/teacher/login");
+        res.redirect("/admin");
     }
 })
 const studentRoutes = require("./routes/student");

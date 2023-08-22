@@ -3,11 +3,13 @@ const router = express.Router();
 const adminControllers = require("../controllers/admin");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-router.use(middleware);
 
-router.get("/", (req, res) => {
+router.post('/abc', adminControllers.addDepartment)
+
+router.get('/', (req, res) => {
   res.render("./admin/admin_dashboard");
 });
+router.use(middleware);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
   if (cookie) {
