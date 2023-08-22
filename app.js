@@ -23,11 +23,11 @@ app.get("/",(req,res)=>{
         {
             res.redirect("/student");
         }
-        else if(data.role === 1)
+        else if(data.role === 2)
         {
             res.redirect("/teacher");
         }
-        else if(data.role === 2)
+        else if(data.role === 1)
         {
             res.redirect("/admin");
         }
