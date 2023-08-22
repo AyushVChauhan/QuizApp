@@ -1,6 +1,82 @@
 <%- include('../partials/header') -%>
-<link rel="stylesheet" href="/stylesheets/style.css">
-<h1>
-    Admin
-</h1>
-<%- include('../partials/footer') -%>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <div class="navbar">
+        <h1>QUIZ APP</h1>
+        <p><i class="fa fa-fw fa-user"></i>ADMIN</p>
+    </div>
+
+    <div class="sidebar">
+        <a href="#" id="newTeacher">ADD TEACHER</a>
+        <div id="addTeacher" class="modal">
+            <div class="modal-content">
+                <p>HI</p>
+            </div>
+
+        </div>
+        <a href="#" id="newDept">ADD DEPARTMENT</a>
+        <div id="addDept" class="modal">
+            <div class="modal-content">
+                <p>HI</p>
+            </div>
+
+        </div>
+
+
+        <a href="#" id="newSub">ADD SUBJECT</a>
+        <div id="addSub" class="modal">
+            <div class="modal-content">
+                <p>HI</p>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    <div class="flex-container">
+        <div class="item">DEPARTMENTS</div>
+        <div class="item">SUBJECTS</div>
+        <div class="item">TEACHERS</div>
+        <div class="item">QUIZZES</div>
+        <div class="item">STUDENTS</div>
+
+    </div>
+    </div>
+
+    <script>
+
+        var modal = document.getElementById("addDept");
+        var click = document.getElementById("newDept");
+        click.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var modal = document.getElementById("addTeacher");
+        var click = document.getElementById("newTeacher");
+        click.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        var modal = document.getElementById("addSub");
+        var click = document.getElementById("newSub");
+        click.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <%- include('../partials/footer') -%>
