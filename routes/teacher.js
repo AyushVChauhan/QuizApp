@@ -3,6 +3,13 @@ const router = express.Router();
 const teacherControllers = require("../controllers/teacher");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: "./public/images", filename: (req, file, cb) => {
+    cb(null, "schema.xlsx")
+  }
+})
+const upload = multer({ storage: storage });
 
 router.post("/login", teacherControllers.login);
 router.get("/login", teacherControllers.loginGet);
@@ -23,9 +30,9 @@ function middleware(req, res, next) {
       next();
     }
     else {
-        res.redirect("/teacher/login");
-      }
-  } 
+      res.redirect("/teacher/login");
+    }
+  }
   else {
     res.redirect("/teacher/login");
   }

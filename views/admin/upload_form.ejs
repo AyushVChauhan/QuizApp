@@ -1,0 +1,27 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<form method="post" enctype="multipart/form-data" id="form">
+	<input type="file" name="excel" id="username" />
+	<input type="submit" value="abc" id="submit" />
+</form>
+<script>
+	$(document).ready(() => {
+		$("#form").submit((e) => {
+			e.preventDefault();
+			let data = new FormData(document.getElementById("form"));
+			console.log(data);
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/admin/studentUpload",
+				data: data,
+                cache:false,
+                contentType:false,
+                processData:false,
+				success: function (response) {
+					console.log(response);
+				},
+			});
+		});
+	});
+</script>
+<%- include('../partials/footer') -%>
