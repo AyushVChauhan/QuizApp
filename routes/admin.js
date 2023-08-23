@@ -9,6 +9,7 @@ router.post('/abc', adminControllers.addDepartment)
 router.get('/', (req, res) => {
   res.render("./admin/admin_dashboard");
 });
+//move middleware above get() afterwards
 router.use(middleware);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
