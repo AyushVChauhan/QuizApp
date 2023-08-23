@@ -1,0 +1,12 @@
+<script>
+  //  console.log()
+  let errors = JSON.parse('<%- JSON.stringify(errors)%>');
+  if (errors) {
+    Swal.fire({
+      // title: 'info',
+      text: errors.text,
+      icon: errors.icon,
+      confirmButtonText: "Okay",
+    });
+  }
+</script>
