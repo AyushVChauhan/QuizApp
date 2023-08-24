@@ -25,7 +25,7 @@ async function enrollment_confirmation_page(req, res) {
 async function enrollment_check(req, res) {
   let student = await studentServices.registerStudent(req.body.Enrollment);
   if (student) {
-    myCache.set("enrollment", student.enrollment);
+    myCache.set("enrollment", student.enrollment, 300);
     res.redirect("/student/register");
   } else {
     res.redirect("/student/enrollmentcheck");
