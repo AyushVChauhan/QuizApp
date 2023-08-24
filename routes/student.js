@@ -6,7 +6,11 @@ const jwt = require("jsonwebtoken");
 
 router.post("/login", studentControllers.login);
 // router.get('/login', studentControllers.loginGet)
-router.use(middleware)
+router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
+router.post("/enrollmentcheck", studentControllers.enrollment_check);
+router.get("/register", studentControllers.register_page);
+router.post("/register", studentControllers.enrollment_check);
+// router.use(middleware)
 router.get("/", (req, res) => {
   res.render("./student/student_dashboard");
 });
@@ -27,3 +31,5 @@ function middleware(req, res, next) {
     res.redirect("/teacher/login");
   }
 }
+
+module.exports=router
