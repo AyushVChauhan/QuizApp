@@ -1,4 +1,4 @@
-<%- include('../partials/header') -%>
+<%- include('../partials/header') %> 
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 <style>
 	.uk-table-hover tbody tr:hover,
@@ -116,10 +116,11 @@
 			},
 			columnDefs: [
 				// Center align the header content of column 1
-				{ className: "dt-head-center", targets: [0,1] },
+				{ className: "dt-head-center", targets: [0, 1] },
 			],
 		});
 	});
 </script>
 <script src="/scripts/adminSidebar.js"></script>
+<%- include('../partials/sweetalert') %>
 <%- include('../partials/footer2') -%>

@@ -47,9 +47,13 @@ async function addSubject (req, res) {
     res.redirect("/admin");
 }
 async function departments(req, res) {
-    
+    let errors = null
+    if (myCache.has('errors')) {
+        errors = myCache.take('errors')//take will empty the myCache
+        // console.log(errors)
+    }
     let dept_data = await adminServices.fetchDepartments()
-    res.render("./admin/departments",{dept_data});
+    res.render("./admin/departments",{dept_data, errors});
 }
 
 module.exports = { addDepartment, adminDashboard, addSubject, departments };
