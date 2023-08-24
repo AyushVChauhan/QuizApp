@@ -8,5 +8,9 @@ async function loginFetch(username, password) {
 async function loginCheck(jwttoken) {
     console.log("hello");
 }
-
-module.exports = {loginFetch, loginCheck};
+async function registerStudent(enrollment){
+    var student =await students.findOne({enrollment:enrollment,password:null});
+    console.log(student)
+    return student;
+}
+module.exports = {loginFetch, loginCheck,registerStudent};
