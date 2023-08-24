@@ -36,14 +36,13 @@ async function uploadStudent(req, res) {
     var sheets = mySheet.SheetNames;
     var obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
     if (obj[0]["Enrollment No"] === undefined) {
-        res.json({ error: "no 'Enrollment No' field" });
+        res.json({ errors: "no 'Enrollment No' field", error: 1 });
     }
-    else{
-        let excelData = [];
-        obj.forEach(async(element) => {
+    else {
+        obj.forEach(async (element) => {
             await adminServices.addStudent(element["Enrollment No"]);
         });
+        res.json({ errors: `${obj.length} records added`, error: 0 });
     }
-    res.json({errors:"none"});
 }
 module.exports = { addDepartment, adminDashboard, uploadStudent, uploadStudentGet };

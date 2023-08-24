@@ -3,32 +3,49 @@ const myCache = require("./cache")
 
 
 async function addDepartment(req, res) {
-   
-   
-    if(req.body.name.trim() !== "")
-    {
+
+
+    if (req.body.name.trim() !== "") {
         let fetchData = await adminServices.departmentFetch(req.body.name);
-        if(fetchData == null ){
+        if (fetchData == null) {
             let data = await adminServices.newDepartment(req.body.name);
-            myCache.set("errors", {text:"Department Added Successfully",icon:"success"});
+            myCache.set("errors", { text: "Department Added Successfully", icon: "success" });
         }
-        else{
-            myCache.set("errors", {text:"Department Already Exist!!",icon:"warning"});
+        else {
+            myCache.set("errors", { text: "Department Already Exist!!", icon: "warning" });
         }
     }
-   
+
 
     res.redirect("/admin");
 }
-async function adminDashboard(req,res){
+async function adminDashboard(req, res) {
 
-    let errors=null
-    if(myCache.has('errors'))
-    {
-        errors=myCache.take('errors')//take will empty the myCache
+    let errors = null
+    if (myCache.has('errors')) {
+        errors = myCache.take('errors')//take will empty the myCache
         // console.log(errors)
     }
-    res.render("./admin/admin_dashboard",{errors});
 
+    let dept_data = await adminServices.fetchDepartments()
+
+    res.render("./admin/admin_dashboard", { errors, dept_data });
 }
-module.exports = {addDepartment,adminDashboard};
+
+async function addSubject (req, res) {
+    let errors = null;
+    //to validate
+    let sub = await adminServices.addSubject(req.body);
+    if(sub === 0)
+    {
+        myCache.set("errors", { text: "Subject Added Successfully", icon: "success" });
+    }
+    else
+    {
+        myCache.set("errors", { text: "Subject Already Exists!", icon: "warning" });
+    }
+    res.redirect("/admin");
+}
+
+
+module.exports = { addDepartment, adminDashboard, addSubject };

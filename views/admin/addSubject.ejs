@@ -1,0 +1,154 @@
+<div
+	class="modal fade"
+	id="subModal"
+	tabindex="-1"
+	aria-labelledby="subModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="subModalLabel">ADD SUBJECT</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+
+			<div class="modal-body">
+				<form action="/admin/addSubject" method="POST" id="sub-form">
+					<div class="mb-3">
+						<label for="subname" class="form-label"
+							>Subject Name :</label
+						>
+						<input
+							type="text"
+							class="form-control"
+							id="subname"
+							name="subname"
+							required
+						/>
+					</div>
+
+					<div class="mb-3">
+						<label for="subcode" class="form-label"
+							>Subject Code :</label
+						>
+						<input
+							type="text"
+							class="form-control"
+							id="subcode"
+							name="subcode"
+							required
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="co" class="form-label"
+							>Course Outcomes :</label
+						>
+						<input
+							type="number"
+							class="form-control"
+							id="co"
+							name="co"
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							title="How many course outcomes in subject"
+							required
+						/>
+					</div>
+
+					<div class="dropdown mb-3">
+						<button
+							class="btn btn-light dropdown-toggle w-100"
+							type="button"
+							id="multiSelectDropdown"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							name="department"
+						>
+							Select Departments
+						</button>
+						<ul
+							class="dropdown-menu w-100"
+							aria-labelledby="multiSelectDropdown"
+						>
+
+							<% for(let i=0; i< dept_data.length;i++){ %>
+							<li>
+								<label>
+									<input
+										type="checkbox"
+										value="<%= dept_data[i]._id %>" name="departments[]"
+									/>
+									<%= dept_data[i].name %>
+								</label>
+							</li>
+							<% } %>
+						</ul>
+					</div>
+					<div>
+						<label for="sem" class="form-label">Semester :</label>
+						<input
+							type="number"
+							class="form-control"
+							id="sem"
+							name="sem"
+							required
+						/>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					class="btn btn-secondary"
+					data-bs-dismiss="modal"
+				>
+					Close
+				</button>
+				<button
+					onclick="subformSubmit()"
+					class="btn btn-primary"
+					form="sub-form"
+				>
+					Save changes
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function subformSubmit() {
+		$("#sub-form").submit();
+	}
+	const chBoxes = document.querySelectorAll(
+		'.dropdown-menu input[type="checkbox"]'
+	);
+	const dpBtn = document.getElementById("multiSelectDropdown");
+	let mySelectedListItems = [];
+
+	function handleCB() {
+		mySelectedListItems = [];
+		let mySelectedListItemsText = "";
+
+		chBoxes.forEach((checkbox) => {
+			if (checkbox.checked) {
+				mySelectedListItems.push(checkbox.value);
+				mySelectedListItemsText =
+					mySelectedListItems.length + " Selected";
+			}
+		});
+
+		dpBtn.innerText =
+			mySelectedListItems.length > 0
+				? mySelectedListItemsText
+				: "Select Department";
+	}
+
+	chBoxes.forEach((checkbox) => {
+		checkbox.addEventListener("change", handleCB);
+	});
+</script>

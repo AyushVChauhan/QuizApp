@@ -2,8 +2,9 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const models = require('./models/teachers');
-const deptmodels = require('./models/departments');
+const teachers = require('./models/teachers');
+const departments = require('./models/departments');
+const subjects = require("./models/subjects");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -52,6 +53,8 @@ app.listen(process.env.PORT,()=>{
 
 // run1();
 // async function run1(){
+    // const subject = await subjects.find().populate('departments');
+    // console.log(subject[0].departments);
 //     const teacher = new models({
 //         email:"avcthehero@gmail.com",department_id:null,subjects:null,first_name:"admin",is_active:1,last_name:"admin",middle_name:"admin",password:"1bbd886460827015e5d605ed44252251",phone:"8200125511",role:0,username:"admin"
 //     });
@@ -67,6 +70,10 @@ app.listen(process.env.PORT,()=>{
     // const course_outcome = await models.courseOutcomesModel.where().populate("subjectId");
     // const question = new models.questionsModel({type:1,marks:1,question:"Good or bad",course_outcome_id:"64e07c5eb175c96be8c940af",difficulty:1,answer:"yes",options:[{option:"yes",file:null},{option:"no",file:null}],files:null});
     // await question.save();
+
+
+
+    //deep populate
     // let questions= await models.questionsModel.find().populate({path:"course_outcome_id",populate:{
     //     path:"subjectId",model:"subjects"
     // }});

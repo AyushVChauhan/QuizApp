@@ -1,89 +1,80 @@
-<%- include('../partials/header') -%>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <div class="navbar">
-        <h1>QUIZ APP</h1>
-        <p><i class="fa fa-fw fa-user"></i>ADMIN</p>
-    </div>
+<%- include('../partials/header') -%> <%- include('../partials/sweetalert') -%>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
 
-    <div class="sidebar">
-        <div class="department ">
-            <!-- Button trigger modal -->
-            <a  data-bs-toggle="modal" data-bs-target="#deptModal">
-                ADD DEPARTMENT
-            </a>
+<div class="grid-container">
+	<!-- Header -->
+	<%- include("./adminHeader") %>
+	<!-- End Header -->
 
-            <!-- Modal -->
-            <div class="modal fade " id="deptModal" tabindex="-1" aria-labelledby="deptModalLabel"
-                aria-hidden="true" >
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deptModalLabel">ADD DEPARTMENT</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="/admin/abc" method="POST">
-                        <div class="modal-body">
-                            <input type="text" placeholder="Add Department" id="name" name="name">
-                        </div>
-                        <div class="modal-footer">
-                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" onclick="fun();">Save changes</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
+	<!-- Sidebar -->
+	<%- include("./adminSidebar") %>
+	<!-- End Sidebar -->
 
-           
+	<!-- Main -->
+	<main class="main-container">
+		<div class="main-title">
+			<h2 class="margin-top">DASHBOARD</h2>
+		</div>
+		<div class="box-container">
+			<div class="row margin">
+				<div class="col-md-3 m-1 box">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<h4>Departments</h4>
+					<p>11</p>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-3 m-1 box">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<h4>Teachers</h4>
+					<p>11</p>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-3 m-1 box">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<h4>Subjects</h4>
+					<p>11</p>
+				</div>
+			</div>
 
-        <!-- <div class="teacher">
-            <a href="#" id="newTeacher">ADD TEACHER</a>
-            <div id="addTeacher" class="modal">
-                <div class="modal-content">
-                    <h1>abc</h1>
-                </div>
+			<div class="row margin">
+				<div class="col-md-2"></div>
+				<div class="col-md-3 m-1">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<h4>Students</h4>
+					<p>11</p>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-3 m-1 box">
+					<!-- <i class="fa-regular fa-building fa-xl"></i> -->
+					<h4>Quizzes</h4>
+					<p>11</p>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</div>
+	</main>
+	<!-- End Main -->
+</div>
 
-            </div>
-        </div> -->
-        <div clas="subject">
-            <a  data-bs-toggle="modal" data-bs-target="#subModal">
-                ADD SUBJECT
-            </a>
-            <div class="modal fade " id="subModal" tabindex="-1" aria-labelledby="subModalLabel"
-                aria-hidden="true" >
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="subModalLabel">ADD SUBJECT</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" placeholder="Add Department">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="flex-container">
-        <div class="item">DEPARTMENTS</div>
-        <div class="item">SUBJECTS</div>
-        <div class="item">TEACHERS</div>
-        <div class="item">QUIZZES</div>
-        <div class="item">STUDENTS</div>
-    </div>
-    </div>
+<script>
+	function openSidebar() {
+		let sidebar = document.getElementsByClassName("sidebar")[0];
+		$("#sidebar").toggleClass("sidebar-open");
+	}
+	const allSideMenu = document.querySelectorAll(
+		"#sidebar .side-menu.top li a"
+	);
 
-    <script>
-        function fun() {
-               alert ("Department has been added.");
-        }
-    </script>
+	allSideMenu.forEach((item) => {
+		const li = item.parentElement;
 
+		item.addEventListener("click", function () {
+			allSideMenu.forEach((i) => {
+				i.parentElement.classList.remove("active");
+			});
+			li.classList.add("active");
+		});
+	});
+</script>
 
-    <%- include('../partials/footer') -%>
+<%- include('../partials/footer') -%>

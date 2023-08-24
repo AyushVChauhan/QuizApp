@@ -14,11 +14,25 @@
 				type: "POST",
 				url: "http://localhost:3000/admin/studentUpload",
 				data: data,
-                cache:false,
-                contentType:false,
-                processData:false,
+				cache: false,
+				contentType: false,
+				processData: false,
 				success: function (response) {
-					console.log(response);
+					if (response.error === 1) {
+						Swal.fire({
+							// title: 'info',
+							text: response.errors,
+							icon: "error",
+							confirmButtonText: "Okay",
+						});
+					} else {
+						Swal.fire({
+							// title: 'info',
+							text: response.errors,
+							icon: "success",
+							confirmButtonText: "Okay",
+						});
+					}
 				},
 			});
 		});
