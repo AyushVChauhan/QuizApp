@@ -1,0 +1,229 @@
+<%- include('../partials/header') -%> 
+<%- include('../partials/sweetalert') -%>
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<div class="navbar">
+  <h1>QUIZ APP</h1>
+  <p><i class="fa fa-fw fa-user"></i>ADMIN</p>
+</div>
+
+<div class="sidebar">
+  <div class="department">
+    <!-- Button trigger modal -->
+    <a data-bs-toggle="modal" data-bs-target="#deptModal"> ADD DEPARTMENT </a>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="deptModal"
+      tabindex="-1"
+      aria-labelledby="deptModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deptModalLabel">ADD DEPARTMENT</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form action="/admin/abc" method="POST">
+            <div class="modal-body">
+              <input
+                type="text"
+                placeholder="Add Department"
+                id="name"
+                name="name"
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary" >
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="teacher">
+            <a href="#" id="newTeacher">ADD TEACHER</a>
+            <div id="addTeacher" class="modal">
+                <div class="modal-content">
+                    <h1>abc</h1>
+                </div>
+
+            </div>
+        </div> -->
+    <div class="subject">
+      <a data-bs-toggle="modal" data-bs-target="#subModal"> ADD SUBJECT </a>
+    </div>
+  </div>
+</div>
+<div class="flex-container">
+  <div class="item">DEPARTMENTS</div>
+  <div class="item">SUBJECTS</div>
+  <div class="item">TEACHERS</div>
+  <div class="item">QUIZZES</div>
+  <div class="item">STUDENTS</div>
+</div>
+<div
+  class="modal fade"
+  id="subModal"
+  tabindex="-1"
+  aria-labelledby="subModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subModalLabel">ADD SUBJECT</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      
+        <div class="modal-body">
+            <form action="/admin/addSub" method="POST" id="sub-form"></form>
+          <div class="mb-3">
+            <label for="subname" class="form-label">Subject Name :</label>
+            <input
+              type="text"
+              class="form-control"
+              id="subname"
+              name="subname"
+              required
+            />
+          </div>
+         
+          <div class="mb-3">
+            <label for="subcode" class="form-label">Subject Code :</label>
+            <input
+              type="text"
+              class="form-control"
+              id="subcode"
+              name="subcode"
+              required
+            />
+          </div>
+          <div>
+            <label for="co" class="form-label">Course Outcomes :</label>
+            <input
+              type="number"
+              class="form-control"
+              id="co"
+              name="co"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="How many course outcomes in subject"
+              required
+            />
+          </div>
+
+          <div class="dropdown">
+            <button
+              class="btn btn-success dropdown-toggle"
+              type="button"
+              id="multiSelectDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              name="department"
+            >
+              Select
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="multiSelectDropdown">
+              <li>
+                <label>
+                  <input type="checkbox" value="Java" />
+                  Java
+                </label>
+              </li>
+              <li>
+                <% for(let i=0; i< dept_data.length;i++){ %>
+                    <li>
+                      <label>
+                        <input type="checkbox" value="<%= dept_data[i]._id %>" />
+                        <%= dept_data[i].name %>
+                      </label>
+                    </li>
+                    <% } %>
+              </li>
+              
+            </ul>
+          </div>
+          <div>
+            <label for="sem" class="form-label">Semester :</label>
+            <input
+              type="number"
+              class="form-control"
+              id="sem"
+              name="sem"
+              required
+            />
+          </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary" form="sub-form">Save changes</button>
+        </div>
+      
+    </div>
+  </div>
+</div>
+<script>
+    console.log('<%- JSON.stringify(dept_data) %>')
+  const chBoxes = document.querySelectorAll(
+    '.dropdown-menu input[type="checkbox"]'
+  );
+  const dpBtn = document.getElementById("multiSelectDropdown");
+  let mySelectedListItems = [];
+
+  function handleCB() {
+    mySelectedListItems = [];
+    let mySelectedListItemsText = "";
+
+    chBoxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        mySelectedListItems.push(checkbox.value);
+        mySelectedListItemsText += checkbox.value + ", ";
+      }
+    });
+
+    dpBtn.innerText =
+      mySelectedListItems.length > 0
+        ? mySelectedListItemsText.slice(0, -2)
+        : "Select";
+  }
+
+  chBoxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", handleCB);
+  });
+</script>
+<!-- <script>
+        function fun() {
+               alert ("Department has been added.");
+        }
+    </script> -->
+
+<%- include('../partials/footer') -%>

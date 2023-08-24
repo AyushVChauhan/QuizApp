@@ -4,11 +4,11 @@ const adminControllers = require("../controllers/admin");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 
-router.post('/abc', adminControllers.addDepartment)
-
 router.get('/', adminControllers.adminDashboard);
+router.post('/addDepartment', adminControllers.addDepartment)
+router.post('/addSubject', adminControllers.addSubject)
 //move middleware above get() afterwards
-router.use(middleware);
+// router.use(middleware);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
   if (cookie) {
