@@ -86,8 +86,8 @@
 			id="datatable"
 		>
 			<thead>
-				<th>Sr no.</th>
-				<th>Name</th>
+				<th class="text-center">Sr no.</th>
+				<th class="text-center">Name</th>
 			</thead>
 			<tbody>
 				<% for( let index = 0; index < dept_data.length; index++ ) { %>
@@ -107,7 +107,7 @@
 		var myTable;
 
 		myTable = $("#datatable").DataTable({
-			pagingType: "simple",
+			pagingType: "simple_numbers",
 			language: {
 				paginate: {
 					previous: "<",

@@ -147,6 +147,10 @@ body {
 	.sidebar-title > span {
 		display: inline;
 	}
+	#sidebar{
+		z-index: 1;
+	}
+	
 }
 @media screen and (max-width: 576px) {
 	.margin {
