@@ -1,0 +1,118 @@
+<%- include('../partials/header') -%>
+<div class="container pb-10">
+  <div class="row justify-content-center mt-5">
+    <div class="col-lg-6 border border-dark rounded">
+      <form action="/student/register">
+        <div class="mb-3">
+          <label for="uname" class="form-label">User name</label>
+          <input
+            type="text"
+            name="uname"
+            class="form-control"
+            id="uname"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="fname" class="form-label">First name</label>
+          <input
+            type="text"
+            name="fname"
+            class="form-control"
+            id="fname"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="mname" class="form-label">Middle name</label>
+          <input
+            type="text"
+            name="mname"
+            class="form-control"
+            id="mname"
+            aria-describedby="emailHelp"
+            readonly
+          />
+        </div>
+        <div class="mb-3">
+          <label for="lname" class="form-label">Last name</label>
+          <input
+            type="text"
+            name="lname"
+            class="form-control"
+            id="lname"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="dropdown mb-3">
+          <button
+            class="btn btn-light dropdown-toggle w-100"
+            type="button"
+            id="multiSelectDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            name="department"
+          >
+            Select Departments
+          </button>
+          <ul class="dropdown-menu w-100" aria-labelledby="multiSelectDropdown">
+            <% for(let i=0; i< dept_data.length;i++){ %>
+            <li>
+              <label>
+                <input
+                  type="checkbox"
+                  value="<%= dept_data[i]._id %>"
+                  name="departments[]"
+                />
+                <%= dept_data[i].name %>
+              </label>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <label for="contact" class="form-label">Contact</label>
+          <input
+            type=""
+            name="contact"
+            class="form-control"
+            id="contact"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="email"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+          <label class="form-check-label" for="exampleCheck1"
+            >Check me out</label
+          >
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mb-3">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') -%>
