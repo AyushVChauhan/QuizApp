@@ -1,6 +1,9 @@
 const { default: mongoose } = require("mongoose");
 const departments = require("../models/departments");
 const subjects = require("../models/subjects");
+const students = require("../models/students");
+const mailer = require("../controllers/mailer");
+const md5 = require("md5");
 async function departmentFetch(name) {
     let fetchData = await departments.findOne({ name: name });
     return fetchData;
@@ -31,7 +34,33 @@ async function addSubject(subObject) {
         return 0;
     }
 }
-module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject };
+async function addStudent(enrollment, email, password){
+    let preData = await students.findOne({enrollment:enrollment});
+    if(!preData)
+    {
+        let record = 1;
+        //send mail
+        let mailDetails = {
+            from: 'avcthehero@gmail.com',
+            to: email,
+            subject: 'Registration',
+            text: `Your Username is ${enrollment} and Password is ${password}`,
+        };
+        mailer.sendMail(mailDetails,async function(err, data) {
+            if(err) {
+                console.log('Error Occurs');
+                record = 0;
+            } else {
+                console.log('Email sent successfully');
+                let data = new students({enrollment:enrollment, email:email, password:md5(password)});
+                await data.save();
+            }
+        });
+        return record;
+    }
+    return 0;
+}
+module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department

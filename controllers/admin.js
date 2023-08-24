@@ -1,7 +1,8 @@
 const adminServices = require("../services/admin");
 const myCache = require("./cache")
-
-
+const commonServices = require("../services/common");
+const xlsx = require("xlsx")
+const mailer = require("./mailer");
 async function addDepartment(req, res) {
 
 
@@ -55,5 +56,26 @@ async function departments(req, res) {
     let dept_data = await adminServices.fetchDepartments()
     res.render("./admin/departments",{dept_data, errors});
 }
-
-module.exports = { addDepartment, adminDashboard, addSubject, departments };
+async function addStudent(req, res) {
+    var mySheet = xlsx.readFile("./public/files/schema.xlsx");
+    var sheets = mySheet.SheetNames;
+    var obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
+    if (obj[0]["Enrollment No"] === undefined) {
+        myCache.set("errors", { text: "no 'Enrollment No' field", icon: "error" });
+    }
+    else if(obj[0]["Email"] === undefined)
+    {
+        myCache.set("errors", { text: "no 'Email' field", icon: "error" });
+    }
+    else {
+        let records = 0;
+        for (let index = 0; index < obj.length; index++) {
+            const element = obj[index];
+            let password = commonServices.randomPassword();
+            records += await adminServices.addStudent(element["Enrollment No"], element["Email"], password );
+        }
+        myCache.set("errors", { text: `${records} records added`, icon: "success" });
+    }
+    res.redirect("/admin");
+}
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent };

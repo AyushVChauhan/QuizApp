@@ -1,0 +1,40 @@
+<div
+	class="modal fade"
+	id="studentModal"
+	tabindex="-1"
+	aria-labelledby="studentModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="studentModalLabel">ADD STUDENTS</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<form
+				action="/admin/addStudent"
+				method="POST"
+				enctype="multipart/form-data"
+			>
+				<input type="file" class="form-control" name="excel" id="excel" />
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn btn-secondary"
+						data-bs-dismiss="modal"
+					>
+						Close
+					</button>
+					<button type="submit" class="btn btn-primary">
+						Save changes
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

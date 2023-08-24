@@ -3,11 +3,17 @@ const router = express.Router();
 const adminControllers = require("../controllers/admin");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const storage = multer.diskStorage({destination:"./public/files",filename:(req,file,cb)=>{
+  cb(null,"schema.xlsx")
+}})
+const upload = multer({storage:storage,limits:{fileSize:15000000}});
 
 router.get('/', adminControllers.adminDashboard);
 router.post('/addDepartment', adminControllers.addDepartment)
 router.post('/addSubject', adminControllers.addSubject)
 router.get("/departments",adminControllers.departments);
+router.post("/addStudent",upload.single('excel'), adminControllers.addStudent)
 //move middleware above get() afterwards
 // router.use(middleware);
 function middleware(req, res, next) {
