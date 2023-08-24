@@ -131,7 +131,6 @@ body {
 
 	.sidebar {
 		display: none;
-		transition: left 2s ease-in-out;
 		
 	}
 	.sidebar-open {
@@ -139,7 +138,6 @@ body {
 		top: 70px;
 		left: 0%;
 		display: block;
-		transition: left 2s ease-in-out;
 	}
 
 	.menu-icon {

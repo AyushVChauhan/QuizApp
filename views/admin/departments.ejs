@@ -1,0 +1,126 @@
+<%- include('../partials/header') %> 
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<style>
+	.uk-table-hover tbody tr:hover,
+	.uk-table-hover > tr:hover {
+		background: #c4d3f6;
+		background-color: #c4d3f6;
+		background-position-x: 0%;
+		background-position-y: 0%;
+		background-repeat: repeat;
+		background-attachment: scroll;
+		background-image: none;
+		background-size: auto;
+		background-origin: padding-box;
+		background-clip: border-box;
+	}
+	table.dataTable thead {
+		background-color: rgb(0, 56, 101);
+	}
+	table.dataTable thead th {
+		color: #fff;
+		font-weight: 500;
+		font-family: "Nunito", sans-serif;
+		font-size: 20px;
+	}
+	#datatable_wrapper {
+		margin: 50px;
+	}
+	#datatable {
+		margin-top: 15px;
+		overflow: hidden;
+		border-radius: 15px;
+	}
+	table.dataTable tr.even {
+		background-color: #e6f4f1;
+	}
+	table.dataTable tr.odd {
+		background-color: #e6f4f1;
+	}
+	table.dataTable tr.even:hover {
+		background-color: #c4d3f6;
+	}
+	table.dataTable tr.odd:hover {
+		background-color: #c4d3f6;
+	}
+	.paginate_button.next {
+		margin-left: 20px;
+	}
+	.paginate_button.previous {
+		margin-right: 20px;
+	}
+	.cdatatableDetails {
+		margin-top: 4px;
+	}
+	.page-link {
+		text-decoration: none;
+	}
+	.page-link:hover {
+		text-decoration: none;
+	}
+	.sorting {
+		text-align: center;
+	}
+	.dt-head-center {
+		text-align: center;
+	}
+	table.dataTable thead .sorting::before {
+		/* right: 22px !important; */
+		margin-right: 10px;
+		content: "\2191" !important;
+		/* top: 31px; */
+	}
+	table.dataTable thead .sorting::after {
+		/* right: 22px !important; */
+		margin-top: -8.2px;
+		content: "\2193" !important;
+		/* top: 31px; */
+	}
+</style>
+<div class="grid-container">
+	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
+
+	<div class="main-container">
+		<table
+			class="uk-table uk-table-hover uk-table-striped text-center"
+			id="datatable"
+		>
+			<thead>
+				<th>Sr no.</th>
+				<th>Name</th>
+			</thead>
+			<tbody>
+				<% for( let index = 0; index < dept_data.length; index++ ) { %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= dept_data[index].name %></td>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<%- include('../partials/footer') -%>
+<script>
+	$(document).ready(() => {
+		console.log("hello");
+		var myTable;
+
+		myTable = $("#datatable").DataTable({
+			pagingType: "simple",
+			language: {
+				paginate: {
+					previous: "<",
+					next: ">",
+				},
+			},
+			columnDefs: [
+				// Center align the header content of column 1
+				{ className: "dt-head-center", targets: [0, 1] },
+			],
+		});
+	});
+</script>
+<script src="/scripts/adminSidebar.js"></script>
+<%- include('../partials/sweetalert') %>
+<%- include('../partials/footer2') -%>
