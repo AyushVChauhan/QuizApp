@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 router.get('/', adminControllers.adminDashboard);
 router.post('/addDepartment', adminControllers.addDepartment)
 router.post('/addSubject', adminControllers.addSubject)
+router.get("/departments",adminControllers.departments);
 //move middleware above get() afterwards
 // router.use(middleware);
 function middleware(req, res, next) {

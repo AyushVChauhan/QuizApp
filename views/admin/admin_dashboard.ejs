@@ -17,21 +17,21 @@
 		</div>
 		<div class="box-container">
 			<div class="row margin">
-				<div class="col-md-3 m-1 box">
+				<div onclick="window.open('/admin/departments','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
-					<h4>Departments</h4>
+					<h4 class="dashboard-tile-header">Departments</h4>
 					<p>11</p>
 				</div>
 				<div class="col-md-1"></div>
-				<div class="col-md-3 m-1 box">
+				<div class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
-					<h4>Teachers</h4>
+					<h4 class="dashboard-tile-header">Teachers</h4>
 					<p>11</p>
 				</div>
 				<div class="col-md-1"></div>
-				<div class="col-md-3 m-1 box">
+				<div class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
-					<h4>Subjects</h4>
+					<h4 class="dashboard-tile-header">Subjects</h4>
 					<p>11</p>
 				</div>
 			</div>
@@ -40,13 +40,13 @@
 				<div class="col-md-2"></div>
 				<div class="col-md-3 m-1">
 					<!-- <i class="fa-regular fa-building"></i> -->
-					<h4>Students</h4>
+					<h4 class="dashboard-tile-header">Students</h4>
 					<p>11</p>
 				</div>
 				<div class="col-md-1"></div>
-				<div class="col-md-3 m-1 box">
+				<div class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building fa-xl"></i> -->
-					<h4>Quizzes</h4>
+					<h4 class="dashboard-tile-header">Quizzes</h4>
 					<p>11</p>
 				</div>
 				<div class="col-md-2"></div>
@@ -55,12 +55,8 @@
 	</main>
 	<!-- End Main -->
 </div>
-
+<%- include('../partials/footer') -%>
 <script>
-	function openSidebar() {
-		let sidebar = document.getElementsByClassName("sidebar")[0];
-		$("#sidebar").toggleClass("sidebar-open");
-	}
 	const allSideMenu = document.querySelectorAll(
 		"#sidebar .side-menu.top li a"
 	);
@@ -76,5 +72,8 @@
 		});
 	});
 </script>
+<script src="/scripts/addSubject.js"></script>
+<script src="/scripts/adminSidebar.js"></script>
+<%- include('../partials/footer2') -%>
 
-<%- include('../partials/footer') -%>
+

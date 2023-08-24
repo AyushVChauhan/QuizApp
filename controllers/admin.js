@@ -28,7 +28,7 @@ async function adminDashboard(req, res) {
     }
 
     let dept_data = await adminServices.fetchDepartments()
-
+    
     res.render("./admin/admin_dashboard", { errors, dept_data });
 }
 
@@ -46,6 +46,10 @@ async function addSubject (req, res) {
     }
     res.redirect("/admin");
 }
+async function departments(req, res) {
+    
+    let dept_data = await adminServices.fetchDepartments()
+    res.render("./admin/departments",{dept_data});
+}
 
-
-module.exports = { addDepartment, adminDashboard, addSubject };
+module.exports = { addDepartment, adminDashboard, addSubject, departments };
