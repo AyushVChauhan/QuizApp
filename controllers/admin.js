@@ -72,7 +72,7 @@ async function addStudent(req, res) {
         for (let index = 0; index < obj.length; index++) {
             const element = obj[index];
             let password = commonServices.randomPassword();
-            records += await adminServices.addStudent(element["Enrollment No"], element["Email"], password );
+            records += await adminServices.addStudent(element["Enrollment No"], element["Email"], password, req.body.semester, req.body.department );
         }
         myCache.set("errors", { text: `${records} records added`, icon: "success" });
     }
@@ -84,4 +84,10 @@ async function subjects(req,res)
     let dept_data = await adminServices.fetchDepartments()
     res.render("./admin/subjects", {dept_data, sub_data});
 }
-module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects };
+async function students(req,res)
+{
+    let sub_data = await adminServices.fetchSubjects();
+    let dept_data = await adminServices.fetchDepartments()
+    res.render("./admin/students", {dept_data, sub_data, errors:null});
+}
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students };

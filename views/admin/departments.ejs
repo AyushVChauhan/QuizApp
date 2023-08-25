@@ -1,92 +1,19 @@
-<%- include('../partials/header') %> 
+<%- include('../partials/header') %>
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
-<style>
-	.uk-table-hover tbody tr:hover,
-	.uk-table-hover > tr:hover {
-		background: #c4d3f6;
-		background-color: #c4d3f6;
-		background-position-x: 0%;
-		background-position-y: 0%;
-		background-repeat: repeat;
-		background-attachment: scroll;
-		background-image: none;
-		background-size: auto;
-		background-origin: padding-box;
-		background-clip: border-box;
-	}
-	table.dataTable thead {
-		background-color: rgb(0, 56, 101);
-	}
-	table.dataTable thead th {
-		color: #fff;
-		font-weight: 500;
-		font-family: "Nunito", sans-serif;
-		font-size: 20px;
-	}
-	#datatable_wrapper {
-		margin: 50px;
-	}
-	#datatable {
-		margin-top: 15px;
-		overflow: hidden;
-		border-radius: 15px;
-	}
-	table.dataTable tr.even {
-		background-color: #e6f4f1;
-	}
-	table.dataTable tr.odd {
-		background-color: #e6f4f1;
-	}
-	table.dataTable tr.even:hover {
-		background-color: #c4d3f6;
-	}
-	table.dataTable tr.odd:hover {
-		background-color: #c4d3f6;
-	}
-	.paginate_button.next {
-		margin-left: 20px;
-	}
-	.paginate_button.previous {
-		margin-right: 20px;
-	}
-	.cdatatableDetails {
-		margin-top: 4px;
-	}
-	.page-link {
-		text-decoration: none;
-	}
-	.page-link:hover {
-		text-decoration: none;
-	}
-	.sorting {
-		text-align: center;
-	}
-	.dt-head-center {
-		text-align: center;
-	}
-	table.dataTable thead .sorting::before {
-		/* right: 22px !important; */
-		margin-right: 10px;
-		content: "\2191" !important;
-		/* top: 31px; */
-	}
-	table.dataTable thead .sorting::after {
-		/* right: 22px !important; */
-		margin-top: -8.2px;
-		content: "\2193" !important;
-		/* top: 31px; */
-	}
-</style>
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
 <div class="grid-container">
 	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
 
 	<div class="main-container">
-		<div class="row ps-5 pe-5	">
-			<div class="col-7">
+		<div class="row ps-5 pe-5">
+			<div class="col-7 align-items-center d-flex">
 				<h1 class="text-start">Departments</h1>
 			</div>
-			<div class="col text-end">
-				<button class="btn btn-primary">Add</button>
+			<div class="col align-items-center d-flex">
+				<a style="border-radius: 900px; height:min-content" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deptModal"
+					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					DEPARTMENT
+				</a>
 			</div>
 		</div>
 		<table
@@ -108,7 +35,7 @@
 		</table>
 	</div>
 </div>
-<%- include('../partials/footer') -%>
+<%- include("./addDepartment") %> <%- include('../partials/footer') -%>
 <script>
 	$(document).ready(() => {
 		console.log("hello");
@@ -130,5 +57,4 @@
 	});
 </script>
 <script src="/scripts/adminSidebar.js"></script>
-<%- include('../partials/sweetalert') %>
-<%- include('../partials/footer2') -%>
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

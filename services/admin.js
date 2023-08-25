@@ -18,27 +18,24 @@ async function fetchDepartments() {
     return dept_data;
 }
 async function addSubject(subObject) {
-    let subjectData = await subjects.findOne({code:subObject.subcode});
-    if(subjectData)
-    {
+    let subjectData = await subjects.findOne({ code: subObject.subcode });
+    if (subjectData) {
         return 1;
     }
-    else
-    {
+    else {
         let deptids = [];
         subObject.departments.forEach(element => {
             deptids.push(new mongoose.Types.ObjectId(element));
         });
         console.log(subObject);
-        let subject = new subjects({name:subObject.subname,code:subObject.subcode,is_active:1,semester:subObject.sem,course_outcomes:subObject.co,departments:deptids});
+        let subject = new subjects({ name: subObject.subname, code: subObject.subcode, is_active: 1, semester: subObject.sem, course_outcomes: subObject.co, departments: deptids });
         await subject.save();
         return 0;
     }
 }
-async function addStudent(enrollment, email, password){
-    let preData = await students.findOne({enrollment:enrollment});
-    if(!preData)
-    {
+async function addStudent(enrollment, email, password, semester, department) {
+    let preData = await students.findOne({ enrollment: enrollment });
+    if (!preData) {
         let record = 1;
         //send mail
         let mailDetails = {
@@ -47,13 +44,13 @@ async function addStudent(enrollment, email, password){
             subject: 'Registration',
             text: `Your Username is ${enrollment} and Password is ${password}`,
         };
-        mailer.sendMail(mailDetails,async function(err, data) {
-            if(err) {
+        mailer.sendMail(mailDetails, async function (err, data) {
+            if (err) {
                 console.log('Error Occurs');
                 record = 0;
             } else {
                 console.log('Email sent successfully');
-                let data = new students({enrollment:enrollment, email:email, password:md5(password)});
+                let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department) });
                 await data.save();
             }
         });

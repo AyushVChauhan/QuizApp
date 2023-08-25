@@ -11,10 +11,11 @@ const upload = multer({storage:storage,limits:{fileSize:15000000}});
 
 router.get('/', adminControllers.adminDashboard);
 router.post('/addDepartment', adminControllers.addDepartment)
-router.post('/addSubject', adminControllers.addSubject)
 router.get("/departments",adminControllers.departments);
-router.post("/addStudent",upload.single('excel'), adminControllers.addStudent)
+router.post('/addSubject', adminControllers.addSubject)
 router.get("/subjects", adminControllers.subjects);
+router.post("/addStudent",upload.single('excel'), adminControllers.addStudent)
+router.get("/students", adminControllers.students);
 //move middleware above get() afterwards
 // router.use(middleware);
 function middleware(req, res, next) {

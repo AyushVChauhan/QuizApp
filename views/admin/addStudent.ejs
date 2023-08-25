@@ -21,7 +21,33 @@
 				method="POST"
 				enctype="multipart/form-data"
 			>
-				<input type="file" class="form-control" name="excel" id="excel" />
+				<div class="mb-3">
+					<input
+						type="file"
+						class="form-control"
+						name="excel"
+						id="excel"
+					/>
+				</div>
+				<div class="mb-3">
+					<select class="form-select" name="department">
+						<option selected>Select Department</option>
+						<% dept_data.forEach(element => { %>
+						<option value="<%= element._id %>">
+							<%= element.name %>
+						</option>
+						<% }) %>
+					</select>
+				</div>
+				<div class="mb-3">
+					<select name="semester" class="form-select">
+						<option selected>Select Semester</option>
+						<% for( let index = 1; index < 9; index++ ) { %>
+							<option value="<%= index %>"><%= index %></option>
+						<% } %>
+						<option value="1">1</option>
+					</select>
+				</div>
 				<div class="modal-footer">
 					<button
 						type="button"

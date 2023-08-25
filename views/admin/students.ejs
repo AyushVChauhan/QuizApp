@@ -5,32 +5,34 @@
 	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
 
 	<div class="main-container">
+		<div class="row ps-5 pe-5">
+			<div class="col-7">
+				<h1 class="text-start">Students</h1>
+			</div>
+			<div class="col align-items-center d-flex">
+				<a
+					style="border-radius: 900px; height: min-content"
+					class="btn btn-primary"
+					data-bs-toggle="modal"
+					data-bs-target="#studentModal"
+					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					STUDENTS
+				</a>
+			</div>
+		</div>
 		<table
 			class="uk-table uk-table-hover uk-table-striped text-center"
 			id="datatable"
 		>
 			<thead>
-				<th class="text-center">Sr no.</th>
-				<th class="text-center">Subject</th>
-				<th class="text-center">Subject Code</th>
-				<th class="text-center">Semester</th>
-				<th class="text-center">No. of COs</th>
+				<th>1</th>
+				<th>1</th>
+				<th>1</th>
 			</thead>
-			<tbody>
-				<% for( let index = 0; index < sub_data.length; index++ ) { %>
-				<tr>
-					<td><%= index+1 %></td>
-					<td><%= sub_data[index].name %></td>
-					<td><%= sub_data[index].code %></td>
-					<td><%= sub_data[index].semester %></td>
-					<td><%= sub_data[index].course_outcomes %></td>
-				</tr>
-				<% } %>
-			</tbody>
 		</table>
 	</div>
 </div>
-<%- include('../partials/footer') -%>
+<%- include("./addStudent") %> <%- include('../partials/footer') -%>
 <script>
 	$(document).ready(() => {
 		console.log("hello");
@@ -52,5 +54,4 @@
 	});
 </script>
 <script src="/scripts/adminSidebar.js"></script>
-
-<%- include('../partials/footer2') -%>
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
