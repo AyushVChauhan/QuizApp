@@ -29,7 +29,8 @@ async function addSubject(subObject) {
         subObject.departments.forEach(element => {
             deptids.push(new mongoose.Types.ObjectId(element));
         });
-        let subject = new subjects({name:subObject.subname,code:subObject.subcode,is_active:1,semester:subObject.semester,course_outcomes:subObject.co,departments:deptids});
+        console.log(subObject);
+        let subject = new subjects({name:subObject.subname,code:subObject.subcode,is_active:1,semester:subObject.sem,course_outcomes:subObject.co,departments:deptids});
         await subject.save();
         return 0;
     }
@@ -60,7 +61,11 @@ async function addStudent(enrollment, email, password){
     }
     return 0;
 }
-module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent };
+async function fetchSubjects() {
+    let sub_data = await subjects.find({});
+    return sub_data;
+}
+module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent, fetchSubjects };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department

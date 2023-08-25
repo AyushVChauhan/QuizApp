@@ -52,19 +52,18 @@ body {
 	color: rgb(255, 255, 255);
 	background-color: rgb(0, 56, 101);
 	overflow: auto;
-	transition: all 2s;
 }
 
 .sidebar a {
 	display: block;
-	color: black;
+	color: #fff;
 	padding: 16px;
 	text-decoration: none;
 	cursor: pointer;
 }
 
 /* Links on mouse-over */
-.sidebar a:hover:not(.active) {
+.sidebar a:hover:not(.active), .sidebar a.hovered {
 	background-color: #d8d9da;
 	color: black;
 	transition: 1s;

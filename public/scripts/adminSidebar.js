@@ -6,5 +6,20 @@ function openSidebar() {
         $(".main-container").css("opacity","100%")
     else
     $(".main-container").css("opacity","50%")
-
 }
+$(document).ready(function () {
+    let path = window.location.pathname;
+    let arr = path.split("/");
+    if(arr.includes("departments"))
+    {
+        $("#departments").toggleClass("hovered")
+    }
+    else if(arr.includes("subjects"))
+    {
+        $("#subjects").toggleClass("hovered")
+    }
+    else
+    {
+        $("#dashboard").toggleClass("hovered")
+    }
+});

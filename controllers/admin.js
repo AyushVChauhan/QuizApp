@@ -29,7 +29,6 @@ async function adminDashboard(req, res) {
     }
 
     let dept_data = await adminServices.fetchDepartments()
-    
     res.render("./admin/admin_dashboard", { errors, dept_data });
 }
 
@@ -61,11 +60,12 @@ async function addStudent(req, res) {
     var sheets = mySheet.SheetNames;
     var obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
     if (obj[0]["Enrollment No"] === undefined) {
-        myCache.set("errors", { text: "no 'Enrollment No' field", icon: "error" });
+        myCache.set("errors", { text: "No (Enrollment No) field", icon: "warning" });
+        console.log("hell");
     }
     else if(obj[0]["Email"] === undefined)
     {
-        myCache.set("errors", { text: "no 'Email' field", icon: "error" });
+        myCache.set("errors", { text: "No (Email) field", icon: "warning" });
     }
     else {
         let records = 0;
@@ -78,4 +78,10 @@ async function addStudent(req, res) {
     }
     res.redirect("/admin");
 }
-module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent };
+async function subjects(req,res)
+{
+    let sub_data = await adminServices.fetchSubjects();
+    let dept_data = await adminServices.fetchDepartments()
+    res.render("./admin/subjects", {dept_data, sub_data});
+}
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects };

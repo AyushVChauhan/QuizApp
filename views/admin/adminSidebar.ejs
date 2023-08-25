@@ -1,24 +1,25 @@
 <div class="sidebar" id="sidebar">
+	<div class="dashboard">
+		<!-- Button trigger modal -->
+		<a id="dashboard" href="/admin"><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;Dashboard </a>
+
+		<!-- Modal -->
+		<%- include("./addDepartment") %>
+	</div>
 	<div class="department">
 		<!-- Button trigger modal -->
-		<a data-bs-toggle="modal" data-bs-target="#deptModal"
-			><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD DEPARTMENT
-		</a>
+		<a id="departments" href="/admin/departments"><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;Departments </a>
 
 		<!-- Modal -->
 		<%- include("./addDepartment") %>
 	</div>
 
 	<div class="subject">
-		<a data-bs-toggle="modal" data-bs-target="#subModal"
-			><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD SUBJECT
-		</a>
+		<a id="subjects" href="/admin/subjects"><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;Subjects </a>
 		<%- include("./addSubject") %>
 	</div>
 	<div class="student">
-		<a data-bs-toggle="modal" data-bs-target="#studentModal"
-			><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD STUDENTS
-		</a>
+		<a id="students" href="/admin/students"><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;Students </a>
 		<%- include("./addStudent") %>
 	</div>
 </div>

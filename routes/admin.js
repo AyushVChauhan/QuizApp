@@ -14,6 +14,7 @@ router.post('/addDepartment', adminControllers.addDepartment)
 router.post('/addSubject', adminControllers.addSubject)
 router.get("/departments",adminControllers.departments);
 router.post("/addStudent",upload.single('excel'), adminControllers.addStudent)
+router.get("/subjects", adminControllers.subjects);
 //move middleware above get() afterwards
 // router.use(middleware);
 function middleware(req, res, next) {
