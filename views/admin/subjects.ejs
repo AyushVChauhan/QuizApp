@@ -5,6 +5,17 @@
 	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
 
 	<div class="main-container">
+		<div class="row ps-5 pe-5">
+			<div class="col-7 align-items-center d-flex">
+				<h1 class="text-start">Subjects</h1>
+			</div>
+			<div class="col align-items-center d-flex">
+				<a style="border-radius: 900px; height:min-content" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subModal"
+					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					SUBJECT
+				</a>
+			</div>
+		</div>
 		<table
 			class="uk-table uk-table-hover uk-table-striped text-center"
 			id="datatable"
@@ -30,7 +41,7 @@
 		</table>
 	</div>
 </div>
-<%- include('../partials/footer') -%>
+<%- include("./addSubject") %><%- include('../partials/footer') -%>
 <script>
 	$(document).ready(() => {
 		console.log("hello");
