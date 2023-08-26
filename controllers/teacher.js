@@ -2,7 +2,7 @@ const teacherServices = require("../services/teacher");
 const jwt = require("jsonwebtoken");
 const xlsx = require("xlsx");
 async function login(req, res) {
-  if(req.body.captcha === req.body.inputcaptcha){
+  
     let data = await teacherServices.loginFetch(
       req.body.username,
        req.body.password
@@ -30,10 +30,9 @@ async function login(req, res) {
       res.redirect("/teacher/login");
     }
     
-  }
-  else{
-    res.redirect("/teacher/login");
-  }
+  // else{
+  //   res.redirect("/teacher/login");
+  // }
  
  
   

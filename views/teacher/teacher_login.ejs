@@ -1,19 +1,31 @@
 <%- include('../partials/header') -%>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <div class="container pb-10">
-        <div class="row justify-content-center mt-5">
-            <div class="col-lg-6 border border-dark rounded">
-                <h3>Login</h3>
-                <form action="/teacher/login" method="POST">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" name="username" id="username" placeholder="Username" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="password" id="password" placeholder="Password" class="form-control">
-                    </div>
-                    <label>Enter Captcha</label>
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<div class="container pb-10">
+  <div class="row justify-content-center mt-5">
+    <div class="col-lg-6 border border-dark rounded">
+      <h3>Login</h3>
+      <form action="/teacher/login" method="POST" id="t">
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            class="form-control"
+          />
+        </div>
+        <!-- <label>Enter Captcha</label>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <div class="form-group col-md-6">
@@ -21,35 +33,40 @@
                             </div>
                             <input type="text" class="form-control"id="textinput" name="inputcaptcha">
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <button onclick="validcap()" type="submit" class="btn btn-primary" value="abc">
-                            Submit</button>
-                    </div>
-                </form>
-                <h6>Captcha Not Visible? <button onclick="cap()" type="submit" class="btn btn-primary" value="abc">
-                    Generate</button></h6>
-            </div>
+                    </div> -->
+        <div id="html_element"></div>
+        <div class="form-group">
+          <button type="submit" id="submit" class="btn btn-primary" value="abc">
+            Submit
+          </button>
         </div>
+      </form>
     </div>
-    <script>
-        function cap(){
-            var alpha=['A','B','C','D','E','F','G','H','@','#','*','+','1','2','8','3'];
-            var a=alpha[Math.floor(Math.random()*16)];
-            var b=alpha[Math.floor(Math.random()*16)];
-            var c=alpha[Math.floor(Math.random()*16)];
-            var d=alpha[Math.floor(Math.random()*16)];
-            var e=alpha[Math.floor(Math.random()*16)];
-            var f=alpha[Math.floor(Math.random()*16)];
+  </div>
+</div>
 
-            var final=a+b+c+d+e+f;
-            document.getElementById("capt").value=final;
-        }
-        function validcap(){
-            var string1=document.getElementById("capt").value;
-            var string2=document.getElementById("textinput").value;
-    
-            
-        }
-    </script>
-    <%- include('../partials/footer') -%>
+<script
+  src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+  async
+  defer
+></script>
+<script type="text/javascript">
+  var onloadCallback = function () {
+    grecaptcha.render("html_element", {
+      sitekey: "6LemmdgnAAAAAL73FQSScdOWLi8VeghInOezQp9h",
+    });
+  };
+</script>
+<%- include('../partials/footer') -%>
+
+<script>
+  $(document).ready(function () {
+    $("#submit").click(function (e) {
+      let captcha = grecaptcha.getResponse();
+      if (captcha.length == 0) {
+        e.preventDefault();
+        alert("captcha invalid");
+      }
+    });
+  });
+</script>
