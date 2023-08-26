@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<div class="grid-container">
+	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
+
+	<div class="main-container">
+		<div class="row ps-5 pe-5">
+			<div class="col-7 align-items-center d-flex">
+				<h1 class="text-start">Teachers</h1>
+			</div>
+			<div class="col align-items-center d-flex">
+				<a style="border-radius: 900px; height:min-content" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teacherModal"
+					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					TEACHER
+				</a>
+			</div>
+		</div>
+		<table
+			class="uk-table uk-table-hover uk-table-striped text-center"
+			id="datatable"
+		>
+			<thead>
+				<th class="text-center">Sr no.</th>
+                <th class="text-center">UserName</th>
+				<th class="text-center">First Name</th>
+                <th class="text-center">Middle Name</th>
+                <th class="text-center">Last Name</th>
+                <th class="text-center">Department</th>
+                <th class="text-center">Email</th>
+			</thead>
+			<tbody>
+				<% for( let index = 0; index < teacher_data.length; index++ ) { %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= teacher_data[index].username %></td>
+                    <td><%= teacher_data[index].first_name %></td>
+                    <td><%= teacher_data[index].middle_name %></td>
+                    <td><%= teacher_data[index].last_name %></td>
+                    <td><%= teacher_data[index].department_id.name %></td>
+                    <td><%= teacher_data[index].email %></td>
+                   
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<%- include("./addTeacher") %> <%- include('../partials/footer') -%>
+<script>
+	$(document).ready(() => {
+		console.log("hello");
+		var myTable;
+
+		myTable = $("#datatable").DataTable({
+			pagingType: "simple_numbers",
+			language: {
+				paginate: {
+					previous: "<",
+					next: ">",
+				},
+			},
+			columnDefs: [
+				// Center align the header content of column 1
+				{ className: "dt-head-center", targets: [0, 1] },
+			],
+		});
+	});
+</script>
+<script src="/scripts/adminSidebar.js"></script>
+< <%- include('../partials/footer2') -%>

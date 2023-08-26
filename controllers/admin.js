@@ -5,7 +5,6 @@ const xlsx = require("xlsx")
 const mailer = require("./mailer");
 async function addDepartment(req, res) {
 
-
     if (req.body.name.trim() !== "") {
         let fetchData = await adminServices.departmentFetch(req.body.name);
         if (fetchData == null) {
@@ -16,18 +15,14 @@ async function addDepartment(req, res) {
             myCache.set("errors", { text: "Department Already Exist!!", icon: "warning" });
         }
     }
-
-
     res.redirect("/admin");
 }
 async function adminDashboard(req, res) {
-
     let errors = null
     if (myCache.has('errors')) {
         errors = myCache.take('errors')//take will empty the myCache
         // console.log(errors)
     }
-
     let dept_data = await adminServices.fetchDepartments()
     res.render("./admin/admin_dashboard", { errors, dept_data });
 }
@@ -43,6 +38,20 @@ async function addSubject (req, res) {
     else
     {
         myCache.set("errors", { text: "Subject Already Exists!", icon: "warning" });
+    }
+    res.redirect("/admin");
+}
+async function addTeacher (req, res) {
+    let errors = null;
+    //to validate
+    let teacher = await adminServices.addTeacher(req.body);
+    if(teacher === 0)
+    {
+        myCache.set("errors", { text: "Teacher Added Successfully", icon: "success" });
+    }
+    else
+    {
+        myCache.set("errors", { text: "Teacher Already Exists!", icon: "warning" });
     }
     res.redirect("/admin");
 }
@@ -90,4 +99,11 @@ async function students(req,res)
     let dept_data = await adminServices.fetchDepartments()
     res.render("./admin/students", {dept_data, sub_data, errors:null});
 }
-module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students };
+async function teachers(req,res)
+{
+    let sub_data = await adminServices.fetchSubjects();
+    let dept_data = await adminServices.fetchDepartments()
+    let teacher_data = await adminServices.fetchTeachers()
+    res.render("./admin/teachers", {dept_data, sub_data,teacher_data,errors:null});
+}
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students,teachers,addTeacher };

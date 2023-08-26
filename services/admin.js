@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const departments = require("../models/departments");
 const subjects = require("../models/subjects");
+const teachers = require("../models/teachers");
 const students = require("../models/students");
 const mailer = require("../controllers/mailer");
 const md5 = require("md5");
@@ -33,6 +34,27 @@ async function addSubject(subObject) {
         return 0;
     }
 }
+async function addTeacher(teacherObject) {
+    let teacherData = await teachers.findOne({ username:teacherObject.username });
+    if (teacherData) {
+        return 1;
+    }
+    else {
+        // let deptids = [];
+        // teacherObject.departments.forEach(element => {
+        //     deptids.push(new mongoose.Types.ObjectId(element));
+        // });
+        console.log(teacherObject);
+        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password });
+        await teacher.save();
+        return 0;
+    }
+}
+// async function newTeacher(name) {
+//     let data = new departments({ name: name, is_active: 1 });
+//     await data.save();
+//     return data;
+// }
 async function addStudent(enrollment, email, password, semester, department) {
     let preData = await students.findOne({ enrollment: enrollment });
     if (!preData) {
@@ -62,7 +84,12 @@ async function fetchSubjects() {
     let sub_data = await subjects.find({});
     return sub_data;
 }
-module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent, fetchSubjects };
+async function fetchTeachers() {
+    let teacher_data = await teachers.find({}).populate("department_id");
+    console.log(teacher_data);
+    return teacher_data;
+}
+module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent, fetchSubjects,fetchTeachers,addTeacher };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department
