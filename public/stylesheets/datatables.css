@@ -18,7 +18,7 @@ table.dataTable thead th {
 	color: #fff;
 	font-weight: 500;
 	font-family: "Nunito", sans-serif;
-	font-size: 20px;
+	font-size: 15px;
 }
 #datatable_wrapper {
 	margin: 50px;
@@ -63,13 +63,16 @@ table.dataTable tr.odd:hover {
 }
 table.dataTable thead .sorting::before {
 	/* right: 22px !important; */
-	margin-right: 10px;
-	content: "\2191" !important;
+	margin-right: 4px;
+	margin-right: -4px;
+	/* margin-top: ; */
+	content: "\2303" !important;
 	/* top: 31px; */
 }
 table.dataTable thead .sorting::after {
 	/* right: 22px !important; */
-	margin-top: -8.2px;
-	content: "\2193" !important;
+	margin-top: -5px;
+	margin-right: -4px;
+	content: "\2304" !important;
 	/* top: 31px; */
 }

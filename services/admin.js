@@ -14,6 +14,12 @@ async function newDepartment(name) {
     await data.save();
     return data;
 }
+async function deleteDepartment(id) {
+    let data = await departments.findOne({_id: new mongoose.Types.ObjectId(id)});
+    data.is_active=0;
+    await data.save();
+    return data;
+}
 async function fetchDepartments() {
     var dept_data = await departments.find({ is_active: 1 });
     return dept_data;
@@ -28,7 +34,7 @@ async function addSubject(subObject) {
         subObject.departments.forEach(element => {
             deptids.push(new mongoose.Types.ObjectId(element));
         });
-        // console.log(subObject);
+        console.log(subObject);
         let subject = new subjects({ name: subObject.subname, code: subObject.subcode, is_active: 1, semester: subObject.semester, course_outcomes: subObject.co, departments: deptids });
         await subject.save();
         return 0;
@@ -40,7 +46,7 @@ async function addTeacher(teacherObject) {
         return 1;
     }
     else {
-        // console.log(teacherObject);
+        
         let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password });
         await teacher.save();
         return 0;
@@ -85,7 +91,7 @@ async function fetchTeachers() {
     console.log(teacher_data);
     return teacher_data;
 }
-module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent, fetchSubjects,fetchTeachers,addTeacher };
+module.exports = { departmentFetch, newDepartment, fetchDepartments, addSubject, addStudent, fetchSubjects,fetchTeachers,addTeacher,deleteDepartment };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department

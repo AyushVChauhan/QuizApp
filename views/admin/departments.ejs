@@ -2,59 +2,97 @@
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 <link rel="stylesheet" href="/stylesheets/datatables.css" />
 <div class="grid-container">
-	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
+  <%- include("./adminHeader") %> <%- include("./adminSidebar") %>
 
-	<div class="main-container">
-		<div class="row ps-5 pe-5">
-			<div class="col-7 align-items-center d-flex">
-				<h1 class="text-start">Departments</h1>
-			</div>
-			<div class="col align-items-center d-flex">
-				<a style="border-radius: 900px; height:min-content" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deptModal"
-					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
-					DEPARTMENT
-				</a>
-			</div>
-		</div>
-		<table
-			class="uk-table uk-table-hover uk-table-striped text-center"
-			id="datatable"
-		>
-			<thead>
-				<th class="text-center">Sr no.</th>
-				<th class="text-center">Name</th>
-			</thead>
-			<tbody>
-				<% for( let index = 0; index < dept_data.length; index++ ) { %>
-				<tr>
-					<td><%= index+1 %></td>
-					<td><%= dept_data[index].name %></td>
-				</tr>
-				<% } %>
-			</tbody>
-		</table>
-	</div>
+  <div class="main-container">
+    <div class="row ps-5 pe-5 align-items-center d-flex ">
+      <div class="col h1">
+       Departments
+      </div>
+      <div class="col">
+        <a
+          style="border-radius: 900px; height: min-content"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#deptModal"
+          ><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD DEPARTMENT
+        </a>
+      </div>
+    </div>
+    <table
+      class="uk-table uk-table-hover uk-table-striped text-center"
+      id="datatable"
+    >
+      <thead>
+        <th class="text-center">Sr no.</th>
+        <th class="text-center">Name</th>
+        <th class="text-center">Actions</th>
+      </thead>
+      <tbody>
+        <% for( let index = 0; index < dept_data.length; index++ ) { %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td><%= dept_data[index].name %></td>
+          <td>
+            <div>
+              <a href=""><i class="fa-solid fa-edit edit fa-lg"></i></a>
+              <a class="delete" data-id="<%= dept_data[index]._id %>"
+                ><i style="color: red" class="fa-solid fa-trash icon fa-lg"></i
+              ></a>
+            </div>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
 </div>
 <%- include("./addDepartment") %> <%- include('../partials/footer') -%>
 <script>
-	$(document).ready(() => {
-		console.log("hello");
-		var myTable;
+  $(document).ready(() => {
+    console.log("hello");
+    var myTable;
 
-		myTable = $("#datatable").DataTable({
-			pagingType: "simple_numbers",
-			language: {
-				paginate: {
-					previous: "<",
-					next: ">",
-				},
-			},
-			columnDefs: [
-				// Center align the header content of column 1
-				{ className: "dt-head-center", targets: [0, 1] },
-			],
-		});
-	});
+    myTable = $("#datatable").DataTable({
+      pagingType: "simple_numbers",
+      language: {
+        paginate: {
+          previous: "<",
+          next: ">",
+        },
+      },
+      columnDefs: [
+        // Center align the header content of column 1
+        { className: "dt-head-center", targets: [0, 1] },
+      ],
+    });
+    $(document).on("click", ".delete", (e) => {
+      e.preventDefault();
+      //   console.log($(this).data("fruit"));
+      let id = e.currentTarget.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+			window.location = "/admin/departments/delete/" + id;
+        //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
+      });
+
+    });
+  });
+
+  function confirmation() {
+    // return false;
+    // event.preventDefault();
+  }
 </script>
 <script src="/scripts/adminSidebar.js"></script>
 <%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

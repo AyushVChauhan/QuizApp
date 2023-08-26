@@ -17,6 +17,12 @@ async function addDepartment(req, res) {
     }
     res.redirect("/admin");
 }
+async function deleteDepartment(req, res) {
+
+    await adminServices.deleteDepartment(req.params.id);
+    myCache.set("errors", { text: "Department Deleted Successfully", icon: "success" });
+    res.redirect("/admin/departments");
+}
 async function adminDashboard(req, res) {
     let errors = null
     if (myCache.has('errors')) {
@@ -106,4 +112,4 @@ async function teachers(req,res)
     let teacher_data = await adminServices.fetchTeachers()
     res.render("./admin/teachers", {dept_data, sub_data,teacher_data,errors:null});
 }
-module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students,teachers,addTeacher };
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students,teachers,addTeacher,deleteDepartment };
