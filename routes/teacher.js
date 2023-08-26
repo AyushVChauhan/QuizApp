@@ -26,7 +26,7 @@ function middleware(req, res, next) {
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
     console.log
     if (data.role === 1) {
-      console.log("Next");
+      //console.log("Next");
       next();
     }
     else {

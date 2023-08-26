@@ -21,7 +21,7 @@ async function login(req, res) {
       );
       res.cookie("auth", token);
       if (data.role === 0) {
-        console.log("login");
+       // console.log("login");
         res.redirect("/teacher");
       } else {
         res.redirect("/admin");
