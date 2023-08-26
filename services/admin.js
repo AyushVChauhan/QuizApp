@@ -28,8 +28,8 @@ async function addSubject(subObject) {
         subObject.departments.forEach(element => {
             deptids.push(new mongoose.Types.ObjectId(element));
         });
-        console.log(subObject);
-        let subject = new subjects({ name: subObject.subname, code: subObject.subcode, is_active: 1, semester: subObject.sem, course_outcomes: subObject.co, departments: deptids });
+        // console.log(subObject);
+        let subject = new subjects({ name: subObject.subname, code: subObject.subcode, is_active: 1, semester: subObject.semester, course_outcomes: subObject.co, departments: deptids });
         await subject.save();
         return 0;
     }
@@ -40,11 +40,7 @@ async function addTeacher(teacherObject) {
         return 1;
     }
     else {
-        // let deptids = [];
-        // teacherObject.departments.forEach(element => {
-        //     deptids.push(new mongoose.Types.ObjectId(element));
-        // });
-        console.log(teacherObject);
+        // console.log(teacherObject);
         let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password });
         await teacher.save();
         return 0;
