@@ -89,7 +89,17 @@
 							<% } %>
 						</ul>
 					</div>
-					<div>
+					<div class="mb-3">
+						<select name="semester" class="form-select">
+							<option selected>Select Semester</option>
+							<option value="1">1</option>
+							<% for( let index = 3; index < 9; index++ ) { %>
+								<option value="<%= index %>"><%= index %></option>
+							<% } %>
+							
+						</select>
+					</div>
+					<!-- <div>
 						<label for="sem" class="form-label">Semester :</label>
 						<input
 							type="number"
@@ -98,7 +108,7 @@
 							name="sem"
 							required
 						/>
-					</div>
+					</div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
