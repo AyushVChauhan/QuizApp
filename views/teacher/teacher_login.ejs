@@ -25,6 +25,16 @@
             class="form-control"
           />
         </div>
+        <select class="form-control" id="country">  
+          <option value="">Select your country</option>
+          <option value="US">United States of America</option>
+          <option value="KE">Kenya</option>
+          <option value="UK">United Kingdom</option>
+          <option value="IN">India</option>
+          <option value="CN">China</option>
+          <option value="CA">Canada</option>
+          <option value="ZA">South Africa</option>
+         </select>
         <!-- <label>Enter Captcha</label>
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -72,3 +82,8 @@
     });
   });
 </script>
+<script>
+  $(function(){
+   $("#country").select2();
+  }); 
+ </script>
