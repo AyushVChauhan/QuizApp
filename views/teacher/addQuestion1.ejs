@@ -1,0 +1,60 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+
+<div class="grid-container">
+  <!-- Header -->
+  <%- include("./teacherHeader") %>
+  <!-- End Header -->
+
+  <!-- Sidebar -->
+  <%- include("./teacherSidebar") %>
+  <!-- End Sidebar -->
+  <div class="main-container" style="margin-left: 15%; margin-right: 15%">
+    <form>
+      <div class="mb-3 h1">Add Question</div>
+      <div class="mb-3">
+        <select class="form-control" id="subject">
+          <option value="">Select Subject</option>
+          <option value="US">United States of America</option>
+          <option value="KE">Kenya</option>
+          <option value="UK">United Kingdom</option>
+          <option value="IN">India</option>
+          <option value="CN">China</option>
+          <option value="CA">Canada</option>
+          <option value="ZA">South Africa</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select name="co" class="form-select">
+          <option selected>Select CO</option>
+          <% for( let index = 1; index < 6; index++ ) { %>
+          <option value="<%= index %>"><%= index %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="topic" class="form-label">Topic :</label>
+        <input
+          type="text"
+          class="form-control"
+          id="topic"
+          name="topic"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+
+  <%- include('../partials/sweetalert') -%> <%- include('../partials/footer')
+  -%>
+  <script>
+    $(function () {
+      $("#subject").select2();
+    });
+  </script>
+</div>
