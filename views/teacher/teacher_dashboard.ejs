@@ -1,6 +1,79 @@
-<%- include('../partials/header') -%>
-<link rel="stylesheet" href="/stylesheets/style.css">
-<h1>
-    Teacher
-</h1>
+<%- include('../partials/header') %> 
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+
+<div class="grid-container">
+	<!-- Header -->
+	<%- include("./teacherHeader") %>
+	<!-- End Header -->
+
+	<!-- Sidebar -->
+	<%- include("./teacherSidebar") %>
+	<!-- End Sidebar -->
+
+	<!-- Main -->
+	<main class="main-container">
+		<div class="main-title">
+			<div class="h1 ps-5 pe-5 dboard">Dashboard</div>
+		</div>
+		<div class="box-container ps-5 pe-5">
+			<div class="row margin">
+				<div onclick="window.open('/teacher/myQuiz','_self')" class="col-md-3 m-1 box dashboard-tile">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<div class="dashboard-tile-header h4">My Quiz</div>
+					<p>11</p>
+						
+				</div>
+				<div class="col-md-1 extraBox"></div>
+				<div onclick="window.open('/teacher/viewQuiz','_self')" class="col-md-3 m-1 box dashboard-tile">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<div class="dashboard-tile-header h4">All Quiz</div>
+					<p>11</p>
+				</div>
+				<div class="col-md-1 extraBox"></div>
+				<div onclick="window.open('/teacher/questions','_self')" class="col-md-3 m-1 box dashboard-tile">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<div class="dashboard-tile-header h4">Questions</div>
+					<p>11</p>
+				</div>
+			</div>
+
+			<div class="row margin">
+				<div class="col-md-2 extraBox"></div>
+				<div onclick="window.open('/teacher/students','_self')" class="col-md-3 m-1 box">
+					<!-- <i class="fa-regular fa-building"></i> -->
+					<div class="dashboard-tile-header h4">Students</div>
+					<p>11</p>
+				</div>
+				<div class="col-md-1 extraBox"></div>
+				<div  onclick="window.open('/teacher/subjects','_self')" class="col-md-3 m-1 box dashboard-tile">
+					<!-- <i class="fa-regular fa-building fa-xl"></i> -->
+					<div class="dashboard-tile-header h4">Subjects</div>
+					<p>11</p>
+				</div>
+				<div class="col-md-2 extraBox"></div>
+			</div>
+		</div>
+	</main>
+	<!-- End Main -->
+</div>
 <%- include('../partials/footer') -%>
+<script>
+	const allSideMenu = document.querySelectorAll(
+		"#sidebar .side-menu.top li a"
+	);
+
+	allSideMenu.forEach((item) => {
+		const li = item.parentElement;
+
+		item.addEventListener("click", function () {
+			allSideMenu.forEach((i) => {
+				i.parentElement.classList.remove("active");
+			});
+			li.classList.add("active");
+		});
+	});
+</script>
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<script src="/scripts/teacherSidebar.js"></script>
+<%- include('../partials/sweetalert') %>
+<%- include('../partials/footer2') -%>

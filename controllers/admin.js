@@ -3,6 +3,19 @@ const myCache = require("./cache")
 const commonServices = require("../services/common");
 const xlsx = require("xlsx")
 const mailer = require("./mailer");
+async function adminDashboard(req, res) {
+    let errors = null
+    if (myCache.has('errors')) {
+        errors = myCache.take('errors')//take will empty the myCache
+        // console.log(errors)
+    }
+    let department_count = await adminServices.countDepartments()
+    let teacher_count = await adminServices.countTeachers()
+    let subject_count = await adminServices.countSubjects()
+    let student_count = await adminServices.countStudents()
+    // let quiz_count = await adminServices.countQuizzes()
+    res.render("./admin/admin_dashboard", { errors, department_count,teacher_count, subject_count, student_count});
+}
 async function addDepartment(req, res) {
 
     if (req.body.name.trim() !== "") {
@@ -22,15 +35,6 @@ async function deleteDepartment(req, res) {
     await adminServices.deleteDepartment(req.params.id);
     myCache.set("errors", { text: "Department Deleted Successfully", icon: "success" });
     res.redirect("/admin/departments");
-}
-async function adminDashboard(req, res) {
-    let errors = null
-    if (myCache.has('errors')) {
-        errors = myCache.take('errors')//take will empty the myCache
-        // console.log(errors)
-    }
-    let dept_data = await adminServices.fetchDepartments()
-    res.render("./admin/admin_dashboard", { errors, dept_data });
 }
 
 async function addSubject (req, res) {

@@ -16,5 +16,5 @@ const quizSchema = new mongoose.Schema({
     is_active: Number,
 }, { timestamps: true });
 
-const quizzesModel = mongoose.model("quiz", quizSchema);
+const quizzesModel = mongoose.model("quizzes", quizSchema);
 module.exports = quizzesModel;

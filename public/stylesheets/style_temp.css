@@ -86,20 +86,17 @@ body {
 	padding: 20px 20px;
 }
 
-.main-title {
+/* .main-title {
 	display: flex;
 	justify-content: space-between;
-}
-.box-container .row .col-md-3 {
+} */
+.box-container .row .box {
 	text-align: center;
-	/* background-color: #CEDEBD; */
-	/* background-color: #B9B4C7; */
 	background-color: #d8d9da;
-	/* border:2px solid  black; */
 	border-radius: 14px;
 	padding: 20px;
 }
-.col-md-3:hover:not(.active) {
+.box:hover:not(.active) {
 	background-color: #11467b;
 	color: rgb(255, 255, 255);
 	cursor: pointer;
@@ -159,16 +156,22 @@ body {
 	.margin {
 		margin-top: 0%;
 	}
-	.header-left {
+	/* .header-left {
 		display: none;
-	}
+	} */
 }
 @media screen and (max-width: 768px) {
 	.margin {
 		margin-top: 0%;
 		margin-left: 5%;
 	}
-	.col-md-3 {
+	/* .col-md-3 {
 		width: 90%;
+	} */
+	.box {
+		width: 90%;
+	}
+	.dboard{
+		text-align: center;
 	}
 }

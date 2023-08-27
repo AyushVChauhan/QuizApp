@@ -17,7 +17,8 @@ router.get("/login", teacherControllers.loginGet);
 router.use(middleware);
 
 router.get("/", (req, res) => {
-  res.render("./teacher/teacher_dashboard");
+  let errors = null;
+  res.render("./teacher/teacher_dashboard", {errors});
 });
 
 function middleware(req, res, next) {
