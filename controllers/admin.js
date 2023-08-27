@@ -13,8 +13,8 @@ async function adminDashboard(req, res) {
     let teacher_count = await adminServices.countTeachers()
     let subject_count = await adminServices.countSubjects()
     let student_count = await adminServices.countStudents()
-    // let quiz_count = await adminServices.countQuizzes()
-    res.render("./admin/admin_dashboard", { errors, department_count,teacher_count, subject_count, student_count});
+    let quiz_count = await adminServices.countQuizzes()
+    res.render("./admin/admin_dashboard", { errors, department_count,teacher_count, subject_count, student_count,quiz_count});
 }
 async function addDepartment(req, res) {
 

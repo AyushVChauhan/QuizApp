@@ -3,7 +3,7 @@ const departments = require("../models/departments");
 const subjects = require("../models/subjects");
 const teachers = require("../models/teachers");
 const students = require("../models/students");
-// const quizzes = require("../models/quizzes");
+const quizzes = require("../models/quizzes");
 const mailer = require("../controllers/mailer");
 const md5 = require("md5");
 
@@ -120,11 +120,11 @@ async function countStudents() {
     return student_count;
 }
 /* ------ QUIZZES ------ */
-/* async function countQuizzes() {
+ async function countQuizzes() {
     let quiz_count = await quizzes.count({ is_active: 1 });
     return quiz_count;
-} */
-module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, countStudents};
+ }
+module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, countStudents,countQuizzes};
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department
