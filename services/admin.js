@@ -47,7 +47,7 @@ async function addTeacher(teacherObject) {
     }
     else {
         
-        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password });
+        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password,role:0 });
         await teacher.save();
         return 0;
     }

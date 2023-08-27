@@ -36,7 +36,7 @@
                     </div> -->
         <div id="html_element"></div>
         <div class="form-group">
-          <button type="submit" id="submit" class="btn btn-primary" value="abc">
+          <button type="button" id="sub" class="btn btn-primary" value="abc">
             Submit
           </button>
         </div>
@@ -61,11 +61,13 @@
 
 <script>
   $(document).ready(function () {
-    $("#submit").click(function (e) {
+    $("#sub").click(function (e) {
       let captcha = grecaptcha.getResponse();
-      if (captcha.length == 0) {
-        e.preventDefault();
+      if (captcha.length == 0) {      
         alert("captcha invalid");
+      }
+      else{
+        $("#t").submit();
       }
     });
   });
