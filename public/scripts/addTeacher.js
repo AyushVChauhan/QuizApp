@@ -1,0 +1,3 @@
+function teachersubform() {
+    $("#teacherForm").submit();
+}

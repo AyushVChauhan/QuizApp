@@ -18,6 +18,14 @@ $(document).ready(function () {
     {
         $("#subjects").toggleClass("hovered")
     }
+    else if(arr.includes("students"))
+    {
+        $("#students").toggleClass("hovered")
+    }
+    else if(arr.includes("teachers"))
+    {
+        $("#teachers").toggleClass("hovered")
+    }
     else
     {
         $("#dashboard").toggleClass("hovered")

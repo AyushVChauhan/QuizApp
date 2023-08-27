@@ -1,68 +1,114 @@
-<%- include('../partials/header') -%>
-  <div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="teacherModalLabel">ADD TEACHER</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="container pb-10">
-          <div class="row justify-content-center mt-5">
-            <div class="col-lg-6 border border-dark rounded">
-              <form action="/admin/addTeacher" method="POST">
-                <div class="mb-3">
-                  <label for="uname" class="form-label">User name</label>
-                  <input type="text" name="username" class="form-control" id="uname" aria-describedby="emailHelp" />
-                </div>
-                <div class="mb-3">
-                  <label for="fname" class="form-label">First name</label>
-                  <input type="text" name="firstname" class="form-control" id="fname"
-                    aria-describedby="emailHelp" />
-                </div>
-
-                <div class="mb-3">
-                  <label for="mname" class="form-label">Middle name</label>
-                  <input type="text" name="middlename" class="form-control" id="mname" aria-describedby="emailHelp"
-                     />
-                </div>
-                <div class="mb-3">
-                  <label for="lname" class="form-label">Last name</label>
-                  <input type="text" name="lastname" class="form-control" id="lname" aria-describedby="emailHelp" />
-                </div>
-
-                <div class="mb-3">
-                  <select class="form-select" name="department">
-                    <option selected>Select Department</option>
-                    <% dept_data.forEach(element=> { %>
-                      <option value="<%= element._id %>">
-                        <%= element.name %>
-                      </option>
-                      <% }) %>
-                  </select>
-                </div>
-
-                <div class="mb-3">
-                  <label for="contact" class="form-label">Contact</label>
-                  <input type="" name="contact" class="form-control" id="contact" aria-describedby="emailHelp" />
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" />
-                </div>
-
-                <div class="mb-3">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" name="password" class="form-control" id="password" />
-                </div>
-
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary mb-3">Submit</button>
-                </div>
-              </form>
-            </div>
+<div
+  class="modal fade"
+  id="teacherModal"
+  tabindex="-1"
+  aria-labelledby="teacherModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="teacherModalLabel">ADD TEACHER</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/addTeacher" method="POST" id="teacherForm">
+          <div class="mb-3">
+            <label for="uname" class="form-label">User name</label>
+            <input
+              type="text"
+              name="username"
+              class="form-control"
+              id="uname"
+              aria-describedby="emailHelp"
+            />
           </div>
+          <div class="mb-3">
+            <label for="fname" class="form-label">First name</label>
+            <input
+              type="text"
+              name="firstname"
+              class="form-control"
+              id="fname"
+              aria-describedby="emailHelp"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="mname" class="form-label">Middle name</label>
+            <input
+              type="text"
+              name="middlename"
+              class="form-control"
+              id="mname"
+              aria-describedby="emailHelp"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="lname" class="form-label">Last name</label>
+            <input
+              type="text"
+              name="lastname"
+              class="form-control"
+              id="lname"
+              aria-describedby="emailHelp"
+            />
+          </div>
+
+          <div class="mb-3">
+            <select class="form-select" name="department">
+              <option selected>Select Department</option>
+              <% dept_data.forEach(element=> { %>
+              <option value="<%= element._id %>"><%= element.name %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="contact" class="form-label">Contact</label>
+            <input
+              type=""
+              name="contact"
+              class="form-control"
+              id="contact"
+              aria-describedby="emailHelp"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              class="form-control"
+              id="email"
+              aria-describedby="emailHelp"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              id="password"
+            />
+          </div>
+         
+        </form>
+      </div>
+      <div class="modal-footer ">
+        <div class="text-center">
+          <button onclick="teachersubform()" type="button" class="btn btn-primary mb-3 ">
+            Submit
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <%- include('../partials/footer') -%>
+</div>
