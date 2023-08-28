@@ -1,0 +1,171 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+
+<div class="grid-container">
+<!-- Header -->
+<%- include("./teacherHeader") %>
+<!-- End Header -->
+
+<!-- Sidebar -->
+<%- include("./teacherSidebar") %>
+<!-- End Sidebar -->
+<div class="main-container">
+  <div class="row">
+   
+    <div class="col">
+      
+        
+        <form>
+            <div class="mb-3 h1">Add Question</div>
+            <div class="mb-3">
+                <select class="form-select" name="type" id="type">
+                    <option>Select Question Type</option>
+                    <option  value="1">MCQ</option>
+                    <option value="2">One word</option>
+                    <option  value="3">Descriptive</option>
+                    
+                </select>
+            </div>
+            <div id="mark" class="mb-3" style="display: none;">
+                <label for="marks" class="form-label">Marks </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="marks"
+                  name="marks"
+                  style="width: 10%;"
+                  required
+                />
+            </div>
+            <div class="mb-3">
+                <label for="question" class="form-label">Question</label>
+                <textarea class="form-control" id="question" name="question"></textarea>
+                <div class="mb-3 text-center">OR</div>
+                <input type="file" class="form-control" id="question" name="question"> 
+            </div>
+            <div class="mb-3">
+                <label for="question" class="form-label">Difficulty Level</label><br>
+                <input type="radio" class="btn-check" name="opt" id="1" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="1">Easy</label>
+                
+                <input type="radio" class="btn-check" name="opt" id="2" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="2">Medium</label>
+                
+                <input type="radio" class="btn-check" name="opt" id="3" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="3">Hard</label>
+            </div>
+            <div id="opt" style="display: none;">
+            <div >
+                <div class=" mb-3">
+                    <label for="option1" class="form-label">option 1 </label>
+                    <input type="text" class="form-control mb-input" placeholder="option 1" name="option1" id="option1">
+                </div>
+            </div>
+            <div id="newinput"></div>
+            <button id="rowAdder" onclick="add()"
+            type="button"
+            class="btn btn-primary mb-3">ADD  </button>
+            <div class="mb-3">
+                <select class="form-select" name="option" id="option">
+                    <option>Select Answer</option>
+                    <option  value="1">option 1</option>
+                  
+                    
+                </select>
+            </div>
+        </div>
+
+        <div id="ans" class="mb-3" style="display: none;">
+            <label for="answer" class="form-label">Answer </label>
+            <input
+              type="text"
+              class="form-control"
+              id="answer"
+              name="answer"
+             
+              required
+            />
+        </div>
+            <div class="mb-3">
+                <button
+                type="reset"
+                class="btn btn-secondary"
+                
+                >
+                Reset
+            </button>
+            <button
+            type="submit"
+            class="btn btn-primary"
+            
+            >
+            Save changes
+        </button>
+    </div>
+</form>
+</div>
+<div class="col">
+    hello
+  </div>
+</div>
+</div>
+</div>
+
+
+<%- include('../partials/sweetalert') -%>
+<%- include('../partials/footer') -%>
+<script>
+//     var row = document.getElementById('row');
+    
+//     function add(){
+//         var newField = document.createElement('input');
+//   newField.setAttribute('type','text');
+//   newField.setAttribute('name','text');
+//   newField.setAttribute('class','text');
+  
+//   newField.setAttribute('placeholder','Option');
+//   row.appendChild(newField);
+// }
+    let count = 2;
+  $("#rowAdder").click(function () {
+            newRowAdd =
+                '<div > <div class=" mb-3">' + ' <label for="option" class="form-label">option '+count+' </label>'+
+                    '<input type="text" class="form-control mb-input" placeholder=" option '+count+'" name=" option'+count+'"> </div>  </div>';
+        
+                $('#newinput').append(newRowAdd);
+                count++;
+                let options="";
+                for(let i=1;i<count;i++){
+                    options+= `<option  value="${i}">option ${i}</option>` 
+                }
+                $("#option").html(options);
+                
+            });
+        
+        $(document).ready(function () {
+            
+            $('#type').change(function () {
+                var value = $(this).val(); var toAppend = '';
+                 if (value == 1) {
+                        let x=document.getElementById("opt"); x.style.display = "block";
+                        let y=document.getElementById("ans"); y.style.display = "none";
+                        let z=document.getElementById("mark"); z.style.display = "none";
+                     }
+                    if (value == 2) {
+                        // toAppend = " <label>Answer :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#answer").html(toAppend); return;
+                        let x=document.getElementById("opt"); x.style.display = "none";
+                        let y=document.getElementById("ans"); y.style.display = "block";
+                        let z=document.getElementById("mark"); z.style.display = "none";
+                    }
+                    if (value == 3) {
+                        // toAppend = " <label>Marks :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#mark").html(toAppend); return;
+                        let x=document.getElementById("opt"); x.style.display = "none";
+                        let y=document.getElementById("ans"); y.style.display = "none";
+                        let z=document.getElementById("mark"); z.style.display = "block";
+                    }
+                    
+                });
+                
+            });
+            </script>
+ 
