@@ -32,10 +32,7 @@ async function login(req, res) {
     
   // else{
   //   res.redirect("/teacher/login");
-  // }
- 
- 
-  
+  // }  
 }
 function loginGet(req, res) {
   res.render("teacher/teacher_login");
@@ -57,4 +54,14 @@ async function uploadStudent(req, res) {
       });
   }
 }
-module.exports = { login, loginGet, uploadStudent, uploadStudentGet };
+
+function teacherDashboard(req,res){
+  let errors = null;
+  res.render("./teacher/teacher_dashboard", {errors});
+}
+async function addQue_subSelect(req,res){
+  let subData=JSON.parse(JSON.stringify(await teacherServices.subjectFetch()));
+  res.render("./teacher/addQuestion1",{subData});
+}
+
+module.exports = { login, loginGet, uploadStudent, uploadStudentGet,teacherDashboard,addQue_subSelect };

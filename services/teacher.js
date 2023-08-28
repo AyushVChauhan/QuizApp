@@ -1,5 +1,7 @@
 const teachers = require("../models/teachers");
 const students = require("../models/students");
+const subjects = require("../models/subjects");
+
 
 async function loginFetch(username, password) {
     let data = await teachers.findOne({username:username, password:password});
@@ -19,4 +21,11 @@ async function addStudent(enrollment){
     }
 }
 
-module.exports = {loginFetch, loginCheck, addStudent};
+async function subjectFetch()
+{
+    let subData=await subjects.find({});
+    console.log(subData);
+    return subData;
+}
+
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch};

@@ -16,10 +16,9 @@ router.get("/login", teacherControllers.loginGet);
 
 router.use(middleware);
 
-router.get("/", (req, res) => {
-  let errors = null;
-  res.render("./teacher/teacher_dashboard", {errors});
-});
+router.get("/", teacherControllers.teacherDashboard);
+router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
+// router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;

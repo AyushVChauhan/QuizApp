@@ -1,6 +1,9 @@
 <%- include('../partials/header') -%>
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
-
+<script>
+  let subArray = JSON.parse('<%- JSON.stringify(subData) %>');
+  console.log(subArray);
+</script>
 <div class="grid-container">
   <!-- Header -->
   <%- include("./teacherHeader") %>
@@ -9,27 +12,24 @@
   <!-- Sidebar -->
   <%- include("./teacherSidebar") %>
   <!-- End Sidebar -->
-  <div class="main-container" style="margin-left: 15%; margin-right: 15%">
+  <div class="main-container" style="width: 40%">
     <form>
       <div class="mb-3 h1">Add Question</div>
       <div class="mb-3">
-        <select class="form-control" id="subject">
-          <option value="">Select Subject</option>
-          <option value="US">United States of America</option>
-          <option value="KE">Kenya</option>
-          <option value="UK">United Kingdom</option>
-          <option value="IN">India</option>
-          <option value="CN">China</option>
-          <option value="CA">Canada</option>
-          <option value="ZA">South Africa</option>
+        <select
+          class="form-control"
+          id="subject"
+        >
+          <% subData.forEach(element=> { %>
+          <option value="<%= element._id %>">
+            <%= element.code %> : <%=element.name%>
+          </option>
+          <% }) %>
         </select>
       </div>
       <div class="mb-3">
-        <select name="co" class="form-select">
+        <select name="co" class="form-select" id="coSelect" disabled>
           <option selected>Select CO</option>
-          <% for( let index = 1; index < 6; index++ ) { %>
-          <option value="<%= index %>"><%= index %></option>
-          <% } %>
         </select>
       </div>
       <div class="mb-3">
@@ -49,12 +49,30 @@
       </div>
     </form>
   </div>
-
-  <%- include('../partials/sweetalert') -%> <%- include('../partials/footer')
-  -%>
+  <%- include('../partials/footer')-%>
   <script>
     $(function () {
       $("#subject").select2();
+      function coSelect(data) {
+        console.log("hii");
+        
+      }
+      $("#subject").change(()=>{
+        // console.log(this.value);
+        let data= $(this).find(":selected").val()
+        subArray.forEach((element) => {
+          if (element["_id"] === data) {
+            let cos = "";
+            for (let i = 1; i <= element["course_outcomes"]; i++) {
+              cos += `<option value=${i}>CO-${i}</option>`;
+            }
+            $("#coSelect").prop("disabled", false);
+            $("#coSelect").html(cos);
+          }
+        });
+       
+
+      })
     });
   </script>
 </div>
