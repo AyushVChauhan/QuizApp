@@ -60,8 +60,19 @@ function teacherDashboard(req,res){
   res.render("./teacher/teacher_dashboard", {errors});
 }
 async function addQue_subSelect(req,res){
-  let subData=JSON.parse(JSON.stringify(await teacherServices.subjectFetch()));
+  let subData=await teacherServices.subjectFetch();
   res.render("./teacher/addQuestion1",{subData});
 }
 
-module.exports = { login, loginGet, uploadStudent, uploadStudentGet,teacherDashboard,addQue_subSelect };
+async function addTopic(req,res) {
+  await teacherServices.addTopic(req.body);
+  res.redirect("/teacher/addQuestion/topics")
+}
+
+async function getTopics(req,res) {
+  let data = await teacherServices.getTopics(req.body);
+  console.log(data);
+  res.json(data);
+}
+
+module.exports = { login, loginGet, uploadStudent, uploadStudentGet,teacherDashboard,addQue_subSelect, addTopic, getTopics };

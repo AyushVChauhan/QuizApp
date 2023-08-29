@@ -43,7 +43,7 @@ app.use("/admin", adminRoutes);
 
 
 app.listen(process.env.PORT, () => {
-    console.log("Listening at port 3000");
+    console.log("http://localhost:3000");
 })
 
 // run1();

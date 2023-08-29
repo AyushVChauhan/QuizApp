@@ -1,0 +1,60 @@
+<div
+	class="modal fade"
+	id="topicModal"
+	tabindex="-1"
+	aria-labelledby="topicModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="topicModalLabel">ADD TOPIC</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<form action="/teacher/addTopic" method="POST">
+				<div class="modal-body">
+					<select class="form-control" id="subjectModal" name="subject">
+						<% subData.forEach(element=> { %>
+						<option value="<%= element._id %>">
+							<%= element.code %> : <%=element.name%>
+						</option>
+						<% }) %>
+					</select>
+					<select
+						name="co"
+						class="form-select"
+						id="coSelectModal"
+						disabled
+					>
+						<option selected>Select CO</option>
+					</select>
+					<label for="topic" class="form-label">Topic :</label>
+					<input
+						type="text"
+						class="form-control"
+						id="topicModal"
+						name="topic"
+						required
+					/>
+				</div>
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn btn-secondary"
+						data-bs-dismiss="modal"
+					>
+						Close
+					</button>
+					<button type="submit" class="btn btn-primary">
+						Save changes
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -17,7 +17,9 @@ router.get("/login", teacherControllers.loginGet);
 router.use(middleware);
 
 router.get("/", teacherControllers.teacherDashboard);
+router.post("/addTopic", teacherControllers.addTopic);
 router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
+router.post("/addQuestion/getTopics", teacherControllers.getTopics);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 
 function middleware(req, res, next) {

@@ -1,78 +1,82 @@
 <%- include('../partials/header') -%>
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+
+<%- include('../partials/footer')-%>
 <script>
-  let subArray = JSON.parse('<%- JSON.stringify(subData) %>');
-  console.log(subArray);
+	let subArray = JSON.parse('<%- JSON.stringify(subData) %>');
+	console.log(subArray);
 </script>
+<style>
+	#datatable_wrapper {
+		margin: 0px;
+	}
+</style>
+<script src="/scripts/addQuestion1.js"></script>
 <div class="grid-container">
-  <!-- Header -->
-  <%- include("./teacherHeader") %>
-  <!-- End Header -->
+	<!-- Header -->
+	<%- include("./teacherHeader") %>
+	<!-- End Header -->
 
-  <!-- Sidebar -->
-  <%- include("./teacherSidebar") %>
-  <!-- End Sidebar -->
-  <div class="main-container" style="width: 40%">
-    <form>
-      <div class="mb-3 h1">Add Question</div>
-      <div class="mb-3">
-        <select
-          class="form-control"
-          id="subject"
-        >
-          <% subData.forEach(element=> { %>
-          <option value="<%= element._id %>">
-            <%= element.code %> : <%=element.name%>
-          </option>
-          <% }) %>
-        </select>
-      </div>
-      <div class="mb-3">
-        <select name="co" class="form-select" id="coSelect" disabled>
-          <option selected>Select CO</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="topic" class="form-label">Topic :</label>
-        <input
-          type="text"
-          class="form-control"
-          id="topic"
-          name="topic"
-          required
-        />
-      </div>
+	<!-- Sidebar -->
+	<%- include("./teacherSidebar") %>
+	<!-- End Sidebar -->
+	<div class="main-container">
+		<div class="row pe-5 align-items-center d-flex">
+			<div class="col h1">Topics</div>
+			<div class="col text-end">
+				<button
+					style="border-radius: 900px; height: min-content"
+					class="btn btn-primary"
+					data-bs-toggle="modal"
+					data-bs-target="#topicModal"
+				>
+					<i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					TOPIC
+				</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-7">
+				<!-- subject and co div -->
+				<div class="row mb-3">
+					<div class="col-6">
+						<select class="form-control" id="subject">
+							<option selected value="0">Select Subject</option>
+							<% subData.forEach(element=> { %>
+							<option value="<%= element._id %>">
+								<%= element.code %> : <%=element.name%>
+							</option>
+							<% }) %>
+						</select>
+					</div>
+					<div class="col-4">
+						<select
+							name="co"
+							class="form-select"
+							id="coSelect"
+							disabled
+						>
+							<option selected>Select CO</option>
+						</select>
+					</div>
+					<div class="col-2">
+						<button
+							class="btn btn-primary"
+							style="border-radius: 100px"
+							id="getTopicButton"
+						>
+							OK
+						</button>
+					</div>
+				</div>
 
-      <div class="mb-3">
-        <button type="reset" class="btn btn-secondary">Reset</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div>
-    </form>
-  </div>
-  <%- include('../partials/footer')-%>
-  <script>
-    $(function () {
-      $("#subject").select2();
-      function coSelect(data) {
-        console.log("hii");
-        
-      }
-      $("#subject").change(()=>{
-        // console.log(this.value);
-        let data= $(this).find(":selected").val()
-        subArray.forEach((element) => {
-          if (element["_id"] === data) {
-            let cos = "";
-            for (let i = 1; i <= element["course_outcomes"]; i++) {
-              cos += `<option value=${i}>CO-${i}</option>`;
-            }
-            $("#coSelect").prop("disabled", false);
-            $("#coSelect").html(cos);
-          }
-        });
-       
-
-      })
-    });
-  </script>
+				<div class="mb-3" id="tableDiv">
+					
+				</div>
+			</div>
+			<div class="col-5" id="selectedTableDiv"></div>
+		</div>
+	</div>
+	<%- include('./addTopic')-%>
 </div>
