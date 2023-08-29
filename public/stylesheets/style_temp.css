@@ -117,6 +117,12 @@ body {
 	color: rgb(0, 56, 101);
 }
 
+
+.ck-editor_editable{
+	max-width: 50% !important;
+	overflow-x: scroll;
+}
+
 /* ---------- MEDIA QUERIES ---------- */
 
 /* Medium <= 992px */
