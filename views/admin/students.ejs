@@ -25,10 +25,24 @@
 			id="datatable"
 		>
 			<thead>
-				<th>1</th>
-				<th>1</th>
-				<th>1</th>
+				<th class="text-center">Sr no.</th>
+                <th class="text-center">Enrollment no.</th>	
+                <th class="text-center">Department</th>
+                <th class="text-center">Semester</th>
+                <th class="text-center">Email</th>
 			</thead>
+			<tbody>
+				<% for( let index = 0; index < student_data.length; index++ ) { %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= student_data[index].enrollment %></td>
+                    <td><%= student_data[index].department_id.name %></td>
+                    <td><%= student_data[index].semester %></td>
+                    <td><%= student_data[index].email %></td>
+                   
+				</tr>
+				<% } %>
+			</tbody>
 		</table>
 	</div>
 </div>
