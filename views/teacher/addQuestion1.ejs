@@ -36,8 +36,8 @@
 				</button>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-7">
+		<div class="row" >
+			<div class="col-7" >
 				<!-- subject and co div -->
 				<div class="row mb-3">
 					<div class="col-6">
@@ -71,11 +71,14 @@
 					</div>
 				</div>
 
-				<div class="mb-3" id="tableDiv">
+				<div class="mb-3" id="tableDiv" style="height: 420px; overflow-x:hidden">
 					
 				</div>
 			</div>
-			<div class="col-5" id="selectedTableDiv"></div>
+			<div class="col-5" id="selectedTableDiv" style="height: 420px; overflow-y:scroll"></div>
+		</div>
+		<div class="text-end">
+			<button class="btn btn-primary" id="nextButton" onclick="nextPage()">Next</button>
 		</div>
 	</div>
 	<%- include('./addTopic')-%>

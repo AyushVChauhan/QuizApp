@@ -1,5 +1,22 @@
 let alltopics = [];
 let selectedTopics = [];
+function nextPage() {
+    if(selectedTopics.length > 0)
+    {
+        $.ajax({
+            type: "POST",
+            url: "/teacher/addQuestion/setTopics",
+            data: {selectedTopics:selectedTopics},
+            success: function (response) {
+                location.href = "http://localhost:3000/teacher/addQuestion/question"
+            }
+        });
+    }
+    else
+    {
+        Swal.fire({text:"Atleast Select One Topic",icon:"warning",timer:2000})
+    }
+}
 function adder(e) {
     // let a = document.getElementById("abc");
     let id = e.getAttribute("data-id");
@@ -66,6 +83,9 @@ $(function () {
     $("#coSelect").select2();
 
     $("#subject").change(() => {
+        selectedTopics = [];
+        $("#selectedTableDiv").html("");
+        $("#tableDiv").html("");
         // console.log(this.value);
         let data = document.getElementById("subject").value;
         subArray.forEach((element) => {
@@ -109,7 +129,6 @@ $(function () {
     $("#getTopicButton").click(() => {
         let subject = $("#subject").val();
         let co = $("#coSelect").val();
-        console.log(subject + co);
         $.ajax({
             type: "POST",
             url: "/teacher/addQuestion/getTopics",
@@ -134,6 +153,8 @@ $(function () {
 
                     myTable = $("#datatable").DataTable({
                         pagingType: "simple_numbers",
+                        scrollCollapse: true,
+                        scrollY: '350px',
                         language: {
                             paginate: {
                                 previous: "<",

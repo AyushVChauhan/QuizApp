@@ -2,6 +2,7 @@ const teachers = require("../models/teachers");
 const students = require("../models/students");
 const subjects = require("../models/subjects");
 const courseOutcomes = require("../models/courseOutcomes");
+const questions = require("../models/questions");
 const { default: mongoose } = require("mongoose");
 
 
@@ -40,5 +41,11 @@ async function getTopics(topicObject) {
     return topic;
 }
 
+async function addQuestion(quesobject)
+{
+    let question = new questions(quesobject);
+    await question.save();
+}
 
-module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics};
+
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion};

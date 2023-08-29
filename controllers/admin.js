@@ -80,7 +80,6 @@ async function addStudent(req, res) {
     var obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
     if (obj[0]["Enrollment No"] === undefined) {
         myCache.set("errors", { text: "No (Enrollment No) field", icon: "warning" });
-        console.log("hell");
     }
     else if(obj[0]["Email"] === undefined)
     {

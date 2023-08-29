@@ -4,6 +4,7 @@ const teacherControllers = require("../controllers/teacher");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const myCache = require("../controllers/cache");
 const storage = multer.diskStorage({
   destination: "./public/images", filename: (req, file, cb) => {
     cb(null, "schema.xlsx")
@@ -19,8 +20,22 @@ router.use(middleware);
 router.get("/", teacherControllers.teacherDashboard);
 router.post("/addTopic", teacherControllers.addTopic);
 router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
+router.get("/addQuestion/question",questionMiddleware, teacherControllers.addQue_question);
+router.post("/addQuestion/question", questionMiddleware, teacherControllers.addQuestion);
 router.post("/addQuestion/getTopics", teacherControllers.getTopics);
+router.post("/addQuestion/setTopics", teacherControllers.setTopics);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
+
+function questionMiddleware(req,res,next){
+  if(myCache.has("Topics"))
+  {
+    next();
+  }
+  else
+  {
+    res.redirect("/teacher/addQuestion/topics");
+  }
+}
 
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;

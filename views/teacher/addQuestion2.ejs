@@ -2,275 +2,178 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<%- include('../partials/footer') -%>
 
 <div class="grid-container">
-  <!-- Header -->
-  <%- include("./teacherHeader") %>
-  <!-- End Header -->
+	<!-- Header -->
+	<%- include("./teacherHeader") %>
+	<!-- End Header -->
 
-  <!-- Sidebar -->
-  <%- include("./teacherSidebar") %>
-  <!-- End Sidebar -->
-  <div class="main-container">
-    <div class="row">
-      <div class="col-6">
-        <form>
-          <div class="mb-3 h1">Add Question</div>
+	<!-- Sidebar -->
+	<%- include("./teacherSidebar") %>
 
-          <div class="mb-3" style="height:490px; overflow-y: scroll;">
-            <div class="mb-3">
-              <select class="form-select" name="type" id="type">
-                <option>Select Question Type</option>
-                <option value="1">MCQ</option>
-                <option value="2">One word</option>
-                <option value="3">Descriptive</option>
-              </select>
-            </div>
-            <div id="mark" class="mb-3" style="display: none">
-              <label for="marks" class="form-label">Marks </label>
-              <input
-                type="number"
-                class="form-control"
-                id="marks"
-                name="marks"
-                style="width: 10%"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="question" class="form-label">Question</label>
-              <div id="editor"></div>
-              <div class="mb-3 text-center">OR</div>
-              <input
-                type="file"
-                class="form-control"
-                id="question"
-                name="question"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="question" class="form-label">Difficulty Level</label
-              ><br />
-              <input
-                type="radio"
-                class="btn-check"
-                name="opt"
-                id="1"
-                autocomplete="off"
-              />
-              <label class="btn btn-outline-secondary" for="1">Easy</label>
+	<!-- End Sidebar -->
+	<div class="main-container">
+		<div class="row">
+			<div class="col-6">
+				<div class="mb-3 h1">Add Question</div>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="opt"
-                id="2"
-                autocomplete="off"
-              />
-              <label class="btn btn-outline-secondary" for="2">Medium</label>
+				<div class="mb-3" style="height: 490px; overflow-y: scroll">
+					<div class="mb-3">
+						<select class="form-select" name="type" id="type">
+							<option>Select Question Type</option>
+							<option value="1">MCQ</option>
+							<option value="2">One word</option>
+							<option value="3">Descriptive</option>
+						</select>
+					</div>
+					<div id="mark" class="mb-3" style="display: none">
+						<label for="marks" class="form-label">Marks </label>
+						<input
+							type="number"
+							class="form-control"
+							id="marks"
+							name="marks"
+							style="width: 10%"
+							required
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="question" class="form-label"
+							>Question</label
+						>
+						<div id="editor"></div>
+						<div class="mb-3 text-center">OR</div>
+						<input
+							type="file"
+							class="form-control"
+							id="question"
+							name="question"
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="question" class="form-label"
+							>Difficulty Level</label
+						><br />
+						<input
+							type="radio"
+							class="btn-check"
+							name="opt"
+							id="1"
+							value="1"
+							autocomplete="off"
+						/>
+						<label class="btn btn-outline-secondary" for="1"
+							>Easy</label
+						>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="opt"
-                id="3"
-                autocomplete="off"
-              />
-              <label class="btn btn-outline-secondary" for="3">Hard</label>
-            </div>
-            <div id="opt" style="display: none">
-              <div class="optionAddRemove">
-                <div class="mb-3">
-                  <label for="option1" class="form-label">Option 1 </label>
-                  <input
-                    type="text"
-                    class="form-control mb-input"
-                    placeholder="option 1"
-                    name="option1"
-                    id="option1"
-                    oninput="arrayStore(this)"
-                  />
-                </div>
-              </div>
-              <button id="rowAdder" type="button" class="btn btn-primary mb-3">
-                ADD
-              </button>
-              <button id="rowRemover" type="button" class="btn btn-danger mb-3">
-                REMOVE
-              </button>
+						<input
+							type="radio"
+							class="btn-check"
+							name="opt"
+							id="2"
+							value="2"
+							autocomplete="off"
+						/>
+						<label class="btn btn-outline-secondary" for="2"
+							>Medium</label
+						>
 
-              <div class="mb-3">
-                <label class="form-label">Answer </label>
-                <select
-                  class="form-select"
-                  name="option"
-                  id="option"
-                  onchange="answerTick(this.value)"
-                >
-                  <option>Select Answer</option>
-                  <option value="1">Option 1</option>
-                </select>
-              </div>
-            </div>
+						<input
+							type="radio"
+							class="btn-check"
+							name="opt"
+							id="3"
+							value="3"
+							autocomplete="off"
+						/>
+						<label class="btn btn-outline-secondary" for="3"
+							>Hard</label
+						>
+					</div>
+					<div id="opt" style="display: none">
+						<div class="optionAddRemove">
+							<div class="mb-3">
+								<label for="option1" class="form-label"
+									>Option 1
+								</label>
+								<input
+									type="text"
+									class="form-control mb-input"
+									placeholder="option 1"
+									name="option1"
+									id="option1"
+									oninput="arrayStore(this)"
+								/>
+							</div>
+						</div>
+						<button
+							id="rowAdder"
+							type="button"
+							class="btn btn-primary mb-3"
+						>
+							ADD
+						</button>
+						<button
+							id="rowRemover"
+							type="button"
+							class="btn btn-danger mb-3"
+						>
+							REMOVE
+						</button>
 
-            <div id="ans" class="mb-3" style="display: none">
-              <label for="answer" class="form-label">Answer </label>
-              <input
-                type="text"
-                class="form-control"
-                id="answer"
-                name="answer"
-                required
-              />
-            </div>
-          </div>
-          <div class="mb-3">
-            <button type="reset" class="btn btn-secondary">Reset</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-          </div>
-        </form>
-      </div>
-      <div class="col-6" style="line-break: strict">
-        <div class="h1">Preview</div>
-        <div>
-          <div>Question:</div>
-          <div class="questionpreview"></div>
-        </div>
-        <div>
-          <div class="opt">Option:</div>
-          <div>
-            <ol style="list-style-type: upper-alpha" class="options"></ol>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+						<div class="mb-3">
+							<label class="form-label">Answer </label>
+							<select
+								class="form-select"
+								name="option"
+								id="option"
+								onchange="answerTick(this.value)"
+							>
+								<option selected>Select Answer</option>
+								<option value="1">Option 1</option>
+							</select>
+						</div>
+					</div>
+
+					<div id="ans" class="mb-3" style="display: none">
+						<label for="answer" class="form-label">Answer </label>
+						<input
+							type="text"
+							class="form-control"
+							id="answer"
+							name="answer"
+							required
+						/>
+					</div>
+				</div>
+				<div class="mb-3">
+					<button type="reset" class="btn btn-secondary">
+						Reset
+					</button>
+					<button type="button" id="addQuestion" class="btn btn-primary" onclick="addQuestion()">
+						Save changes
+					</button>
+				</div>
+			</div>
+			<div class="col-6" style="line-break: strict">
+				<div class="h1">Preview</div>
+				<div>
+					<div>Question:</div>
+					<div class="questionpreview"></div>
+				</div>
+				<div>
+					<div class="opt">Option:</div>
+					<div>
+						<ol
+							style="list-style-type: upper-alpha"
+							class="options"
+						></ol>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<%- include('../partials/footer') -%>
-<script>
-  let count = 2;
-  let options = [];
-  let editor;
-  ClassicEditor.create(document.querySelector("#editor"))
-    .then((newEditor) => {
-      editor = newEditor;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-
-  function arrayStore(data) {
-    let id = data.id;
-    let ih = "";
-    options[id] = data.value;
-    options[option1];
-    listOption();
-  }
-
-  function listOption() {
-    let ih = "";
-
-    for (let i = 1; i < count; i++) {
-      ih += `<li id="opt${i}" > ${options["option" + i]}</li>`;
-    }
-    $(".options").html(ih);
-  }
-  function answerTick(data) {
-    // console.log(data);
-    let str = "opt" + data;
-    // console.log(str.value);
-
-    var row = document.getElementById(str);
-    row.innerHTML += "&nbsp;&nbsp;&nbsp;&#x2714;";
-    row.style.color = "green";
-    // row.style.fontStyle="bold";
-  }
-  //     var row = document.getElementById('row');
-
-  //     function add(){
-  //         var newField = document.createElement('input');
-  //   newField.setAttribute('type','text');
-  //   newField.setAttribute('name','text');
-  //   newField.setAttribute('class','text');
-
-  //   newField.setAttribute('placeholder','Option');
-  //   row.appendChild(newField);
-  // }
-
-  $("#rowAdder").click(function () {
-    newRowAdd =
-      '<div > <div class=" mb-3">' +
-      ' <label for="option' +
-      count +
-      '" class="form-label">Option ' +
-      count +
-      " </label>" +
-      '<input type="text" id="option' +
-      count +
-      '" oninput="abc(this)" class="form-control mb-input" placeholder="option ' +
-      count +
-      '" name="option' +
-      count +
-      '"> </div>  </div>';
-
-    $(".optionAddRemove").append(newRowAdd);
-    count++;
-    let options = "";
-    for (let i = 1; i < count; i++) {
-      options += `<option id="option ${i}" value="${i}">Option ${i}</option>`;
-    }
-    $("#option").html(options);
-  });
-  $("#rowRemover").click(function () {
-    if ($(".optionAddRemove").children().length > 1) {
-      document.querySelector(".optionAddRemove > :last-child").remove();
-      document.querySelector("#option > :last-child").remove();
-      document.querySelector(".options > :last-child").remove();
-      count--;
-    }
-  });
-  $(document).ready(function () {
-    $("#type").change(function () {
-      var value = $(this).val();
-      var toAppend = "";
-      if (value == 1) {
-        let x = document.getElementById("opt");
-        x.style.display = "block";
-        let y = document.getElementById("ans");
-        y.style.display = "none";
-        let z = document.getElementById("mark");
-        z.style.display = "none";
-      }
-      if (value == 2) {
-        // toAppend = " <label>Answer :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#answer").html(toAppend); return;
-        let x = document.getElementById("opt");
-        x.style.display = "none";
-        let y = document.getElementById("ans");
-        y.style.display = "block";
-        let z = document.getElementById("mark");
-        z.style.display = "none";
-      }
-      if (value == 3) {
-        // toAppend = " <label>Marks :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#mark").html(toAppend); return;
-        let x = document.getElementById("opt");
-        x.style.display = "none";
-        let y = document.getElementById("ans");
-        y.style.display = "none";
-        let z = document.getElementById("mark");
-        z.style.display = "block";
-      }
-    });
-    editor.model.document.on("change", () => {
-      $(".questionpreview").html(editor.getData());
-    });
-    // $('#option1').on("input",()=>{
-    //   $(".options").html(`<li> ${$('#option1').val()}</li>`)
-    // }
-    // )
-    // $('#option2').on("input",()=>{
-    //   $(".options").html(`<li> ${$('#option2').val()}</li>`)
-    // }
-    // )
-  });
-</script>
+<script src="/scripts/addQuestion2.js"></script>

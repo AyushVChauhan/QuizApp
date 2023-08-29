@@ -18,8 +18,8 @@ async function newDepartment(name) {
     return data;
 }
 async function deleteDepartment(id) {
-    let data = await departments.findOne({_id: new mongoose.Types.ObjectId(id)});
-    data.is_active=0;
+    let data = await departments.findOne({ _id: new mongoose.Types.ObjectId(id) });
+    data.is_active = 0;
     await data.save();
     return data;
 }
@@ -62,13 +62,13 @@ async function countSubjects() {
 
 /* ------ TEACHER ------- */
 async function addTeacher(teacherObject) {
-    let teacherData = await teachers.findOne({ username:teacherObject.username });
+    let teacherData = await teachers.findOne({ username: teacherObject.username });
     if (teacherData) {
         return 1;
     }
     else {
-        
-        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department),email: teacherObject.email,password: teacherObject.password,role:0 });
+
+        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department), email: teacherObject.email, password: teacherObject.password, role: 0 });
         await teacher.save();
         return 0;
     }
@@ -101,22 +101,28 @@ async function addStudent(enrollment, email, password, semester, department) {
             subject: 'Registration',
             text: `Your Username is ${enrollment} and Password is ${password}`,
         };
-        mailer.sendMail(mailDetails, async function (err, data) {
+        await timeout(300);
+        mailer.sendMail(mailDetails, function (err, data) {
             if (err) {
-                console.log('Error Occurs');
                 record = 0;
             } else {
-                console.log('Email sent successfully');
-                let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department),is_active:1 });
-                await data.save();
+                console.log(`${enrollment} : SENT`);
             }
         });
+        if(record)
+        {
+            let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department), is_active: 1 });
+            await data.save();
+        }
         return record;
     }
     return 0;
 }
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function fetchStudents() {
-    let student_data = await students.find({is_active:1}).populate("department_id");
+    let student_data = await students.find({ is_active: 1 }).populate("department_id");
     console.log(student_data);
     return student_data;
 }
@@ -125,11 +131,11 @@ async function countStudents() {
     return student_count;
 }
 /* ------ QUIZZES ------ */
- async function countQuizzes() {
+async function countQuizzes() {
     let quiz_count = await quizzes.count({ is_active: 1 });
     return quiz_count;
- }
-module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent,fetchStudents, countStudents,countQuizzes};
+}
+module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, fetchStudents, countStudents, countQuizzes };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department
