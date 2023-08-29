@@ -5,11 +5,19 @@ let editor;
 ClassicEditor.create(document.querySelector("#editor"))
     .then((newEditor) => {
         editor = newEditor;
-    })
+    }) 
     .catch((error) => {
         console.error(error);
     });
-
+    function disableAdd(){
+        if(!document.querySelector(".optionAddRemove > div:last-of-type > input:last-child ").value){
+            document.getElementById("rowAdder").disabled = true;
+          
+        } 
+        else{
+            document.getElementById("rowAdder").disabled = false;
+        }
+    }
 function addQuestion() {
     let marks = 0;
     let type = 0;
@@ -35,6 +43,7 @@ function addQuestion() {
     });
 }
 function arrayStore(data) {
+    disableAdd();
     let id = data.id;
     options[id] = data.value;
     listOption();
@@ -47,6 +56,7 @@ function listOption() {
         ih += `<li id="opt${i}" > ${options["option" + i]}</li>`;
     }
     $(".options").html(ih);
+    disableAdd();
 }
 function answerTick(data) {
     for (let index = 1; index < count; index++) {
@@ -62,6 +72,7 @@ function answerTick(data) {
             row.style.color = "black";
         }
     }
+    disableAdd();
     // console.log(data);
     // console.log(str.value);
     // row.style.fontStyle="bold";
@@ -69,8 +80,10 @@ function answerTick(data) {
 
 
 $("#rowAdder").click(function () {
+    console.log(document.querySelector(".optionAddRemove > div:last-of-type > input:last-child ").value);
+   
     newRowAdd =
-        '<div > <div class=" mb-3">' +
+        ' <div class=" mb-3">' +
         ' <label for="option' +
         count +
         '" class="form-label">Option ' +
@@ -82,10 +95,11 @@ $("#rowAdder").click(function () {
         count +
         '" name="option' +
         count +
-        '"> </div>  </div>';
+        '">  </div>';
 
     $(".optionAddRemove").append(newRowAdd);
     count++;
+    disableAdd();
     let options = "<option selected>Select Answer</option>";
     for (let i = 1; i < count; i++) {
         options += `<option id="option ${i}" value="${i}">Option ${i}</option>`;
@@ -93,14 +107,21 @@ $("#rowAdder").click(function () {
     $("#option").html(options);
 });
 $("#rowRemover").click(function () {
-    if ($(".optionAddRemove").children().length > 1) {
+    
+    if ($('.optionAddRemove > div').length >1) {
         document.querySelector(".optionAddRemove > :last-child").remove();
         document.querySelector("#option > :last-child").remove();
-        document.querySelector(".options > :last-child").remove();
+        if($('.optionAddRemove > div').length == $('.options').length){
+           
+            document.querySelector(".options > :last-child").remove();
+        }
         count--;
     }
+    disableAdd();
+    listOption();
 });
 $(document).ready(function () {
+
     $("#type").change(function () {
         var value = $(this).val();
         var toAppend = "";
@@ -130,8 +151,11 @@ $(document).ready(function () {
             let z = document.getElementById("mark");
             z.style.display = "block";
         }
-    });
+    }
+    );
+    disableAdd();
     editor.model.document.on("change", () => {
         $(".questionpreview").html(editor.getData());
     });
+    
 });
