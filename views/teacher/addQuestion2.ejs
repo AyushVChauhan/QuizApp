@@ -16,104 +16,113 @@
       <div class="col-6">
         <form>
           <div class="mb-3 h1">Add Question</div>
-          <div class="mb-3">
-            <select class="form-select" name="type" id="type">
-              <option>Select Question Type</option>
-              <option value="1">MCQ</option>
-              <option value="2">One word</option>
-              <option value="3">Descriptive</option>
-            </select>
-          </div>
-          <div id="mark" class="mb-3" style="display: none">
-            <label for="marks" class="form-label">Marks </label>
-            <input
-              type="number"
-              class="form-control"
-              id="marks"
-              name="marks"
-              style="width: 10%"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="question" class="form-label">Question</label>
-            <div id="editor"></div>
-            <div class="mb-3 text-center">OR</div>
-            <input
-              type="file"
-              class="form-control"
-              id="question"
-              name="question"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="question" class="form-label">Difficulty Level</label
-            ><br />
-            <input
-              type="radio"
-              class="btn-check"
-              name="opt"
-              id="1"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="1">Easy</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="opt"
-              id="2"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="2">Medium</label>
-
-            <input
-              type="radio"
-              class="btn-check"
-              name="opt"
-              id="3"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="3">Hard</label>
-          </div>
-          <div id="opt" style="display: none">
-            <div class="optionAddRemove">
-              <div class="mb-3">
-                <label for="option1" class="form-label">Option 1 </label>
-                <input
-                  type="text"
-                  class="form-control mb-input"
-                  placeholder="option 1"
-                  name="option1"
-                  id="option1"
-                />
-              </div>
-            </div>
-            <button id="rowAdder" type="button" class="btn btn-primary mb-3">
-              ADD
-            </button>
-            <button id="rowRemover" type="button" class="btn btn-danger mb-3">
-              REMOVE
-            </button>
-
+          <div class="mb-3" style="height:490px; overflow-y: scroll;">
             <div class="mb-3">
-              <label class="form-label">Answer </label>
-              <select class="form-select" name="option" id="option">
-                <option>Select Answer</option>
-                <option value="1">option 1</option>
+              <select class="form-select" name="type" id="type">
+                <option>Select Question Type</option>
+                <option value="1">MCQ</option>
+                <option value="2">One word</option>
+                <option value="3">Descriptive</option>
               </select>
             </div>
-          </div>
+            <div id="mark" class="mb-3" style="display: none">
+              <label for="marks" class="form-label">Marks </label>
+              <input
+                type="number"
+                class="form-control"
+                id="marks"
+                name="marks"
+                style="width: 10%"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="question" class="form-label">Question</label>
+              <div id="editor"></div>
+              <div class="mb-3 text-center">OR</div>
+              <input
+                type="file"
+                class="form-control"
+                id="question"
+                name="question"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="question" class="form-label">Difficulty Level</label
+              ><br />
+              <input
+                type="radio"
+                class="btn-check"
+                name="opt"
+                id="1"
+                autocomplete="off"
+              />
+              <label class="btn btn-outline-secondary" for="1">Easy</label>
 
-          <div id="ans" class="mb-3" style="display: none">
-            <label for="answer" class="form-label">Answer </label>
-            <input
-              type="text"
-              class="form-control"
-              id="answer"
-              name="answer"
-              required
-            />
+              <input
+                type="radio"
+                class="btn-check"
+                name="opt"
+                id="2"
+                autocomplete="off"
+              />
+              <label class="btn btn-outline-secondary" for="2">Medium</label>
+
+              <input
+                type="radio"
+                class="btn-check"
+                name="opt"
+                id="3"
+                autocomplete="off"
+              />
+              <label class="btn btn-outline-secondary" for="3">Hard</label>
+            </div>
+            <div id="opt" style="display: none">
+              <div class="optionAddRemove">
+                <div class="mb-3">
+                  <label for="option1" class="form-label">Option 1 </label>
+                  <input
+                    type="text"
+                    class="form-control mb-input"
+                    placeholder="option 1"
+                    name="option1"
+                    id="option1"
+                    oninput="arrayStore(this)"
+                  />
+                </div>
+              </div>
+              <button id="rowAdder" type="button" class="btn btn-primary mb-3">
+                ADD
+              </button>
+              <button id="rowRemover" type="button" class="btn btn-danger mb-3">
+                REMOVE
+              </button>
+
+              <div class="mb-3">
+                <label class="form-label">Answer </label>
+                <select
+                  class="form-select"
+                  name="option"
+                  id="option"
+                  onchange="answerTick(this.value)"
+                >
+                  <option>Select Answer</option>
+                  <option value="1">Option 1</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="ans" class="mb-3" style="display: none">
+              <label for="answer" class="form-label">Answer </label>
+              <input
+                type="text"
+                class="form-control"
+                id="answer"
+                name="answer"
+                required
+              />
+            </div>
           </div>
           <div class="mb-3">
             <button type="reset" class="btn btn-secondary">Reset</button>
@@ -121,18 +130,18 @@
           </div>
         </form>
       </div>
-      <div class="col-6" style="line-break: strict;">
+      <div class="col-6" style="line-break: strict">
         <div class="h1">Preview</div>
-      <div>
-        <div >Question: </div>
-        <div class="questionpreview" ></div>
-      </div>
-      <div>
-        <div class="opt">Option: </div>
-      </div>
-      
-
-
+        <div>
+          <div>Question:</div>
+          <div class="questionpreview"></div>
+        </div>
+        <div>
+          <div class="opt">Option:</div>
+          <div>
+            <ol style="list-style-type: upper-alpha" class="options"></ol>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -140,6 +149,8 @@
 
 <%- include('../partials/footer') -%>
 <script>
+  let count = 2;
+  let options = [];
   let editor;
   ClassicEditor.create(document.querySelector("#editor"))
     .then((newEditor) => {
@@ -148,6 +159,33 @@
     .catch((error) => {
       console.error(error);
     });
+
+  function arrayStore(data) {
+    let id = data.id;
+    let ih = "";
+    options[id] = data.value;
+    options[option1];
+    listOption();
+  }
+
+  function listOption() {
+    let ih = "";
+
+    for (let i = 1; i < count; i++) {
+      ih += `<li id="opt${i}" > ${options["option" + i]}</li>`;
+    }
+    $(".options").html(ih);
+  }
+  function answerTick(data) {
+    // console.log(data);
+    let str = "opt" + data;
+    // console.log(str.value);
+
+    var row = document.getElementById(str);
+    row.innerHTML += "&nbsp;&nbsp;&nbsp;&#x2714;";
+    row.style.color = "green";
+    // row.style.fontStyle="bold";
+  }
   //     var row = document.getElementById('row');
 
   //     function add(){
@@ -159,14 +197,18 @@
   //   newField.setAttribute('placeholder','Option');
   //   row.appendChild(newField);
   // }
-  let count = 2;
+
   $("#rowAdder").click(function () {
     newRowAdd =
       '<div > <div class=" mb-3">' +
-      ' <label for="option" class="form-label">Option ' +
+      ' <label for="option' +
+      count +
+      '" class="form-label">Option ' +
       count +
       " </label>" +
-      '<input type="text" class="form-control mb-input" placeholder="option ' +
+      '<input type="text" id="option' +
+      count +
+      '" oninput="abc(this)" class="form-control mb-input" placeholder="option ' +
       count +
       '" name="option' +
       count +
@@ -176,7 +218,7 @@
     count++;
     let options = "";
     for (let i = 1; i < count; i++) {
-      options += `<option  value="${i}">option ${i}</option>`;
+      options += `<option id="option ${i}" value="${i}">Option ${i}</option>`;
     }
     $("#option").html(options);
   });
@@ -184,10 +226,10 @@
     if ($(".optionAddRemove").children().length > 1) {
       document.querySelector(".optionAddRemove > :last-child").remove();
       document.querySelector("#option > :last-child").remove();
+      document.querySelector(".options > :last-child").remove();
       count--;
     }
   });
-
   $(document).ready(function () {
     $("#type").change(function () {
       var value = $(this).val();
@@ -220,7 +262,15 @@
       }
     });
     editor.model.document.on("change", () => {
-      $(".questionpreview").html(editor.getData())
+      $(".questionpreview").html(editor.getData());
     });
+    // $('#option1').on("input",()=>{
+    //   $(".options").html(`<li> ${$('#option1').val()}</li>`)
+    // }
+    // )
+    // $('#option2').on("input",()=>{
+    //   $(".options").html(`<li> ${$('#option2').val()}</li>`)
+    // }
+    // )
   });
 </script>
