@@ -1,6 +1,8 @@
 const teachers = require("../models/teachers");
 const students = require("../models/students");
 const subjects = require("../models/subjects");
+const courseOutcomes = require("../models/courseOutcomes");
+const { default: mongoose } = require("mongoose");
 
 
 async function loginFetch(username, password) {
@@ -24,8 +26,19 @@ async function addStudent(enrollment){
 async function subjectFetch()
 {
     let subData=await subjects.find({});
-    console.log(subData);
     return subData;
 }
 
-module.exports = {loginFetch, loginCheck, addStudent,subjectFetch};
+async function addTopic(topicObject) {
+    let topic = new courseOutcomes({course_outcome:topicObject.co,is_active:1,subjectId:new mongoose.Types.ObjectId(topicObject.subject),topic:topicObject.topic});
+    await topic.save();
+}
+
+async function getTopics(topicObject) {
+    console.log(topicObject);
+    let topic = await courseOutcomes.find({course_outcome:topicObject.co,is_active:1,subjectId:new mongoose.Types.ObjectId(topicObject.subject)});
+    return topic;
+}
+
+
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics};
