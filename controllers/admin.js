@@ -106,8 +106,9 @@ async function subjects(req,res)
 async function students(req,res)
 {
     let sub_data = await adminServices.fetchSubjects();
-    let dept_data = await adminServices.fetchDepartments()
-    res.render("./admin/students", {dept_data, sub_data, errors:null});
+    let dept_data = await adminServices.fetchDepartments();
+    let student_data = await adminServices.fetchStudents();
+    res.render("./admin/students", {dept_data, sub_data,student_data, errors:null});
 }
 async function teachers(req,res)
 {

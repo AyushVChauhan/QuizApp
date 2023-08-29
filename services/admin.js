@@ -115,6 +115,11 @@ async function addStudent(enrollment, email, password, semester, department) {
     }
     return 0;
 }
+async function fetchStudents() {
+    let student_data = await students.find({}).populate("department_id");
+    console.log(student_data);
+    return student_data;
+}
 async function countStudents() {
     let student_count = await students.count({ is_active: 1 });
     return student_count;
@@ -124,7 +129,7 @@ async function countStudents() {
     let quiz_count = await quizzes.count({ is_active: 1 });
     return quiz_count;
  }
-module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, countStudents,countQuizzes};
+module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent,fetchStudents, countStudents,countQuizzes};
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department
