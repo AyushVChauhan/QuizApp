@@ -107,7 +107,7 @@ async function addStudent(enrollment, email, password, semester, department) {
                 record = 0;
             } else {
                 console.log('Email sent successfully');
-                let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department) });
+                let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department),is_active:1 });
                 await data.save();
             }
         });
@@ -116,7 +116,7 @@ async function addStudent(enrollment, email, password, semester, department) {
     return 0;
 }
 async function fetchStudents() {
-    let student_data = await students.find({}).populate("department_id");
+    let student_data = await students.find({is_active:1}).populate("department_id");
     console.log(student_data);
     return student_data;
 }
