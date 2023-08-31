@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const myCache = require("../controllers/cache");
 const storage = multer.diskStorage({
-  destination: "./public/images", filename: (req, file, cb) => {
+  destination: "./public/files", filename: (req, file, cb) => {
     cb(null, "schema.xlsx")
   }
 })
@@ -19,11 +19,15 @@ router.use(middleware);
 
 router.get("/", teacherControllers.teacherDashboard);
 router.post("/addTopic", teacherControllers.addTopic);
+router.post("/addGroup", upload.single('excel') , teacherControllers.addGroup);
+router.post("/viewGroup", teacherControllers.viewGroup);
 router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
 router.get("/addQuestion/question",questionMiddleware, teacherControllers.addQue_question);
 router.post("/addQuestion/question", questionMiddleware, teacherControllers.addQuestion);
 router.post("/addQuestion/getTopics", teacherControllers.getTopics);
 router.post("/addQuestion/setTopics", teacherControllers.setTopics);
+router.get("/addQuiz/getGroups", teacherControllers.getGroups);
+router.post("/addQuiz/deptGroup", teacherControllers.deptGroup);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 
 function questionMiddleware(req,res,next){

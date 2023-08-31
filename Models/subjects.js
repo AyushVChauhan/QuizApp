@@ -7,7 +7,7 @@ const subjectsSchema = new mongoose.Schema({
   semester: Number,
   departments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "departments" }],
   is_active: Number,
-});
+},{timestamps:true});
 
 const subjectsModel = mongoose.model("subjects", subjectsSchema);
 module.exports = subjectsModel;

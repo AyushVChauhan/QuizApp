@@ -1,0 +1,51 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<%- include('../partials/footer')-%>
+<script>
+    let departments = JSON.parse('<%- JSON.stringify(dept_data) %>');
+    let groups = JSON.parse('<%- JSON.stringify(group_data) %>');
+</script>
+<script src="/scripts/addQuiz2.js"></script>
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./teacherHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./teacherSidebar") %>
+    <!-- End Sidebar -->
+    <div class="main-container">
+        <div class="row pe-5 align-items-center d-flex">
+            <div class="col h1">Select Students</div>
+            <div class="col text-end">
+                <button
+                    style="border-radius: 900px; height: min-content"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#groupModal"
+                >
+                    <i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;Add
+                    Group
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <select
+                    id="dept_group"
+                    onchange="changeSelect(this)"
+                    autocomplete="off"
+                >
+                    <option value="department" selected>Department</option>
+                    <option value="group">Group</option>
+                </select>
+            </div>
+        </div>
+        <div id="dynamicDiv">
+        </div>
+    </div>
+</div>
+<%- include("./addGroup") -%>
+<%- include("./viewGroup") -%>

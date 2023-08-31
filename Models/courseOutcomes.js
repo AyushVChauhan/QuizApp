@@ -5,7 +5,7 @@ const cousrseOutcomesSchema = new mongoose.Schema({
   subjectId: { type: mongoose.SchemaTypes.ObjectId, ref: "subjects" },
   topic: String,
   is_active: Number,
-});
+},{timestamps:true});
 
 const courseOutcomesModel = mongoose.model("course_outcomes", cousrseOutcomesSchema);
 module.exports = courseOutcomesModel;

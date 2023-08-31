@@ -13,7 +13,7 @@ const teacherSchema = new mongoose.Schema({
   subjects: [{ type: mongoose.SchemaTypes.ObjectId, ref: "subjects" }],
   is_active: Number,
  
-});
+},{timestamps:true});
 
 const teachersModel = mongoose.model("teachers", teacherSchema);
 module.exports = teachersModel;

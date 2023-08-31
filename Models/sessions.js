@@ -10,6 +10,6 @@ const sessionSchema = new mongoose.Schema({
     ip: String,
     questions_answers: [{ question: { type: mongoose.SchemaTypes.ObjectId, ref: "questions" }, answer: String, marks: Number }],
     is_active: Number,
-});
+},{timestamps:true});
 const sessionsModel = mongoose.model("sessions", sessionSchema);
 module.exports = sessionsModel;
