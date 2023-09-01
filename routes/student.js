@@ -5,16 +5,15 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 
 router.post("/login", studentControllers.login);
-// router.get('/login', studentControllers.loginGet)
-router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
-router.post("/enrollmentcheck", studentControllers.enrollment_check);
-router.get("/register", studentControllers.register_page);
-router.post("/register", studentControllers.enrollment_check);
+router.get('/login', studentControllers.loginPage);
+router.get('/forgetPassword', studentControllers.forgetPage);
+router.post('/forgetPassword', studentControllers.forgetPassword);
+// router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
+// router.post("/enrollmentcheck", studentControllers.enrollment_check);
+// router.get("/register", studentControllers.register_page);
+// router.post("/register", studentControllers.enrollment_check);
 // router.use(middleware)
-router.get("/", (req, res) => {
-  res.render("./student/student_dashboard");
-});
-module.exports = router;
+router.get("/",middleware, studentControllers.dashboardPage);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
   console.log(cookie)
@@ -32,4 +31,4 @@ function middleware(req, res, next) {
   }
 }
 
-module.exports=router
+module.exports = router;
