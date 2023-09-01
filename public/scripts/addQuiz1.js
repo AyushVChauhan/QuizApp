@@ -20,13 +20,13 @@ function nextPage() {
     }
     $.ajax({
         type: "POST",
-        url: "/teacher/createQuiz/setQuiz",
+        url: "/teacher/addQuiz/setQuiz",
         data: {  quizname,quizdate_from,quizdate_to,visible_from , visible_to,duration, marks,guest},
 
         
 
         success: function (response) {
-            location.href = "http://localhost:3000/teacher/addQuestion/question"
+            location.href = "http://localhost:3000/teacher/addQuiz/getGroups"
         }
     });
 }
