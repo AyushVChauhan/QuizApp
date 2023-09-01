@@ -1,0 +1,124 @@
+<%- include('../partials/header') -%>
+
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<%- include('../partials/footer') -%>
+
+<div class="grid-container">
+	<!-- Header -->
+	<%- include("./teacherHeader") %>
+	<!-- End Header -->
+
+	<!-- Sidebar -->
+	<%- include("./teacherSidebar") %>
+
+	<!-- End Sidebar -->
+    <script src="/scripts/addQuiz1.js"></script>
+	<div class="main-container" id="main" name="main">
+        <div class="mb-3 h1">Create Quiz</div>
+            <div class="mb-3" id="qname">
+                <label for="quizname" class="form-label">Quiz Name </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="quizname"
+                    name="quizname"
+                    style="width: 55.6%;"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <select class="form-control" id="subject" name="subject" style="width: 55.6%;">
+                    <option selected value="0">Select Subject</option>
+                    <% subData.forEach(element=> { %>
+                    <option value="<%= element._id %>">
+                        <%= element.code %> : <%=element.name%>
+                    </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="quizdate" class="form-label">Quiz Date </label><br>
+                <div style="display: inline-flex;">
+                    <!-- Datetime? -->
+                    <input
+                    type="date"
+                    class="form-control col-sm-6"
+                    id="quizdate_from"
+                    name="quizdate_from"
+                    placeholder="FROM"
+                    
+                    required
+                    
+                />
+                <input
+                    type="date"
+                    class="form-control col-sm-6"
+                    id="quizdate_to"
+                    name="quizdate_to"
+                    placeholder="TO"
+                    required
+                    
+                /></div>
+            </div>
+           
+            <div class="mb-3">
+                <label for="visible" class="form-label">Quiz On Air </label><br>
+                <div style="display: inline-flex;">
+                    <!-- Datetime? -->
+                    <input
+                    type="date"
+                    class="form-control col-sm-6"
+                    id="visible_from"
+                    name="visible_from"
+                    placeholder="FROM"
+                    required
+                    
+                />
+                <input
+                    type="date"
+                    class="form-control col-sm-6"
+                    id="visible_to"
+                    name="visible_to"
+                    placeholder="TO"
+                    required
+                    
+                /></div>
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Duration of Quiz </label>
+                <input
+                    type="number"
+                    class="form-control"
+                    id="duration"
+                    name="duration"
+                    placeholder="In minutes"
+                    style="width: 55.6%;"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label for="marks" class="form-label">Marks </label>
+                <input
+                    type="number"
+                    class="form-control"
+                    id="marks"
+                    name="marks"
+                    style="width: 55.6%;"
+                    required
+                />
+            </div>
+        
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="guest" name="guest" checked>
+            <label class="form-check-label" for="guest">Guest students allowed</label>
+          </div>
+          <div>
+            <button type="reset" class="btn btn-secondary">
+                Reset
+            </button>
+            <button type="button" class="btn btn-primary" id="nextButton" onclick="nextPage()">
+                Next
+            </button>
+        </div>
+        </div>
+</div>
