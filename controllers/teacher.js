@@ -147,6 +147,16 @@ async function addGroup(req, res) {
 async function deptGroup(req, res) {
 	await teacherServices.deptGroup(req.body.department, req.body.semester);
 }
+async function createQuiz(req, res) {
+    let subData = await teacherServices.subjectFetch();
+    res.render("./teacher/addQuiz1", { subData });
+}
+async function setQuiz(req, res) {
+    myCache.set("quiz", req.body);
+    //  console.log(myCache);
+    console.log(req.body);
+    res.json({ success: 1 });
+}
 module.exports = {
 	login,
 	loginGet,
@@ -163,4 +173,6 @@ module.exports = {
 	addGroup,
 	deptGroup,
 	viewGroup,
+	createQuiz,
+	setQuiz,
 };
