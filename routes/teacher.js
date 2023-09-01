@@ -33,7 +33,7 @@ router.get("/addQuiz/setQuiz", teacherControllers.createQuiz);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 
 function questionMiddleware(req,res,next){
-  if(myCache.has("Topics"))
+  if(req.session.topics)
   {
     next();
   }
