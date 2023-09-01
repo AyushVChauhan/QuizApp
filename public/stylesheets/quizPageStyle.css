@@ -102,10 +102,10 @@ body {
 .instructions{
 	color: red;
 }
-#submit{
+#submit,#close{
 	background-color: rgb(0, 56, 101);
 }
-#submit:hover{
+#submit:hover,#close:hover{
 	background-color: rgb(16, 102, 172);
 	/* color:  rgb(0, 56, 101); */
 	color: #ffffff;

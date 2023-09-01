@@ -101,8 +101,14 @@
     </div>
 
             <div class="instructions mb-3 me-2 ms-2">
-              <p align="justify">
-                <b>INSTRUCTION :</b>
+              <p align="Center">
+                <button
+                style="background-color: white; color: red; border: 1px solid red "
+                class="btn"
+                data-bs-toggle="modal"
+                data-bs-target="#instructionModal"
+                >INSTRUCTIONS
+              </button>
                   <!--<BR />Lorem ipsum dolor sit amet
                 consectetur, aetur corrupti eligendi, accusamus assumenda in
                 minima? -->
@@ -123,5 +129,5 @@
       <!-- </div> -->
     </div>
   </div>
-  <%- include('../partials/footer')-%>
+  <%- include("./instructionmodal") %> <%- include('../partials/footer')-%>
 </div>
