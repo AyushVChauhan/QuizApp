@@ -1,0 +1,113 @@
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Nunito Sans", sans-serif;
+	/* height: 100vh; */
+}
+.grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 0.2fr 3fr;
+	grid-template-areas:
+	"header header"
+	"main main";
+	/* height: 60vh; */
+	/* width: 100%; */
+} 
+
+/* ---------- HEADER ---------- */
+.header {
+	grid-area: header;
+	height:70px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 30px 0 30px;
+	color: rgb(255, 255, 255);
+	background-color: rgb(0, 56, 101);
+	box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+}
+.header-left{
+	color: white;
+}
+.header-right{
+	display: flex;
+}
+#header-right{
+	flex-direction: column;
+}
+
+/* ---------- MAIN ---------- */
+.main-container {
+	grid-area:main;
+	/* height: 80vh; */
+}
+
+/* ---------- MAIN LEFT  ---------- */
+.question-scroll{
+	overflow-y: scroll;
+	min-height: 60vh;
+	max-height:60vh;
+}
+.footer-buttons{
+	padding: 3px 5px;
+	display: flex;
+	justify-content: space-between;
+}
+
+/* ---------- MAIN RIGHT  ---------- */
+.questionlist-box{
+	display: flex;
+	flex-direction: column;
+}
+/* .sub-box{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+} */
+.timeLabel{
+	color: red;
+}
+.question-list{
+	display: flex;
+	flex-wrap: wrap;
+}
+.question-list-scroll{
+	overflow-y: scroll;
+	min-height: 37vh;
+	max-height:37vh;
+}
+.span{
+	padding: 15px;
+	margin: 3px;
+	height: 54px;
+	width: 51.78px;	/* according to double digits */
+	text-align:center;
+	border-radius: 6px;
+	color: #ffffff;
+	background-color: #6c757d;
+}
+.box-shadow{
+	box-shadow: 5px -5px 7px -4px rgba(0, 0, 0, 0.2),
+	-5px 5px 7px -4px rgba(0, 0, 0, 0.2);
+}
+.count-indicator{
+	display: flex;
+	flex-wrap: wrap;
+}
+.count{
+	margin: 5px 5px;
+}
+.instructions{
+	color: red;
+}
+#submit{
+	background-color: rgb(0, 56, 101);
+}
+#submit:hover{
+	background-color: rgb(16, 102, 172);
+	/* color:  rgb(0, 56, 101); */
+	color: #ffffff;
+	border: 1.5px solid rgb(0, 56, 101);
+}
