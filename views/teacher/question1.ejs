@@ -1,0 +1,164 @@
+<%- include('../partials/header') %>
+    <link rel="stylesheet" href="/stylesheets/style_temp.css" />
+    <link rel="stylesheet" href="/stylesheets/datatables.css" />
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .readmore {
+            margin: 0 5px;
+        }
+    </style>
+    <div class="grid-container">
+
+        <%- include("./teacherHeader") %>
+            <%- include("./teacherSidebar") %>
+                <div class="col text-end">
+                    <a href="/teacher/addQuestion/topics">
+                        <button style="border-radius: 900px; height:min-content" class="btn btn-primary"><i
+                                class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+                            QUESTION
+                        </button></a>
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col-sm-4 mb-4">
+                            <label>Type</label>
+                            <select class="form-control" id="typeselect" name="typeselect">
+                                <option selected="" value="All">All</option>
+                                <option value="1">MCQ</option>
+                                <option value="2">ONE WORD</option>
+                                <option value="3">DESCRIPTIVE</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-4 mb-4">
+                            <label>Subject</label>
+                            <select class="form-control" name="subjectselect" id="subjectselect">
+                                <option selected="" value="All">All</option>
+                                <% subData.forEach(element=> { %>
+                                    <option value="<%= element._id %>">
+                                        <%= element.code %> : <%=element.name%>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-4 mb-4">
+                            <label>Difficulty Level</label>
+                            <select class="form-control" name="difficultyselect" id="difficultyselect">
+                                <option value="All" selected="">All</option>
+                                <option value="1">Easy</option>
+                                <option value="2">Medium</option>
+                                <option value="3">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <button type="button" id="generateDataTable" class="btn btn-primary">
+                                Generate
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mb-3" id="tableDiv" style="height: 420px; overflow-x:hidden">
+
+                </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+        <script>
+            $("#generateDataTable").click(() => {
+                let subject = $("#subjectselect").val();
+                let type = $("#typeselect").val();
+                let difficulty = $("#difficultyselect").val();
+                console.log("hi");
+                $.ajax({
+                    type: "POST",
+                    url: "/teacher/addQuestion/getQuestion",
+                    data: { subject, type, difficulty },
+                    success: function (response) {
+                        if (response.length !== 0) {
+
+                            questions = response.questionData;
+
+                            let def = "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Type</th><th>Subject</th><th>Question</th><th>Action</th></thead>";
+                            let data = "";
+                            let type1 = null;
+                            let subject1 = null;
+                            questions.forEach((ele, ind) => {
+                                if (ele.type == 1) {
+                                    type1 = "MCQ";
+                                }
+                                if (ele.type == 2) {
+                                    type1 = "ONE WORD";
+                                }
+                                if (ele.type == 3) {
+                                    type1 = "DESCRIPTIVE";
+                                }
+                                data += "<tr>";
+                                data += `<td>${ind + 1}</td>`;
+                                data += `<td>${type1}</td>`;
+                                ele.course_outcome_id.forEach((element) => {
+                                    subject1 = element.subjectId.name;
+                                })
+                                data += `<td>${subject1
+                                    }
+                        </td>`;
+                                data += `<td class="content">${ele.question}</td>`;
+                                data += `<td><a data-id='${ele._id}' onclick='adder(this)' class='adder' ><i class='fa-solid fa-eye'/></a></td>`;
+                                data += "</tr>";
+                            })
+
+                            $("#tableDiv").html(def + data + "</table>");
+                            var myTable;
+
+                            myTable = $("#datatable").DataTable({
+                                pagingType: "simple_numbers",
+                                scrollCollapse: true,
+                                scrollY: '350px',
+                                language: {
+                                    paginate: {
+                                        previous: "<",
+                                        next: ">",
+                                    },
+                                },
+                            });
+                            abc();
+                        }
+
+                    }
+                });
+
+            });
+            function abc() {
+
+                var maxL = 180;
+
+                $('.content').each(function () {
+
+                    var text = $(this).text();
+                    if (text.length > maxL) {
+
+                        var begin = text.substr(0, maxL),
+                            end = text.substr(maxL);
+
+                        $(this).html(begin)
+                            .append($('<a class="readmore"/>').attr('href', '#').html('read more...'))
+                            .append($('<div class="hidden" />').html(end));
+                    }
+                });
+
+                $(document).on('click', '.readmore', function () {
+                    // $(this).next('.readmore').fadeOut("400");
+                    $(this).next('.hidden').slideToggle(200);
+                })
+            }
+        </script>
+        <script src="/scripts/teacherSidebar.js"></script>
+        <%- include('../partials/footer2') -%>
