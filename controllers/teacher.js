@@ -167,6 +167,17 @@ async function setQuiz(req, res) {
     console.log(req.body);
     res.json({ success: 1 });
 }
+async function question(req,res){
+	
+	let subData = await teacherServices.subjectFetch();
+	
+    res.render("./teacher/question1", {subData});
+}
+async function getQuestion(req,res){
+	let questionData= await teacherServices.getQuestion(req.body);
+	
+	res.json({success:1,questionData});
+}
 module.exports = {
 	login,
 	loginGet,
@@ -185,5 +196,5 @@ module.exports = {
 	viewGroup,
 	createQuiz,
 	setQuiz,
-	addQuestionFiles,
+	addQuestionFiles,question,getQuestion
 };

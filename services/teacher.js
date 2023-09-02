@@ -104,5 +104,53 @@ async function addQuestionFile(questionId, filePath, description)
         await question.save();
     }
 }
+async function fetchQuestions() {
+    let question_data = await questions.find({});
+    return question_data;
+}
+async function getQuestion(data){
+    let questionData=null;
+    if(data.subject=="All"){
+        if(data.type=="All"){
+            if(data.difficulty=="All"){
+                 questionData = await questions.find({}).populate({path:"course_outcome_id", model:"course_outcomes" ,populate:{
+                    path:"subjectId",model:"subjects",select: "name"
+                }});
+            }
+            else{
+                questionData=await questions.find({difficulty:data.difficulty});
+            }
+        }
+        else{
+            if(data.difficulty=="All"){
+                questionData = await questions.find({type:data.type});
+           }
+           else{
+               questionData=await questions.find({difficulty:data.difficulty,type:data.type});
+           }
+        }
 
-module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup, addQuestionFile};
+    }
+    else{
+        if(data.type=="All"){
+            if(data.difficulty=="All"){
+                 questionData = await questions.find({subject:data.subject});
+            }
+            else{
+                questionData=await questions.find({difficulty:data.difficulty,subject:data.subject});
+            }
+        }
+        else{
+            if(data.difficulty=="All"){
+                questionData = await questions.find({type:data.type,subject:data.subject});
+           }
+           else{
+               questionData=await questions.find({difficulty:data.difficulty,type:data.type,subject:data.subject});
+           }
+        }
+    }
+    return questionData;
+}
+
+
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup, addQuestionFile,getQuestion,fetchQuestions};

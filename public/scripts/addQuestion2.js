@@ -4,6 +4,7 @@ let editor;
 let filesData = "";
 let divData = [];
 divData.push({id:1,html:$("#files").html(),rendered:true});
+// fOR CREATING CKEDITOR
 ClassicEditor.create(document.querySelector("#editor"))
     .then((newEditor) => {
         editor = newEditor;
@@ -64,6 +65,7 @@ function renderFileDiv()
     })
     $("#files").append(innerHTML);
 }
+ // FOR DISABLING ADD BUTTON ON EMPTY VALUE
 function disableAdd() {
     if (
         !document.querySelector(
@@ -196,13 +198,15 @@ function addQuestion() {
         },
     });
 }
+// FOR PREVIEW
+// TO CREATE ARRAY OF OPTIONS
 function arrayStore(data) {
     disableAdd();
     let id = data.id;
     options[id] = data.value;
     listOption();
 }
-
+// ADDING NEW LI
 function listOption() {
     let ih = "";
 
@@ -212,6 +216,7 @@ function listOption() {
     $(".options").html(ih);
     disableAdd();
 }
+// FOR ADDING STYLE TO CORRECT ANS
 function answerTick(data) {
     for (let index = 1; index < count; index++) {
         const element = options["option" + index];
@@ -230,7 +235,7 @@ function answerTick(data) {
     // console.log(str.value);
     // row.style.fontStyle="bold";
 }
-
+// TO ADD A NEW OPTION
 $("#rowAdder").click(function () {
     console.log(
         document.querySelector(
@@ -256,17 +261,24 @@ $("#rowAdder").click(function () {
     $(".optionAddRemove").append(newRowAdd);
     count++;
     disableAdd();
+     // FOR ADDING OPTION IN SELECT ANSWER
     let options = "<option selected>Select Answer</option>";
     for (let i = 1; i < count; i++) {
         options += `<option id="option ${i}" value="${i}">Option ${i}</option>`;
     }
     $("#option").html(options);
 });
+// TO REMOVE
 $("#rowRemover").click(function () {
-    if ($(".optionAddRemove > div").length > 1) {
-        document.querySelector(".optionAddRemove > :last-child").remove();
+    
+    if ($('.optionAddRemove > div').length >1) {
+        // REMOVING OPTION TEXT FEILD
+        document.querySelector(".optionAddRemove > :last-child").remove();   
+         // REMOVING OPTION SELECT ANSWER  
         document.querySelector("#option > :last-child").remove();
-        if ($(".optionAddRemove > div").length == $(".options").length) {
+         // REMOVING OPTION FROM PREVIEW
+        if($('.optionAddRemove > div').length == $('.options').length){
+           
             document.querySelector(".options > :last-child").remove();
         }
         count--;
@@ -274,6 +286,7 @@ $("#rowRemover").click(function () {
     disableAdd();
     listOption();
 });
+//      ********            For showing option(marks,ans,option)        *******
 $(document).ready(function () {
     $("#type").change(function () {
         var value = $(this).val();
@@ -306,6 +319,7 @@ $(document).ready(function () {
         }
     });
     disableAdd();
+     // FOR SHOWING QUESTION PREVIEW
     editor.model.document.on("change", () => {
         $(".questionpreview").html(editor.getData());
     });
