@@ -78,7 +78,7 @@ async function getTopics(req, res) {
 }
 
 async function setTopics(req, res) {
-	myCache.set("Topics", req.body.selectedTopics);
+	req.session.topics = req.body.selectedTopics;
 	res.json({ success: 1 });
 }
 
@@ -87,7 +87,7 @@ async function addQue_question(req, res) {
 }
 
 async function addQuestion(req, res) {
-	let topics = myCache.get("Topics");
+	let topics = req.session.topics;
 	let course_outcome_id = [];
 	let options = [];
 	topics.forEach((ele) => {
@@ -106,8 +106,19 @@ async function addQuestion(req, res) {
 		answer: req.body.options[req.body.answer - 1],
 		is_active: 1,
 	};
-	await teacherServices.addQuestion(question);
-	res.json({ success: 1 });
+	let questionId = await teacherServices.addQuestion(question);
+	res.json({ success: 1, questionId: questionId});
+}
+
+async function addQuestionFiles(req, res){
+
+	for (let index = 0; index < req.files.length; index++) {
+		const element = req.files[index];
+		let filePath = element.destination + element.filename;
+		let description = element.originalname;
+		await teacherServices.addQuestionFile(req.body.questionId,filePath,description);
+	}
+	res.json({success:1});
 }
 
 async function getGroups(req, res) {
@@ -124,22 +135,22 @@ async function addGroup(req, res) {
 	let sheets = mySheet.SheetNames;
 	let obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
 	if (obj[0]["Enrollment No"] === undefined) {
-		myCache.set("errors", {
+		req.session.errors = {
 			text: "No (Enrollment No) field",
 			icon: "warning",
-		});
+		};
 	} else {
 		let group = await teacherServices.addGroup(req.body.group, obj);
 		if (group === 1) {
-			myCache.set("errors", {
+			req.session.errors = {
 				text: `Group Created Successfully`,
 				icon: "success",
-			});
+			};
 		} else {
-			myCache.set("errors", {
+			req.session.errors = {
 				text: "File Error",
 				icon: "error",
-			});
+			};
 		}
 	}
 	res.redirect("/teacher");
@@ -152,8 +163,7 @@ async function createQuiz(req, res) {
     res.render("./teacher/addQuiz1", { subData });
 }
 async function setQuiz(req, res) {
-    myCache.set("quiz", req.body);
-    //  console.log(myCache);
+	req.session.quiz = req.body;
     console.log(req.body);
     res.json({ success: 1 });
 }
@@ -175,4 +185,5 @@ module.exports = {
 	viewGroup,
 	createQuiz,
 	setQuiz,
+	addQuestionFiles,
 };

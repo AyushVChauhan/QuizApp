@@ -92,7 +92,17 @@ async function addQuestion(quesobject)
 {
     let question = new questions(quesobject);
     await question.save();
+    return question._id;
 }
 
+async function addQuestionFile(questionId, filePath, description)
+{
+    let question = await questions.findOne({_id:questionId});
+    if(question)
+    {
+        question.files.push({description:description,file:filePath});
+        await question.save();
+    }
+}
 
-module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup};
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup, addQuestionFile};
