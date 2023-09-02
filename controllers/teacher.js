@@ -178,6 +178,13 @@ async function getQuestion(req,res){
 	
 	res.json({success:1,questionData});
 }
+
+async function questionDetail(req,res){
+	let questionDetail=await teacherServices.questionDetail(req.body.id);
+	res.json({success:1,questionDetail});
+
+}
+
 module.exports = {
 	login,
 	loginGet,
@@ -196,5 +203,5 @@ module.exports = {
 	viewGroup,
 	createQuiz,
 	setQuiz,
-	addQuestionFiles,question,getQuestion
+	addQuestionFiles,question,getQuestion,questionDetail
 };

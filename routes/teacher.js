@@ -53,6 +53,7 @@ router.post("/addQuiz/setQuiz", teacherControllers.setQuiz);
 router.get("/addQuiz/setQuiz", teacherControllers.createQuiz);
 router.get("/question1", teacherControllers.question);
 router.post("/addQuestion/getQuestion", teacherControllers.getQuestion);
+router.post("/questionDetail", teacherControllers.questionDetail);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 
 function questionMiddleware(req, res, next) {

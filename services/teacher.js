@@ -169,5 +169,10 @@ async function getQuestion(data){
     return questionData;
 }
 
-
-module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup, addQuestionFile,getQuestion,fetchQuestions};
+async function questionDetail(data){
+    let questionDetail=await questions.findById(data).populate({path:"course_outcome_id", model:"course_outcomes" ,populate:{
+        path:"subjectId",model:"subjects"
+    }});;
+    return questionDetail
+}
+module.exports = {loginFetch, loginCheck, addStudent,subjectFetch, addTopic, getTopics, addQuestion, fetchDepartments, fetchGroups, addGroup, deptGroup, viewGroup, addQuestionFile,getQuestion,fetchQuestions,questionDetail};

@@ -1,108 +1,195 @@
 <%- include('../partials/header') %>
-    <link rel="stylesheet" href="/stylesheets/style_temp.css" />
-    <link rel="stylesheet" href="/stylesheets/datatables.css" />
-    <style>
-        .hidden {
-            display: none;
-        }
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<style>
+    .hidden {
+        display: none;
+    }
 
-        .readmore {
-            margin: 0 5px;
-        }
-    </style>
-    <div class="grid-container">
-
-        <%- include("./teacherHeader") %>
-            <%- include("./teacherSidebar") %>
-            <div class="main-container">
-
-                <div class="col h1">Questions</div>
-                <div class="col text-end">
-                    <a href="/teacher/addQuestion/topics">
-                        <button style="border-radius: 900px; height:min-content" class="btn btn-primary"><i
-                                class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
-                            QUESTION
-                        </button></a>
-                </div>
-                <div>
-                    <div class="row">
-                        <div class="col-sm-4 mb-4">
-                            <label>Type</label>
-                            <select class="form-control" id="typeselect" name="typeselect">
-                                <option selected="" value="All">All</option>
-                                <option value="1">MCQ</option>
-                                <option value="2">ONE WORD</option>
-                                <option value="3">DESCRIPTIVE</option>
-                            </select>
-                        </div>
-
-                        <div class="col-sm-4 mb-4">
-                            <label>Subject</label>
-                            <select class="form-control" name="subjectselect" id="subjectselect">
-                                <option selected="" value="All">All</option>
-                                <% subData.forEach(element=> { %>
-                                    <option value="<%= element._id %>">
-                                        <%= element.code %> : <%=element.name%>
-                                    </option>
-                                    <% }) %>
-                            </select>
-                        </div>
-
-                        <div class="col-sm-4 mb-4">
-                            <label>Difficulty Level</label>
-                            <select class="form-control" name="difficultyselect" id="difficultyselect">
-                                <option value="All" selected="">All</option>
-                                <option value="1">Easy</option>
-                                <option value="2">Medium</option>
-                                <option value="3">Hard</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                            <div class="text-center">
-                                
-                                <button type="button" id="generateDataTable" class="btn btn-primary text-center" width="">
-                                    Generate
-                                </button>
-                            </div>
-                                
-
+    .readmore {
+        margin: 0 5px;
+    }
+</style>
+<div class="grid-container">
+    <%- include("./teacherHeader") %> <%- include("./teacherSidebar") %>
+    <div class="main-container">
+        <div class="col h1">Questions</div>
+        <div class="col text-end">
+            <a href="/teacher/addQuestion/topics">
+                <button
+                    style="border-radius: 900px; height: min-content"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+                    QUESTION
+                </button></a
+            >
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-sm-4 mb-4">
+                    <label>Type</label>
+                    <select
+                        class="form-control"
+                        id="typeselect"
+                        name="typeselect"
+                    >
+                        <option selected="" value="All">All</option>
+                        <option value="1">MCQ</option>
+                        <option value="2">ONE WORD</option>
+                        <option value="3">DESCRIPTIVE</option>
+                    </select>
                 </div>
 
-                <div class="mb-3" id="tableDiv" style="height: 420px; overflow-x:hidden">
+                <div class="col-sm-4 mb-4">
+                    <label>Subject</label>
+                    <select
+                        class="form-control"
+                        name="subjectselect"
+                        id="subjectselect"
+                    >
+                        <option selected="" value="All">All</option>
+                        <% subData.forEach(element=> { %>
+                        <option value="<%= element._id %>">
+                            <%= element.code %> : <%=element.name%>
+                        </option>
+                        <% }) %>
+                    </select>
+                </div>
 
+                <div class="col-sm-4 mb-4">
+                    <label>Difficulty Level</label>
+                    <select
+                        class="form-control"
+                        name="difficultyselect"
+                        id="difficultyselect"
+                    >
+                        <option value="All" selected="">All</option>
+                        <option value="1">Easy</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Hard</option>
+                    </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="text-center">
+                    <button
+                        type="button"
+                        id="generateDataTable"
+                        class="btn btn-primary text-center"
+                        width=""
+                    >
+                        Generate
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="mb-3"
+                id="tableDiv"
+                style="height: 420px; overflow-x: hidden"
+            ></div>
+        </div>
+        <%- include('./questionDetail')-%>
     </div>
 
     <%- include('../partials/footer') %>
-        <script>
-            function seer(e){
-                console.log(e.getAttribute("data-id"));
-            }
-            $("#generateDataTable").click(() => {
-                let subject = $("#subjectselect").val();
-                let type = $("#typeselect").val();
-                let difficulty = $("#difficultyselect").val();
-                // console.log("hi");
-                $.ajax({
-                    type: "POST",
-                    url: "/teacher/addQuestion/getQuestion",
-                    data: { subject, type, difficulty },
-                    success: function (response) {
-                        if (response.length !== 0) {
-                            questions = response.questionData;
-                            // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
-                            let def = "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Type</th><th>Subject</th><th>Question</th><th>Action</th></thead>";
-                            let data = "";
-                            let type1 = null;
-                            let subject1 = null;
-                            let ind=1;
-                            questions.forEach((ele) => {
-                                
-                                if(ele.course_outcome_id.length!=0)
-                                { 
-                                    // console.log("hii");
+    <script>
+        function seer(e) {
+            let id = e.getAttribute("data-id");
+            $.ajax({
+                type: "POST",
+                url: "/teacher/questionDetail",
+                data: { id },
+                success: function (response) {
+                    // console.log(response);
+                    let data = response.questionDetail;
+                    let subcodeqdetail = null;
+                    let subnameqdetail = null;
+                    let coqdetail = null;
+                    let topicqdetail = null;
+
+                    data.course_outcome_id.forEach((element) => {
+                        coqdetail = element.course_outcome;
+                        topicqdetail = element.topic;
+                        subcodeqdetail = element.subjectId.code;
+                        subnameqdetail = element.subjectId.name;
+                    });
+                    console.log(data);
+                    let typeqdetail = null;
+                    let difficultyqdetail = null;
+                    if (data.type == 1) {
+                        typeqdetail = "MCQ";
+                    }
+                    if (data.type == 2) {
+                        typeqdetail = "One Word";
+                    }
+                    if (data.type == 3) {
+                        typeqdetail = "Descriptive";
+                    }
+                    if (data.difficulty == 1) {
+                        difficultyqdetail = "Easy";
+                    }
+                    if (data.difficulty == 2) {
+                        difficultyqdetail = "Medium";
+                    }
+                    if (data.difficulty == 3) {
+                        difficultyqdetail = "Hard";
+                    }
+                    let html =
+                        "<div class='question'><div class='modalQuestion me-2'><h4><b>Question :</b></h4></div><div class='modalQuestion'> " +
+                        data.question +
+                        "</div></div><div class=' me-2' ><h4><b>Option :</b></h4></div><div class=''><ol style='list-style-type: upper-alpha;font-size:20px'>";
+                    data.options.forEach((element) => {
+                        html += "<li>" + element.option + "</li>";
+                    });
+                    html +=
+                        "</ol></div><div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
+                        data.answer +
+                        "</b></div></div></div><div><div class='modalQuestion me-2'><h4><b>Marks :</b></h4></div><div class='modalQuestion'> " +
+                        data.marks +
+                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Type :</b></h4></div><div class='modalQuestion'> " +
+                        typeqdetail +
+                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Difficulty:</b></h4></div><div class='modalQuestion'> " +
+                        difficultyqdetail +
+                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Subject:</b></h4></div><div class='modalQuestion'> " +
+                        subnameqdetail +
+                        "(" +
+                        subcodeqdetail +
+                        ")" +
+                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>CO : </b></h4></div><div class='modalQuestion'> " +
+                        coqdetail +
+                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Topic :</b></h4></div><div class='modalQuestion'> " +
+                        topicqdetail +
+                        "</div></div></div>";
+                    $(".modal-body").html(html);
+                    // $('#largeModal').modal('show');
+                    $("#questionDetailModal").modal("show");
+                },
+            });
+        }
+        $("#generateDataTable").click(() => {
+            let subject = $("#subjectselect").val();
+            let type = $("#typeselect").val();
+            let difficulty = $("#difficultyselect").val();
+            // console.log("hi");
+            $.ajax({
+                type: "POST",
+                url: "/teacher/addQuestion/getQuestion",
+                data: { subject, type, difficulty },
+                success: function (response) {
+                    if (response.length !== 0) {
+                        questions = response.questionData;
+                        // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
+                        let def =
+                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Type</th><th>Subject</th><th>Question</th><th>Action</th></thead>";
+                        let data = "";
+                        let type1 = null;
+                        let subject1 = null;
+                        let ind = 1;
+                        questions.forEach((ele) => {
+                            if (ele.course_outcome_id.length != 0) {
+                                // console.log("hii");
                                 if (ele.type == 1) {
                                     type1 = "MCQ";
                                 }
@@ -117,58 +204,60 @@
                                 data += `<td>${type1}</td>`;
                                 ele.course_outcome_id.forEach((element) => {
                                     subject1 = element.subjectId.name;
-                                })
+                                });
                                 data += `<td>${subject1}
                         </td>`;
                                 data += `<td class="content">${ele.question}</td>`;
                                 data += `<td><a data-id='${ele._id}' onclick='seer(this)' class='adder' ><i class='fa-solid fa-eye'/></a></td>`;
                                 data += "</tr>";
-                        }})
+                            }
+                        });
 
-                            $("#tableDiv").html(def + data + "</table>");
-                            var myTable;
+                        $("#tableDiv").html(def + data + "</table>");
+                        var myTable;
 
-                            myTable = $("#datatable").DataTable({
-                                pagingType: "simple_numbers",
-                                scrollCollapse: true,
-                                scrollY: '350px',
-                                language: {
-                                    paginate: {
-                                        previous: "<",
-                                        next: ">",
-                                    },
+                        myTable = $("#datatable").DataTable({
+                            pagingType: "simple_numbers",
+                            scrollCollapse: true,
+                            scrollY: "350px",
+                            language: {
+                                paginate: {
+                                    previous: "<",
+                                    next: ">",
                                 },
-                            });
-                            abc();
-                        }
-
+                            },
+                        });
+                        abc();
                     }
-                });
-
+                },
             });
-            function abc() {
+        });
+        function abc() {
+            var maxL = 180;
 
-                var maxL = 180;
+            $(".content").each(function () {
+                var text = $(this).text();
+                if (text.length > maxL) {
+                    var begin = text.substr(0, maxL),
+                        end = text.substr(maxL);
 
-                $('.content').each(function () {
+                    $(this)
+                        .html(begin)
+                        .append(
+                            $('<a class="readmore"/>')
+                                .attr("href", "#")
+                                .html("read more...")
+                        )
+                        .append($('<div class="hidden" />').html(end));
+                }
+            });
 
-                    var text = $(this).text();
-                    if (text.length > maxL) {
-
-                        var begin = text.substr(0, maxL),
-                            end = text.substr(maxL);
-
-                        $(this).html(begin)
-                            .append($('<a class="readmore"/>').attr('href', '#').html('read more...'))
-                            .append($('<div class="hidden" />').html(end));
-                    }
-                });
-
-                $(document).on('click', '.readmore', function () {
-                    // $(this).next('.readmore').fadeOut("400");
-                    $(this).next('.hidden').slideToggle(200);
-                })
-            }
-        </script>
-        <script src="/scripts/teacherSidebar.js"></script>
-        <%- include('../partials/footer2') -%>
+            $(document).on("click", ".readmore", function () {
+                // $(this).next('.readmore').fadeOut("400");
+                $(this).next(".hidden").slideToggle(200);
+            });
+        }
+    </script>
+    <script src="/scripts/teacherSidebar.js"></script>
+    <%- include('../partials/footer2') -%>
+</div>
