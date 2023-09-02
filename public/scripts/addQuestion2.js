@@ -1,23 +1,131 @@
-
 let count = 2;
 let options = [];
 let editor;
+let filesData = "";
+let divData = [];
+divData.push({id:1,html:$("#files").html(),rendered:true});
 ClassicEditor.create(document.querySelector("#editor"))
     .then((newEditor) => {
         editor = newEditor;
-    }) 
+    })
     .catch((error) => {
         console.error(error);
     });
-    function disableAdd(){
-        if(!document.querySelector(".optionAddRemove > div:last-of-type > input:last-child ").value){
-            document.getElementById("rowAdder").disabled = true;
-          
-        } 
-        else{
-            document.getElementById("rowAdder").disabled = false;
+function descChange() {
+    let flag = 0;
+    divData.forEach(ele=>{
+        if(document.getElementById(`questionDesc${ele.id}`).value.length == 0 && document.getElementById(`questionFile${ele.id}`).files.length == 0)
+        {
+            flag = ele.id;
+            return;
+        }
+    })
+    if(flag!=0)
+    {
+        removeFile(document.getElementById("fileButton"+flag));
+    }
+
+    filesData = "";
+    let temp = 0;
+    for (let index = 0; index < divData.length; index++) {
+        const element = divData[index];
+        if(index%2 ==0 && index!=0)
+        {
+            filesData += "</div>"
+            temp--;
+        }
+        if(index%2 == 0)
+        {
+            filesData += "<div class='row'>";
+            temp++;
+        }
+        filesData += "<div class='col'>"
+        let descValue = document.getElementById(`questionDesc${element.id}`).value;
+        if(descValue.length == 0)
+        descValue = index + 1;
+        filesData += descValue;
+        filesData += "</div>"
+    }
+    if(temp == 1)
+    filesData += "</div>"
+
+    filesData += "</div>"
+    $(".filespreview").html(filesData);
+} 
+function renderFileDiv()
+{
+    let innerHTML = "";
+    divData.forEach(ele => {
+        if(!ele.rendered)
+        {
+            innerHTML+= ele.html;
+            ele.rendered = true;
+        }
+    })
+    $("#files").append(innerHTML);
+}
+function disableAdd() {
+    if (
+        !document.querySelector(
+            ".optionAddRemove > div:last-of-type > input:last-child "
+        ).value
+    ) {
+        document.getElementById("rowAdder").disabled = true;
+    } else {
+        document.getElementById("rowAdder").disabled = false;
+    }
+}
+function removeFile(e) {
+    let id = e.getAttribute("data-id");
+    console.log(divData);
+    for (let index = 0; index < divData.length; index++) {
+        const element = divData[index];
+        if ( element.id == id) {
+            divData.splice(index,1);
+            break;
         }
     }
+    console.log(divData);
+    document.getElementById(`inputGroup${id}`).remove();
+}
+function addFile() {
+    let flag = 1;
+    divData.forEach(ele=>{
+        if(document.getElementById(`questionDesc${ele.id}`).value.length == 0 || document.getElementById(`questionFile${ele.id}`).files.length == 0)
+        {
+            flag = 0;
+            return;
+        }
+    })
+    if(flag)
+    {
+        let curr_id = (divData.length === 0) ? (0) : (divData[divData.length - 1].id + 1);
+        let innerHTML = `<div class="input-group" id="inputGroup${curr_id}"><input class="form-control" type="text" name="" id="questionDesc${curr_id}" placeholder="Description" oninput='descChange()'>
+        <input
+            type="file"
+            class="form-control"
+            id="questionFile${curr_id}"
+            name="question"
+            onchange="fileChange(this)"
+        />
+        <button data-id="${curr_id}" class="btn btn-danger" id="fileButton${curr_id}" onclick="removeFile(this)"><i class="fa-solid fa-xmark"></i></button></div>`;
+        divData.push({id:curr_id,html:innerHTML,rendered:false});
+        renderFileDiv();
+    }
+}
+function fileChange(e) {
+    // let files = document.getElementById("question").files;
+    // fileData = "<table>";
+    // for (let index = 0; index < files.length; index++) {
+    //     const element = files[index];
+    //     if(index % 2 === 0 )
+    //     {
+    //         fileData += "<tr>";
+    //     }
+    //     fileData += ""
+    // }
+    // fileData += "</tr></table>";
+}
 function addQuestion() {
     let marks = 0;
     let type = 0;
@@ -35,11 +143,57 @@ function addQuestion() {
     $.ajax({
         type: "post",
         url: "/teacher/addQuestion/question",
-        data: { question: editor.getData(), marks: marks, type: type, difficulty: difficulty, options: allOptions, answer: answer },
+        data: {
+            question: editor.getData(),
+            marks: marks,
+            type: type,
+            difficulty: difficulty,
+            options: allOptions,
+            answer: answer,
+        },
         success: function (response) {
-            Swal.fire({ text: "Question added succesfully", icon: "success", timer: 2000 });
+            if(divData.length > 0)
+            {
+                let formdata = new FormData();
+                divData.forEach((ele,ind)=>{
+                    let myFile = document.getElementById(`questionFile${ele.id}`).files[0];
+                    let myName = document.getElementById(`questionDesc${ele.id}`).value;
+                    if(myName.length == 0)
+                    myName = ind;
+                    formdata.append('questionFiles',myFile, myName);
+                })
+                console.log(formdata);
+                let questionId = response.questionId;
+                formdata.append("questionId",questionId);
+                console.log(questionId);
+                $.ajax({
+                    type: "post",
+                    url: "/teacher/addQuestion/question/files",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if(response.success == 1)
+                        {
+                            Swal.fire({
+                                text: "Question added succesfully",
+                                icon: "success",
+                                timer: 2000,
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                text: "There was an error, Please Refresh Page",
+                                icon: "error",
+                                timer: 2000,
+                            });
 
-        }
+                        }
+                        
+                    }
+                });
+            }
+        },
     });
 }
 function arrayStore(data) {
@@ -66,8 +220,7 @@ function answerTick(data) {
         if (data == index) {
             row.innerHTML = element + "&nbsp;&nbsp;&nbsp;&#x2714;";
             row.style.color = "green";
-        }
-        else {
+        } else {
             row.innerHTML = element;
             row.style.color = "black";
         }
@@ -78,10 +231,13 @@ function answerTick(data) {
     // row.style.fontStyle="bold";
 }
 
-
 $("#rowAdder").click(function () {
-    console.log(document.querySelector(".optionAddRemove > div:last-of-type > input:last-child ").value);
-   
+    console.log(
+        document.querySelector(
+            ".optionAddRemove > div:last-of-type > input:last-child "
+        ).value
+    );
+
     newRowAdd =
         ' <div class=" mb-3">' +
         ' <label for="option' +
@@ -107,12 +263,10 @@ $("#rowAdder").click(function () {
     $("#option").html(options);
 });
 $("#rowRemover").click(function () {
-    
-    if ($('.optionAddRemove > div').length >1) {
+    if ($(".optionAddRemove > div").length > 1) {
         document.querySelector(".optionAddRemove > :last-child").remove();
         document.querySelector("#option > :last-child").remove();
-        if($('.optionAddRemove > div').length == $('.options').length){
-           
+        if ($(".optionAddRemove > div").length == $(".options").length) {
             document.querySelector(".options > :last-child").remove();
         }
         count--;
@@ -121,7 +275,6 @@ $("#rowRemover").click(function () {
     listOption();
 });
 $(document).ready(function () {
-
     $("#type").change(function () {
         var value = $(this).val();
         var toAppend = "";
@@ -151,11 +304,9 @@ $(document).ready(function () {
             let z = document.getElementById("mark");
             z.style.display = "block";
         }
-    }
-    );
+    });
     disableAdd();
     editor.model.document.on("change", () => {
         $(".questionpreview").html(editor.getData());
     });
-    
 });

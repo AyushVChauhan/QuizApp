@@ -106,8 +106,19 @@ async function addQuestion(req, res) {
 		answer: req.body.options[req.body.answer - 1],
 		is_active: 1,
 	};
-	await teacherServices.addQuestion(question);
-	res.json({ success: 1 });
+	let questionId = await teacherServices.addQuestion(question);
+	res.json({ success: 1, questionId: questionId});
+}
+
+async function addQuestionFiles(req, res){
+
+	for (let index = 0; index < req.files.length; index++) {
+		const element = req.files[index];
+		let filePath = element.destination + element.filename;
+		let description = element.originalname;
+		await teacherServices.addQuestionFile(req.body.questionId,filePath,description);
+	}
+	res.json({success:1});
 }
 
 async function getGroups(req, res) {
@@ -174,4 +185,5 @@ module.exports = {
 	viewGroup,
 	createQuiz,
 	setQuiz,
+	addQuestionFiles,
 };
