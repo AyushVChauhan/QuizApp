@@ -14,6 +14,9 @@
 
         <%- include("./teacherHeader") %>
             <%- include("./teacherSidebar") %>
+            <div class="main-container">
+
+                <div class="col h1">Questions</div>
                 <div class="col text-end">
                     <a href="/teacher/addQuestion/topics">
                         <button style="border-radius: 900px; height:min-content" class="btn btn-primary"><i
@@ -56,42 +59,50 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4">
-                            <button type="button" id="generateDataTable" class="btn btn-primary">
-                                Generate
-                            </button>
-                        </div>
-                    </div>
+                            <div class="text-center">
+                                
+                                <button type="button" id="generateDataTable" class="btn btn-primary text-center" width="">
+                                    Generate
+                                </button>
+                            </div>
+                                
 
                 </div>
 
                 <div class="mb-3" id="tableDiv" style="height: 420px; overflow-x:hidden">
 
                 </div>
+            </div>
     </div>
 
     <%- include('../partials/footer') %>
         <script>
+            function seer(e){
+                console.log(e.getAttribute("data-id"));
+            }
             $("#generateDataTable").click(() => {
                 let subject = $("#subjectselect").val();
                 let type = $("#typeselect").val();
                 let difficulty = $("#difficultyselect").val();
-                console.log("hi");
+                // console.log("hi");
                 $.ajax({
                     type: "POST",
                     url: "/teacher/addQuestion/getQuestion",
                     data: { subject, type, difficulty },
                     success: function (response) {
                         if (response.length !== 0) {
-
                             questions = response.questionData;
-
+                            // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
                             let def = "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Type</th><th>Subject</th><th>Question</th><th>Action</th></thead>";
                             let data = "";
                             let type1 = null;
                             let subject1 = null;
-                            questions.forEach((ele, ind) => {
+                            let ind=1;
+                            questions.forEach((ele) => {
+                                
+                                if(ele.course_outcome_id.length!=0)
+                                { 
+                                    // console.log("hii");
                                 if (ele.type == 1) {
                                     type1 = "MCQ";
                                 }
@@ -102,18 +113,17 @@
                                     type1 = "DESCRIPTIVE";
                                 }
                                 data += "<tr>";
-                                data += `<td>${ind + 1}</td>`;
+                                data += `<td>${ind++}</td>`;
                                 data += `<td>${type1}</td>`;
                                 ele.course_outcome_id.forEach((element) => {
                                     subject1 = element.subjectId.name;
                                 })
-                                data += `<td>${subject1
-                                    }
+                                data += `<td>${subject1}
                         </td>`;
                                 data += `<td class="content">${ele.question}</td>`;
-                                data += `<td><a data-id='${ele._id}' onclick='adder(this)' class='adder' ><i class='fa-solid fa-eye'/></a></td>`;
+                                data += `<td><a data-id='${ele._id}' onclick='seer(this)' class='adder' ><i class='fa-solid fa-eye'/></a></td>`;
                                 data += "</tr>";
-                            })
+                        }})
 
                             $("#tableDiv").html(def + data + "</table>");
                             var myTable;

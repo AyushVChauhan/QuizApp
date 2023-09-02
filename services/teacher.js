@@ -118,15 +118,21 @@ async function getQuestion(data){
                 }});
             }
             else{
-                questionData=await questions.find({difficulty:data.difficulty});
+                questionData=await questions.find({difficulty:data.difficulty}).populate({path:"course_outcome_id", model:"course_outcomes" ,populate:{
+                    path:"subjectId",model:"subjects",select: "name"
+                }});
             }
         }
         else{
             if(data.difficulty=="All"){
-                questionData = await questions.find({type:data.type});
+                questionData = await questions.find({type:data.type}).populate({path:"course_outcome_id", model:"course_outcomes" ,populate:{
+                    path:"subjectId",model:"subjects",select: "name"
+                }});
            }
            else{
-               questionData=await questions.find({difficulty:data.difficulty,type:data.type});
+               questionData=await questions.find({difficulty:data.difficulty,type:data.type}).populate({path:"course_outcome_id", model:"course_outcomes" ,populate:{
+                path:"subjectId",model:"subjects",select: "name"
+            }});
            }
         }
 
@@ -134,21 +140,32 @@ async function getQuestion(data){
     else{
         if(data.type=="All"){
             if(data.difficulty=="All"){
-                 questionData = await questions.find({subject:data.subject});
+                //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+                //     path:"subjectId",model:"subjects",select: "name"
+                 questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'subjectId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+                    path:"subjectId",model:"subjects"
+                }}).exec();
             }
             else{
-                questionData=await questions.find({difficulty:data.difficulty,subject:data.subject});
+                questionData=await questions.find({difficulty:data.difficulty}).populate({path:"course_outcome_id", model:"course_outcomes" ,match:{'subjectId':{$eq : data.subject}},populate:{
+                    path:"subjectId",model:"subjects"
+                }}).exec();
             }
         }
         else{
             if(data.difficulty=="All"){
-                questionData = await questions.find({type:data.type,subject:data.subject});
+                questionData = await questions.find({type:data.type}).populate({path:"course_outcome_id",match:{'subjectId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+                    path:"subjectId",model:"subjects"
+                }}).exec();
            }
            else{
-               questionData=await questions.find({difficulty:data.difficulty,type:data.type,subject:data.subject});
+               questionData=await questions.find({difficulty:data.difficulty,type:data.type}).populate({path:"course_outcome_id",match:{'subjectId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+                path:"subjectId",model:"subjects"
+            }}).exec();
            }
         }
     }
+    // console.log(questionData);
     return questionData;
 }
 
