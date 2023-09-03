@@ -2,13 +2,22 @@
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 <link rel="stylesheet" href="/stylesheets/datatables.css" />
 <style>
-    .hidden {
-        display: none;
-    }
+    .add-read-more.show-less-content .second-section,
+.add-read-more.show-less-content .read-less {
+   display: none;
+}
 
-    .readmore {
-        margin: 0 5px;
-    }
+.add-read-more.show-more-content .read-more {
+   display: none;
+}
+
+.add-read-more .read-more,
+.add-read-more .read-less {
+   font-weight: bold;
+   margin-left: 2px;
+   color: blue;
+   cursor: pointer;
+}
 </style>
 <div class="grid-container">
     <%- include("./teacherHeader") %> <%- include("./teacherSidebar") %>
@@ -207,7 +216,7 @@
                                 });
                                 data += `<td>${subject1}
                         </td>`;
-                                data += `<td class="content">${ele.question}</td>`;
+                                data += `<td class="add-read-more show-less-content">${ele.question}</td>`;
                                 data += `<td><a data-id='${ele._id}' onclick='seer(this)' class='adder' ><i class='fa-solid fa-eye'/></a></td>`;
                                 data += "</tr>";
                             }
@@ -227,36 +236,42 @@
                                 },
                             },
                         });
-                        abc();
+                        // abc();
+                        AddReadMore();
+
                     }
                 },
             });
         });
-        function abc() {
-            var maxL = 180;
+        function AddReadMore() {
+      //This limit you can set after how much characters you want to show Read More.
+      var carLmt = 170;
+      // Text to show when text is collapsed
+      var readMoreTxt = " ...read more";
+      // Text to show when text is expanded
+      var readLessTxt = " read less";
 
-            $(".content").each(function () {
-                var text = $(this).text();
-                if (text.length > maxL) {
-                    var begin = text.substr(0, maxL),
-                        end = text.substr(maxL);
 
-                    $(this)
-                        .html(begin)
-                        .append(
-                            $('<a class="readmore"/>')
-                                .attr("href", "#")
-                                .html("read more...")
-                        )
-                        .append($('<div class="hidden" />').html(end));
-                }
-            });
+      //Traverse all selectors with this class and manipulate HTML part to show Read More
+      $(".add-read-more").each(function () {
+         if ($(this).find(".first-section").length)
+            return;
 
-            $(document).on("click", ".readmore", function () {
-                // $(this).next('.readmore').fadeOut("400");
-                $(this).next(".hidden").slideToggle(200);
-            });
-        }
+         var allstr = $(this).text();
+         if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd = firstSet + "<span class='second-section'>" + secdHalf + "</span><span class='read-more'  title='Click to Show More'>" + readMoreTxt + "</span><span class='read-less' title='Click to Show Less'>" + readLessTxt + "</span>";
+            $(this).html(strtoadd);
+         }
+      });
+
+      //Read More and Read Less Click Event binding
+      $(document).on("click", ".read-more,.read-less", function () {
+         $(this).closest(".add-read-more").toggleClass("show-less-content show-more-content");
+      });
+   }
+
     </script>
     <script src="/scripts/teacherSidebar.js"></script>
     <%- include('../partials/footer2') -%>
