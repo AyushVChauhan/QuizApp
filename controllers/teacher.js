@@ -198,9 +198,21 @@ async function questionDetail(req, res) {
 }
 
 async function addQuizQuestion(req, res) {
-	let subject = "64e852425e5e7f3c61111360";
-    res.render("./teacher/addQuiz3", {subject});
+    let topics=[];
+	let subject = "64e77033e506148ab9bac29d";
+    let coData= await teacherServices.getCOs(subject);
+    let cos=coData.course_outcomes;
+    for (let index = 1; index <= cos; index++) {
+        let temp=await teacherServices.getTopics({co:index,subject:subject});
+        console.log(temp);
+        topics.push(...temp);
+    }
+    console.log(coData);
+    console.log(topics);
+    res.render("./teacher/addQuiz3", {subject,cos,topics});
+
 }
+
 
 module.exports = {
     login,

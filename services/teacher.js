@@ -413,6 +413,12 @@ async function questionDetail(data) {
     // console.log(questionDetail);
     return questionDetail;
 }
+async function getCOs(data){
+    console.log(data);
+    let coData= await subjects.findOne({_id:data});
+
+    return coData;
+}
 module.exports = {
     loginFetch,
     loginCheck,
@@ -430,4 +436,5 @@ module.exports = {
     getQuestion,
     fetchQuestions,
     questionDetail,
+    getCOs,
 };

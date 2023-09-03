@@ -58,6 +58,47 @@
                             <option value="1">By me</option>
                         </select>
                     </div>
+                    <div class="col-sm-4 mb-4">
+                        <label>CO's</label>
+                        <select
+                            class="form-control"
+                            name="coselect"
+                            id="coselect"
+                        >
+                            <option value="All" selected="">All</option>
+                          
+							 <% for( let index = 1; index <= cos; index++ ) { %>
+                             
+                            
+							<option value="<%= index %>">
+								CO-<%= index %>
+							</option>
+							<% } %>
+                            
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <label>Topic</label>
+                        <select
+                            class="form-control"
+                            name="topicselect"
+                            id="topicselect"
+                        >
+                            <option value="All" selected="">All</option>
+                            
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-4">
+                        <label>Marks</label>
+                        <select
+                            class="form-control"
+                            name="markselect"
+                            id="markselect"
+                        >
+                            <option value="All" selected="">All</option>
+                            
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
