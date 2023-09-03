@@ -1,5 +1,6 @@
 const teacherServices = require("../services/teacher");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const xlsx = require("xlsx");
 const myCache = require("./cache");
 const { default: mongoose } = require("mongoose");
@@ -8,17 +9,19 @@ async function viewGroup(req, res){
 	res.json(students.students);
 }
 async function login(req, res) {
+
 	let data = await teacherServices.loginFetch(
 		req.body.username,
 		req.body.password
 	);
 	if (data != null) {
 		// res.redirect("/teacher");
-
+		console.log(data.id);
 		let token = jwt.sign(
 			{
 				username: req.body.username,
 				password: req.body.password,
+				id:data._id,
 				role: data.role + 1,
 			},
 			process.env.JWT_SECRET
@@ -90,12 +93,15 @@ async function addQuestion(req, res) {
 	let topics = req.session.topics;
 	let course_outcome_id = [];
 	let options = [];
+    let cookie = req.cookies.auth;
+	let data = jwt.verify(cookie, process.env.JWT_SECRET);
 	topics.forEach((ele) => {
 		course_outcome_id.push(new mongoose.Types.ObjectId(ele["_id"]));
 	});
 	req.body.options.forEach((ele) => {
 		options.push({ option: ele, file: null });
 	});
+	console.log(data.id);
 	let question = {
 		course_outcome_id: course_outcome_id,
 		question: req.body.question,
@@ -105,8 +111,10 @@ async function addQuestion(req, res) {
 		options: options,
 		answer: req.body.options[req.body.answer - 1],
 		is_active: 1,
+		created_by:data.id
 	};
 	let questionId = await teacherServices.addQuestion(question);
+	console.log(questionId);
 	res.json({ success: 1, questionId: questionId});
 }
 
@@ -174,7 +182,9 @@ async function question(req,res){
     res.render("./teacher/question1", {subData});
 }
 async function getQuestion(req,res){
-	let questionData= await teacherServices.getQuestion(req.body);
+	let cookie = req.cookies.auth;
+	let data = jwt.verify(cookie, process.env.JWT_SECRET);
+	let questionData= await teacherServices.getQuestion(req.body,data.id);
 	
 	res.json({success:1,questionData});
 }

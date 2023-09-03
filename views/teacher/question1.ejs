@@ -36,7 +36,7 @@
         </div>
         <div>
             <div class="row">
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-3 mb-4">
                     <label>Type</label>
                     <select
                         class="form-control"
@@ -50,7 +50,7 @@
                     </select>
                 </div>
 
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-3 mb-4">
                     <label>Subject</label>
                     <select
                         class="form-control"
@@ -66,7 +66,7 @@
                     </select>
                 </div>
 
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-3 mb-4">
                     <label>Difficulty Level</label>
                     <select
                         class="form-control"
@@ -79,13 +79,24 @@
                         <option value="3">Hard</option>
                     </select>
                 </div>
+                <div class="col-sm-3 mb-4">
+                    <label>Created By</label>
+                    <select
+                        class="form-control"
+                        name="createdbyselect"
+                        id="createdbyselect"
+                    >
+                        <option value="All" selected="">All</option>
+                        <option value="1">By me</option>
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="text-center">
                     <button
                         type="button"
                         id="generateDataTable"
-                        class="btn btn-primary text-center"
+                        class="btn btn-primary text-center mb-3"
                         width=""
                     >
                         Generate
@@ -96,7 +107,7 @@
             <div
                 class="mb-3"
                 id="tableDiv"
-                style="height: 420px; overflow-x: hidden"
+                style="overflow: hidden"
             ></div>
         </div>
         <%- include('./questionDetail')-%>
@@ -116,11 +127,11 @@
                     let subcodeqdetail = null;
                     let subnameqdetail = null;
                     let coqdetail = null;
-                    let topicqdetail = null;
-
+                    let topicqdetail = [];
+                
                     data.course_outcome_id.forEach((element) => {
                         coqdetail = element.course_outcome;
-                        topicqdetail = element.topic;
+                        topicqdetail.push(element.topic);
                         subcodeqdetail = element.subjectId.code;
                         subnameqdetail = element.subjectId.name;
                     });
@@ -148,9 +159,16 @@
                     let html =
                         "<div class='question'><div class='modalQuestion me-2'><h4><b>Question :</b></h4></div><div class='modalQuestion'> " +
                         data.question +
-                        "</div></div><div class=' me-2' ><h4><b>Option :</b></h4></div><div class=''><ol style='list-style-type: upper-alpha;font-size:20px'>";
+                        "</div></div><div class='row' ><div class='modalQuestion col-auto'><h4><b>Option :</b></h4></div><div class='modalQuestion col'><ol style='list-style-type: upper-alpha;font-size:20px'>";
                     data.options.forEach((element) => {
-                        html += "<li>" + element.option + "</li>";
+                        if(element.option==data.answer){
+
+                            html += "<li style='color:green'>" + element.option + "</li>";
+                        }
+                        else{
+                            html += "<li>" + element.option + "</li>";
+
+                        }
                     });
                     html +=
                         "</ol></div><div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
@@ -168,8 +186,12 @@
                         ")" +
                         "</div></div></div><div><div class='modalQuestion me-2'><h4><b>CO : </b></h4></div><div class='modalQuestion'> " +
                         coqdetail +
-                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Topic :</b></h4></div><div class='modalQuestion'> " +
-                        topicqdetail +
+                        "</div></div></div><div class='row'><div class='modalQuestion col-auto'><h4><b>Topic :</b></h4></div><div class='modalQuestion col'><ul> " ;
+                        topicqdetail.forEach(ele=>{
+                            html+=`<li>${ele}</li>`;
+                        });
+                        html+="</ul></div></div></div><div><div class='modalQuestion me-2'><h4><b>Created By :</b></h4></div><div class='modalQuestion'>"+
+                        data.created_by.username +
                         "</div></div></div>";
                     $(".modal-body").html(html);
                     // $('#largeModal').modal('show');
@@ -181,11 +203,12 @@
             let subject = $("#subjectselect").val();
             let type = $("#typeselect").val();
             let difficulty = $("#difficultyselect").val();
+            let createdby =$("#createdbyselect").val();
             // console.log("hi");
             $.ajax({
                 type: "POST",
                 url: "/teacher/addQuestion/getQuestion",
-                data: { subject, type, difficulty },
+                data: { subject, type, difficulty,createdby },
                 success: function (response) {
                     if (response.length !== 0) {
                         questions = response.questionData;
@@ -228,7 +251,7 @@
                         myTable = $("#datatable").DataTable({
                             pagingType: "simple_numbers",
                             scrollCollapse: true,
-                            scrollY: "350px",
+                            
                             language: {
                                 paginate: {
                                     previous: "<",

@@ -154,7 +154,6 @@ $(function () {
                     myTable = $("#datatable").DataTable({
                         pagingType: "simple_numbers",
                         scrollCollapse: true,
-                        scrollY: '350px',
                         language: {
                             paginate: {
                                 previous: "<",

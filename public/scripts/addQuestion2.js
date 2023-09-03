@@ -181,7 +181,10 @@ function addQuestion() {
                                 text: "Question added succesfully",
                                 icon: "success",
                                 timer: 2000,
+                            }).then(function(){
+                                $("#reset").click();
                             });
+                            
                         }
                         else {
                             Swal.fire({
@@ -235,6 +238,9 @@ function answerTick(data) {
     // console.log(str.value);
     // row.style.fontStyle="bold";
 }
+$("#reset").on("click",function (){
+    location.href="/teacher/addQuestion/question";
+})
 // TO ADD A NEW OPTION
 $("#rowAdder").click(function () {
     console.log(
