@@ -129,6 +129,7 @@
                     let coqdetail = null;
                     let topicqdetail = [];
                 
+
                     data.course_outcome_id.forEach((element) => {
                         coqdetail = element.course_outcome;
                         topicqdetail.push(element.topic);
@@ -161,14 +162,11 @@
                         data.question +
                         "</div></div><div class='row' ><div class='modalQuestion col-auto'><h4><b>Option :</b></h4></div><div class='modalQuestion col'><ol style='list-style-type: upper-alpha;font-size:20px'>";
                     data.options.forEach((element) => {
-                        if(element.option==data.answer){
-
-                            html += "<li style='color:green'>" + element.option + "</li>";
-                        }
-                        else{
+                        if(element.option == data.answer)
+                            html += "<li style='color:green;'>" + element.option + "</li>";
+                        else
                             html += "<li>" + element.option + "</li>";
 
-                        }
                     });
                     html +=
                         "</ol></div><div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
