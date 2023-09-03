@@ -230,6 +230,8 @@ $("#generateDataTable").click(() => {
             }
         },
     });
+
+    $("#filterModal").modal('hide');
 });
 function AddReadMore() {
     //This limit you can set after how much characters you want to show Read More.
