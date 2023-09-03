@@ -116,11 +116,11 @@
                     let subcodeqdetail = null;
                     let subnameqdetail = null;
                     let coqdetail = null;
-                    let topicqdetail = null;
+                    let topicqdetail = [];
 
                     data.course_outcome_id.forEach((element) => {
                         coqdetail = element.course_outcome;
-                        topicqdetail = element.topic;
+                        topicqdetail.push(element.topic);
                         subcodeqdetail = element.subjectId.code;
                         subnameqdetail = element.subjectId.name;
                     });
@@ -150,7 +150,11 @@
                         data.question +
                         "</div></div><div class=' me-2' ><h4><b>Option :</b></h4></div><div class=''><ol style='list-style-type: upper-alpha;font-size:20px'>";
                     data.options.forEach((element) => {
-                        html += "<li>" + element.option + "</li>";
+                        if(element.option == data.answer)
+                            html += "<li style='color:green;'>" + element.option + "</li>";
+                        else
+                            html += "<li>" + element.option + "</li>";
+
                     });
                     html +=
                         "</ol></div><div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
@@ -168,9 +172,11 @@
                         ")" +
                         "</div></div></div><div><div class='modalQuestion me-2'><h4><b>CO : </b></h4></div><div class='modalQuestion'> " +
                         coqdetail +
-                        "</div></div></div><div><div class='modalQuestion me-2'><h4><b>Topic :</b></h4></div><div class='modalQuestion'> " +
-                        topicqdetail +
-                        "</div></div></div>";
+                        "</div></div></div><div class='row'><div class='modalQuestion col-auto'><h4><b>Topics :</b></h4></div><div class='modalQuestion col'><ul>";
+                    topicqdetail.forEach(ele=>{
+                        html += `<li>${ele}</li>`;
+                    })
+                    html += "</ul></div></div></div>"
                     $(".modal-body").html(html);
                     // $('#largeModal').modal('show');
                     $("#questionDetailModal").modal("show");
