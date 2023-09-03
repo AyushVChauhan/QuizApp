@@ -1,0 +1,92 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<%- include('../partials/footer')-%>
+<script>
+    let subject = "<%- subject -%>";
+</script>
+
+<style>
+    
+    .add-read-more.show-less-content .second-section,
+    .add-read-more.show-less-content .read-less {
+        display: none;
+    }
+
+    .add-read-more.show-more-content .read-more {
+        display: none;
+    }
+
+    .add-read-more .read-more,
+    .add-read-more .read-less {
+        font-weight: bold;
+        margin-left: 2px;
+        color: blue;
+        cursor: pointer;
+    }
+
+    #datatable_wrapper {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+</style>
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./teacherHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./teacherSidebar") %>
+
+    <div class="main-container">
+        <div class="col h1">Select Questions</div>
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">
+                        <button
+                            style="border-radius: 900px; height: min-content"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#filterModal"
+                        >
+                            Filter
+                        </button>
+                    </div>
+                    <div class="col-6">dropdown</div>
+                </div>
+                <div class="mb-3" id="tableDiv"></div>
+            </div>
+            <div class="col-4">
+                <div class="accordion" id="coDiv">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button
+                                class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#CO1"
+                                aria-expanded="true"
+                                aria-controls="CO1"
+                            >
+                                CO-1
+                            </button>
+                        </h2>
+                        <div
+                            id="CO1"
+                            class="accordion-collapse collapse show"
+                            data-bs-parent="#coDiv"
+                        >
+                            <div class="accordion-body"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('./questionDetail')-%> <%- include('./filterModal')-%>
+<script src="/scripts/teacherSidebar.js"></script>
+<script src="/scripts/addQuiz3.js"></script>
+
+<%- include('../partials/footer2') -%>

@@ -133,247 +133,264 @@ async function fetchQuestions() {
 }
 async function getQuestion(data, id) {
     let questionData = null;
-
-    if (data.createdby == "All") {
-        if (data.subject == "All") {
-            if (data.type == "All") {
-                if (data.difficulty == "All") {
-                    questionData = await questions.find({}).populate({
-                        path: "course_outcome_id",
-                        model: "course_outcomes",
-                        populate: {
-                            path: "subjectId",
-                            model: "subjects",
-                            select: "name",
-                        },
-                    });
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                }
-            } else {
-                if (data.difficulty == "All") {
-                    questionData = await questions
-                        .find({ type: data.type })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty, type: data.type })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                }
-            }
-        } else {
-            if (data.type == "All") {
-                if (data.difficulty == "All") {
-                    //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
-                    //     path:"subjectId",model:"subjects",select: "name"
-                    questionData = await questions
-                        .find({})
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            match: { subjectId: { $eq: data.subject } },
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                }
-            } else {
-                if (data.difficulty == "All") {
-                    questionData = await questions
-                        .find({ type: data.type })
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty, type: data.type })
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                }
-            }
-        }
-    } else {
-        if (data.subject == "All") {
-            if (data.type == "All") {
-                if (data.difficulty == "All") {
-                    questionData = await questions
-                        .find({ created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty, created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                }
-            } else {
-                if (data.difficulty == "All") {
-                    questionData = await questions
-                        .find({ type: data.type, created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                } else {
-                    questionData = await questions
-                        .find({
-                            difficulty: data.difficulty,
-                            type: data.type,
-                            created_by: id,
-                        })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                                select: "name",
-                            },
-                        });
-                }
-            }
-        } else {
-            if (data.type == "All") {
-                if (data.difficulty == "All") {
-                    //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
-                    //     path:"subjectId",model:"subjects",select: "name"
-                    questionData = await questions
-                        .find({ created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                } else {
-                    questionData = await questions
-                        .find({ difficulty: data.difficulty, created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            model: "course_outcomes",
-                            match: { subjectId: { $eq: data.subject } },
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                }
-            } else {
-                if (data.difficulty == "All") {
-                    questionData = await questions
-                        .find({ type: data.type, created_by: id })
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                } else {
-                    questionData = await questions
-                        .find({
-                            difficulty: data.difficulty,
-                            type: data.type,
-                            created_by: id,
-                        })
-                        .populate({
-                            path: "course_outcome_id",
-                            match: { subjectId: { $eq: data.subject } },
-                            model: "course_outcomes",
-                            populate: {
-                                path: "subjectId",
-                                model: "subjects",
-                            },
-                        })
-                        .exec();
-                }
-            }
-        }
-    }
-
+    console.log(data);
+    let createdby =
+        data.createdby == "All" ? { $exists: true } : data.createdby;
+    let type = data.type == "All" ? { $exists: true } : data.type;
+    let difficulty =
+        data.difficulty == "All" ? { $exists: true } : data.difficulty;
+    let subjects = data.subject == "All" ? [{subjectId:{$exists:true}}] : [{subjectId:{$exists:true}},{subjectId:{$eq: data.subject}}];
+    questionData = await questions.find({created_by:createdby,type:type,difficulty:difficulty,is_active:1}).populate({
+        path: "course_outcome_id",
+        model: "course_outcomes",
+        match: { $and : subjects },
+        populate: {
+            path: "subjectId",
+            model: "subjects",
+            select: "name",
+        },
+    });
+    // console.log(questionData);
+    // if (data.createdby == "All") {
+    //     if (data.subject == "All") {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions.find({}).populate({
+    //                     path: "course_outcome_id",
+    //                     model: "course_outcomes",
+    //                     populate: {
+    //                         path: "subjectId",
+    //                         model: "subjects",
+    //                         select: "name",
+    //                     },
+    //                 });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         }
+    //     } else {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+    //                 //     path:"subjectId",model:"subjects",select: "name"
+    //                 questionData = await questions
+    //                     .find({})
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         }
+    //     }
+    // } else {
+    //     if (data.subject == "All") {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({
+    //                         difficulty: data.difficulty,
+    //                         type: data.type,
+    //                         created_by: id,
+    //                     })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         }
+    //     } else {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+    //                 //     path:"subjectId",model:"subjects",select: "name"
+    //                 questionData = await questions
+    //                     .find({ created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({
+    //                         difficulty: data.difficulty,
+    //                         type: data.type,
+    //                         created_by: id,
+    //                     })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         }
+    //     }
+    // }
+    // console.log(questionData);
     return questionData;
 }
 
@@ -388,7 +405,11 @@ async function questionDetail(data) {
                 model: "subjects",
             },
         })
-        .populate({ path: "created_by", model: "teachers",select:"username" });
+        .populate({
+            path: "created_by",
+            model: "teachers",
+            select: "username",
+        });
     // console.log(questionDetail);
     return questionDetail;
 }

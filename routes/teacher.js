@@ -26,7 +26,6 @@ router.use(middleware);
 
 router.get("/", teacherControllers.teacherDashboard);
 router.post("/addTopic", teacherControllers.addTopic);
-router.post("/addGroup", upload.single("excel"), teacherControllers.addGroup);
 router.post("/viewGroup", teacherControllers.viewGroup);
 router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
 router.get(
@@ -42,15 +41,20 @@ router.post(
 router.post(
     "/addQuestion/question/files",
     questionMiddleware,
-    questionUpload.array('questionFiles'),
+    questionUpload.array("questionFiles"),
     teacherControllers.addQuestionFiles
 );
 router.post("/addQuestion/getTopics", teacherControllers.getTopics);
 router.post("/addQuestion/setTopics", teacherControllers.setTopics);
+
+
 router.get("/addQuiz/getGroups", teacherControllers.getGroups);
+router.post("/addGroup", upload.single("excel"), teacherControllers.addGroup);
 router.post("/addQuiz/deptGroup", teacherControllers.deptGroup);
 router.post("/addQuiz/setQuiz", teacherControllers.setQuiz);
 router.get("/addQuiz/setQuiz", teacherControllers.createQuiz);
+router.get("/addQuiz/questions", teacherControllers.addQuizQuestion);
+
 router.get("/question1", teacherControllers.question);
 router.post("/addQuestion/getQuestion", teacherControllers.getQuestion);
 router.post("/questionDetail", teacherControllers.questionDetail);
