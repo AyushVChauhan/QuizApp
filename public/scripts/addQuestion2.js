@@ -3,7 +3,7 @@ let options = [];
 let editor;
 let filesData = "";
 let divData = [];
-divData.push({id:1,html:$("#files").html(),rendered:true});
+divData.push({ id: 1, html: $("#files").html(), rendered: true });
 // fOR CREATING CKEDITOR
 ClassicEditor.create(document.querySelector("#editor"))
     .then((newEditor) => {
@@ -14,58 +14,56 @@ ClassicEditor.create(document.querySelector("#editor"))
     });
 function descChange() {
     let flag = 0;
-    divData.forEach(ele=>{
-        if(document.getElementById(`questionDesc${ele.id}`).value.length == 0 && document.getElementById(`questionFile${ele.id}`).files.length == 0)
-        {
+    divData.forEach((ele) => {
+        if (
+            document.getElementById(`questionDesc${ele.id}`).value.length ==
+                0 &&
+            document.getElementById(`questionFile${ele.id}`).files.length == 0
+        ) {
             flag = ele.id;
             return;
         }
-    })
-    if(flag!=0)
-    {
-        removeFile(document.getElementById("fileButton"+flag));
+    });
+    if (flag != 0) {
+        removeFile(document.getElementById("fileButton" + flag));
     }
 
     filesData = "";
     let temp = 0;
     for (let index = 0; index < divData.length; index++) {
         const element = divData[index];
-        if(index%2 ==0 && index!=0)
-        {
-            filesData += "</div>"
+        if (index % 2 == 0 && index != 0) {
+            filesData += "</div>";
             temp--;
         }
-        if(index%2 == 0)
-        {
+        if (index % 2 == 0) {
             filesData += "<div class='row'>";
             temp++;
         }
-        filesData += "<div class='col'>"
-        let descValue = document.getElementById(`questionDesc${element.id}`).value;
-        if(descValue.length == 0)
-        descValue = index + 1;
+        filesData += "<div class='col'>";
+        let descValue = document.getElementById(
+            `questionDesc${element.id}`
+        ).value;
+        if (descValue.length == 0) descValue = index + 1;
         filesData += descValue;
-        filesData += "</div>"
+        filesData += "</div>";
     }
-    if(temp == 1)
-    filesData += "</div>"
+    if (temp == 1) filesData += "</div>";
 
-    filesData += "</div>"
+    filesData += "</div>";
     $(".filespreview").html(filesData);
-} 
-function renderFileDiv()
-{
+}
+function renderFileDiv() {
     let innerHTML = "";
-    divData.forEach(ele => {
-        if(!ele.rendered)
-        {
-            innerHTML+= ele.html;
+    divData.forEach((ele) => {
+        if (!ele.rendered) {
+            innerHTML += ele.html;
             ele.rendered = true;
         }
-    })
+    });
     $("#files").append(innerHTML);
 }
- // FOR DISABLING ADD BUTTON ON EMPTY VALUE
+// FOR DISABLING ADD BUTTON ON EMPTY VALUE
 function disableAdd() {
     if (
         !document.querySelector(
@@ -82,8 +80,8 @@ function removeFile(e) {
     console.log(divData);
     for (let index = 0; index < divData.length; index++) {
         const element = divData[index];
-        if ( element.id == id) {
-            divData.splice(index,1);
+        if (element.id == id) {
+            divData.splice(index, 1);
             break;
         }
     }
@@ -92,16 +90,19 @@ function removeFile(e) {
 }
 function addFile() {
     let flag = 1;
-    divData.forEach(ele=>{
-        if(document.getElementById(`questionDesc${ele.id}`).value.length == 0 || document.getElementById(`questionFile${ele.id}`).files.length == 0)
-        {
+    divData.forEach((ele) => {
+        if (
+            document.getElementById(`questionDesc${ele.id}`).value.length ==
+                0 ||
+            document.getElementById(`questionFile${ele.id}`).files.length == 0
+        ) {
             flag = 0;
             return;
         }
-    })
-    if(flag)
-    {
-        let curr_id = (divData.length === 0) ? (0) : (divData[divData.length - 1].id + 1);
+    });
+    if (flag) {
+        let curr_id =
+            divData.length === 0 ? 0 : divData[divData.length - 1].id + 1;
         let innerHTML = `<div class="input-group" id="inputGroup${curr_id}"><input class="form-control" type="text" name="" id="questionDesc${curr_id}" placeholder="Description" oninput='descChange()'>
         <input
             type="file"
@@ -111,7 +112,7 @@ function addFile() {
             onchange="fileChange(this)"
         />
         <button data-id="${curr_id}" class="btn btn-danger" id="fileButton${curr_id}" onclick="removeFile(this)"><i class="fa-solid fa-xmark"></i></button></div>`;
-        divData.push({id:curr_id,html:innerHTML,rendered:false});
+        divData.push({ id: curr_id, html: innerHTML, rendered: false });
         renderFileDiv();
     }
 }
@@ -154,19 +155,25 @@ function addQuestion() {
             answer: answer,
         },
         success: function (response) {
-            if(divData.length > 0)
-            {
+            if (
+                divData.length > 0 &&
+                document.getElementById(`questionDesc${divData[0].id}`).value &&
+                document.getElementById(`questionFile${divData[0].id}`).files[0]
+            ) {
                 let formdata = new FormData();
-                divData.forEach((ele,ind)=>{
-                    let myFile = document.getElementById(`questionFile${ele.id}`).files[0];
-                    let myName = document.getElementById(`questionDesc${ele.id}`).value;
-                    if(myName.length == 0)
-                    myName = ind;
-                    formdata.append('questionFiles',myFile, myName);
-                })
+                divData.forEach((ele, ind) => {
+                    let myFile = document.getElementById(
+                        `questionFile${ele.id}`
+                    ).files[0];
+                    let myName = document.getElementById(
+                        `questionDesc${ele.id}`
+                    ).value;
+                    if (myName.length == 0) myName = ind;
+                    formdata.append("questionFiles", myFile, myName);
+                });
                 console.log(formdata);
                 let questionId = response.questionId;
-                formdata.append("questionId",questionId);
+                formdata.append("questionId", questionId);
                 console.log(questionId);
                 $.ajax({
                     type: "post",
@@ -175,27 +182,30 @@ function addQuestion() {
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        if(response.success == 1)
-                        {
+                        if (response.success == 1) {
                             Swal.fire({
                                 text: "Question added succesfully",
                                 icon: "success",
                                 timer: 2000,
-                            }).then(function(){
+                            }).then(function () {
                                 $("#reset").click();
                             });
-                            
-                        }
-                        else {
+                        } else {
                             Swal.fire({
                                 text: "There was an error, Please Refresh Page",
                                 icon: "error",
                                 timer: 2000,
                             });
-
                         }
-                        
-                    }
+                    },
+                });
+            } else {
+                Swal.fire({
+                    text: "Question added succesfully",
+                    icon: "success",
+                    timer: 2000,
+                }).then(function () {
+                    $("#reset").click();
                 });
             }
         },
@@ -238,9 +248,9 @@ function answerTick(data) {
     // console.log(str.value);
     // row.style.fontStyle="bold";
 }
-$("#reset").on("click",function (){
-    location.href="/teacher/addQuestion/question";
-})
+$("#reset").on("click", function () {
+    location.href = "/teacher/addQuestion/question";
+});
 // TO ADD A NEW OPTION
 $("#rowAdder").click(function () {
     console.log(
@@ -267,7 +277,7 @@ $("#rowAdder").click(function () {
     $(".optionAddRemove").append(newRowAdd);
     count++;
     disableAdd();
-     // FOR ADDING OPTION IN SELECT ANSWER
+    // FOR ADDING OPTION IN SELECT ANSWER
     let options = "<option selected>Select Answer</option>";
     for (let i = 1; i < count; i++) {
         options += `<option id="option ${i}" value="${i}">Option ${i}</option>`;
@@ -276,15 +286,13 @@ $("#rowAdder").click(function () {
 });
 // TO REMOVE
 $("#rowRemover").click(function () {
-    
-    if ($('.optionAddRemove > div').length >1) {
+    if ($(".optionAddRemove > div").length > 1) {
         // REMOVING OPTION TEXT FEILD
-        document.querySelector(".optionAddRemove > :last-child").remove();   
-         // REMOVING OPTION SELECT ANSWER  
+        document.querySelector(".optionAddRemove > :last-child").remove();
+        // REMOVING OPTION SELECT ANSWER
         document.querySelector("#option > :last-child").remove();
-         // REMOVING OPTION FROM PREVIEW
-        if($('.optionAddRemove > div').length == $('.options').length){
-           
+        // REMOVING OPTION FROM PREVIEW
+        if ($(".optionAddRemove > div").length == $(".options").length) {
             document.querySelector(".options > :last-child").remove();
         }
         count--;
@@ -325,7 +333,7 @@ $(document).ready(function () {
         }
     });
     disableAdd();
-     // FOR SHOWING QUESTION PREVIEW
+    // FOR SHOWING QUESTION PREVIEW
     editor.model.document.on("change", () => {
         $(".questionpreview").html(editor.getData());
     });
