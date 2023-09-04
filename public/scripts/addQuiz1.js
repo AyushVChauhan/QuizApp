@@ -1,5 +1,6 @@
 
-
+let count=2;
+let sum=0;
 
 function nextPage() {
     let quizname = document.getElementById("quizname").value;
@@ -30,3 +31,69 @@ function nextPage() {
         }
     });
 }
+function show(){
+    $("#total").html(sum);
+
+}
+// FOR DISABLING ADD BUTTON ON EMPTY VALUE
+function disableAdd() {
+    
+        let a = document.querySelectorAll(' .temp');
+         sum=0;
+        console.log(a);
+        for(let i = 0; i <= a.length-1; i++){
+         if(!a[i].value){
+            document.getElementById("rowAdder").disabled = true;
+         }
+         else {
+            document.getElementById("rowAdder").disabled = false;
+        }         
+       
+        }
+        for(let i = 0; i <= a.length-1; i=i+2){
+            sum += ((parseInt(a[i].value))*(parseInt(a[i+1].value))); 
+         }
+        if (sum) {
+            
+            $("#total").html(sum);
+        }
+       
+}
+function add(){
+    // disableAdd();
+    console.log("hi");
+    newRowAdd =   
+    '<div class="input-group" id="inputGroup' + 
+    count + '" >' + 
+   
+    '<input type="number" id="mark' +
+    count +
+    '" class="form-control mb-3 temp" oninput="disableAdd()" placeholder="Marks " name="mark' +
+    count +
+    '"/> ' + 
+    '<input type="number" id="count' +
+    count +
+    '" class="form-control mb-3 temp" oninput="disableAdd()" placeholder="No. of Questions " name="count' +
+    count +
+    '"/> </div>';
+    $(".markcount").append(newRowAdd);
+    count++;
+   
+
+    disableAdd();
+    
+};
+function remove(){
+    if ($(".markcount > div").length > 1) {
+        // REMOVING OPTION TEXT FEILD
+        document.querySelector(".markcount > :last-child").remove();
+       
+        
+        count--;
+    }
+   disableAdd();
+};
+$(document).ready(function () {
+    disableAdd();
+});
+

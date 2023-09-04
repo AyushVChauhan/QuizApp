@@ -14,7 +14,15 @@
 	<!-- End Sidebar -->
     <script src="/scripts/addQuiz1.js"></script>
 	<div class="main-container" id="main" name="main">
-        <div class="mb-3 h1">Create Quiz</div>
+        <div class="row">
+            <div class="col-6">
+        <div class="mb-3 h1">Create Quiz</div></div>
+        <div class="col-6">
+    </div>
+    </div>
+        <div class="row">
+            <div class="col-6">
+
             <div class="mb-3" id="qname">
                 <label for="quizname" class="form-label">Quiz Name </label>
                 <input
@@ -22,12 +30,13 @@
                     class="form-control"
                     id="quizname"
                     name="quizname"
-                    style="width: 55.6%;"
+                    placeholder="Quiz name"
+                   
                     required
                 />
             </div>
             <div class="mb-3">
-                <select class="form-control" id="subject" name="subject" style="width: 55.6%;">
+                <select class="form-control" id="subject" name="subject">
                     <option selected value="0">Select Subject</option>
                     <% subData.forEach(element=> { %>
                     <option value="<%= element._id %>">
@@ -37,16 +46,16 @@
                 </select>
             </div>
             <div class="mb-3">
+                <!-- The date from student can attempt quiz -->
                 <label for="quizdate" class="form-label">Quiz Date </label><br>
                 <div style="display: inline-flex;">
-                    <!-- Datetime? -->
                     <input
                     type="datetime-local"
                     class="form-control col-sm-6"
                     id="quizdate_from"
                     name="quizdate_from"
                     placeholder="FROM"
-                    
+                    style="width: 59%;"
                     required
                     
                 />
@@ -56,6 +65,7 @@
                     id="quizdate_to"
                     name="quizdate_to"
                     placeholder="TO"
+                    style="width: 59%;"
                     required
                     
                 /></div>
@@ -63,6 +73,7 @@
            
             <div class="mb-3">
                 <label for="visible" class="form-label">Quiz On Air </label><br>
+                 <!-- The date from student can view quiz -->
                 <div style="display: inline-flex;">
                     <!-- Datetime? -->
                     <input
@@ -71,6 +82,7 @@
                     id="visible_from"
                     name="visible_from"
                     placeholder="FROM"
+                    style="width: 59%;"
                     required
                     
                 />
@@ -80,6 +92,7 @@
                     id="visible_to"
                     name="visible_to"
                     placeholder="TO"
+                    style="width: 59%;"
                     required
                     
                 /></div>
@@ -92,21 +105,11 @@
                     id="duration"
                     name="duration"
                     placeholder="In minutes"
-                    style="width: 55.6%;"
+                   
                     required
                 />
             </div>
-            <div class="mb-3">
-                <label for="marks" class="form-label">Marks </label>
-                <input
-                    type="number"
-                    class="form-control"
-                    id="marks"
-                    name="marks"
-                    style="width: 55.6%;"
-                    required
-                />
-            </div>
+            
         
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="guest" name="guest" checked>
@@ -121,4 +124,52 @@
             </button>
         </div>
         </div>
+        <div class="col-6">
+           
+            <div class="mb-2"><span   >Total Marks : <span  id="total" ></span> </span></div>
+
+            <div class="mb-3 markcount">
+                <div class="input-group" id="inputGroup1">
+                    <input
+                        class="form-control mb-3 temp"
+                        type="number"
+                        name="mark1"
+                        id="mark1"
+                        placeholder="Marks"
+                        oninput="disableAdd()"
+                        
+                    />
+                    <input
+                        type="number"
+                        class="form-control mb-3 temp"
+                        id="count1"
+                        name="count1"
+                        placeholder="No. of Questions"
+                        oninput="disableAdd()"
+                        
+                    />
+                  
+                </div>
+            </div>
+                <button
+                id="rowAdder"
+                type="button"
+                class="btn btn-primary mb-3"
+                onclick="add()"
+                
+            >
+                ADD
+            </button>
+            <button
+            id="rowRemover"
+            type="button"
+            class="btn btn-danger mb-3"
+            onclick="remove()"
+        >
+            REMOVE
+        </button>
+                
+          
+        </div>
+    </div></div>
 </div>

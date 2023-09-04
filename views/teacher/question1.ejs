@@ -203,10 +203,13 @@
             let difficulty = $("#difficultyselect").val();
             let createdby =$("#createdbyselect").val();
             // console.log("hi");
+            let mark="All";
+            let topic="All";
+            let co="All";
             $.ajax({
                 type: "POST",
                 url: "/teacher/addQuestion/getQuestion",
-                data: { subject, type, difficulty,createdby },
+                data: { subject, type, difficulty,createdby,co,mark,topic },
                 success: function (response) {
                     if (response.length !== 0) {
                         questions = response.questionData;

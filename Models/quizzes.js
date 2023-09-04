@@ -15,6 +15,7 @@ const quizSchema = new mongoose.Schema({
     guest_to: Date,
     compulsary_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
     random_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
+    no_questions : [{marks:Number,count:Number}],
     group_id: { type: mongoose.SchemaTypes.ObjectId, ref: "groups" },
     is_active: Number,
 }, { timestamps: true });
