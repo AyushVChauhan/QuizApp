@@ -170,12 +170,15 @@ $("#generateDataTable").click(() => {
     let type = $("#typeselect").val();
     let difficulty = $("#difficultyselect").val();
     let createdby = $("#createdbyselect").val();
+    let co = $("#coselect").val();
+    let mark = $("#markselect").val();
+    let topic = $("#topicselect").val();
 
     // console.log("hi");
     $.ajax({
         type: "POST",
         url: "/teacher/addQuestion/getQuestion",
-        data: { subject, type, difficulty, createdby },
+        data: { subject, type, difficulty, createdby,co,mark,topic },
         success: function (response) {
             if (response.length !== 0) {
                 questions = response.questionData;

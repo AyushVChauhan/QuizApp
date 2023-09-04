@@ -199,7 +199,7 @@ async function questionDetail(req, res) {
 
 async function addQuizQuestion(req, res) {
     let topics=[];
-	let subject = "64e852425e5e7f3c61111360";
+	let subject = "64e8df1517e12eb0bbd66f06";
     let coData= await teacherServices.getCOs(subject);
     let cos=coData.course_outcomes;
     for (let index = 1; index <= cos; index++) {

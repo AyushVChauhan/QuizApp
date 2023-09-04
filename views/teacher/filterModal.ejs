@@ -85,7 +85,7 @@
                         <label>Topic</label><br />
                         <select name="topicselect[]" id="topicselect" multiple>
                             <% topics.forEach(element => { %>
-                            <option value="<%= element.topic %>">
+                            <option value="<%= element._id %>">
                                 <%= element.topic %>
                             </option>
                             <% }) %>
@@ -147,7 +147,7 @@
     function renderTopics() {
         let html = "";
         availTopics.forEach((ele) => {
-            html += `<option value='${ele.topic}'>${ele.topic}</option>`;
+            html += `<option value='${ele._id}'>${ele.topic}</option>`;
         });
         $("#topicselect").html(html);
         $("#topicselect").select2({
@@ -180,7 +180,7 @@
     };
 
     const handleSelection = (event) => {
-        if ($("#topicselect").val().length == availTopics.length) {
+        if ($("#topicselect").val().length == availTopics.length && event.params.data.id === "selectAll") {
             $("#topicselect").val(null).trigger("change");
         } else if (event.params.data.id === "selectAll") {
             $("#topicselect").val(event.params.data.matchIds);

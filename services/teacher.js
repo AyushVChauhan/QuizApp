@@ -137,13 +137,17 @@ async function getQuestion(data, id) {
     let createdby =
         data.createdby == "All" ? { $exists: true } : data.createdby;
     let type = data.type == "All" ? { $exists: true } : data.type;
-    let difficulty =
-        data.difficulty == "All" ? { $exists: true } : data.difficulty;
-    let subjects = data.subject == "All" ? [{subjectId:{$exists:true}}] : [{subjectId:{$exists:true}},{subjectId:{$eq: data.subject}}];
-    questionData = await questions.find({created_by:createdby,type:type,difficulty:difficulty,is_active:1}).populate({
+    let mark = data.mark == "All" ? { $exists: true } : data.mark;
+    let topic = { $in : data.topic} ;
+
+    let co = data.co == "All" ? { $and:[{course_outcome:{$exists:true}}] } : {$and:[{course_outcome:{$exists:true}},{course_outcome:{$eq: data.co}}]};
+    let difficulty = data.difficulty == "All" ? { $exists: true } : data.difficulty;
+    console.log(co);
+    let subjects = data.subject == "All" ? {$and:[{subjectId:{$exists:true}}]} : {$and:[{subjectId:{$exists:true}},{subjectId:{$eq: data.subject}}]};
+    questionData = await questions.find({course_outcome_id:topic,marks:mark,created_by:createdby,type:type,difficulty:difficulty,is_active:1}).populate({
         path: "course_outcome_id",
         model: "course_outcomes",
-        match: { $and : subjects },
+        match: { $and : [subjects,co] },
         populate: {
             path: "subjectId",
             model: "subjects",
