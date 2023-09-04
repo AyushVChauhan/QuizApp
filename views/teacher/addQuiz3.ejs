@@ -7,7 +7,6 @@
 </script>
 
 <style>
-    
     .add-read-more.show-less-content .second-section,
     .add-read-more.show-less-content .read-less {
         display: none;
@@ -29,6 +28,15 @@
         margin-left: 0px;
         margin-right: 0px;
     }
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+    .select2-container .select2-selection--single {
+        height: 35px !important;
+    }
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
 </style>
 <div class="grid-container">
     <!-- Header -->
@@ -45,7 +53,11 @@
                 <div class="row">
                     <div class="col-6">
                         <button
-                            style="border-radius: 900px; height: min-content"
+                            style="
+                                border-radius: 900px;
+                                height: min-content;
+                                width: 100%;
+                            "
                             class="btn btn-primary"
                             data-bs-toggle="modal"
                             data-bs-target="#filterModal"
@@ -53,14 +65,36 @@
                             Filter
                         </button>
                     </div>
-                    <div class="col-6">dropdown</div>
+                    <div class="col-6">
+                        <select id="fields" multiple>
+                            <option value="type">Type</option>
+                            <option value="subject">Subject</option>
+                            <option value="question">Question</option>
+                            <option value="mark">Mark</option>
+                            <option value="co">CO</option>
+                            <option value="difficulty">Difficulty</option>
+                            <option value="createdby">Created By</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3" id="tableDiv"></div>
+                <div
+                    class="mb-3"
+                    id="tableDiv"
+                    style="width: 100%; overflow-x: scroll"
+                ></div>
             </div>
             <div class="col-4">
-                <div class="accordion" id="coDiv">
-
+                <div class="mb-5">
+                    <select
+                        id="marksORco"
+                        class="form-control"
+                        onchange="renderCos(this.value)"
+                    >
+                        <option value="co" selected>CO</option>
+                        <option value="marks">Marks</option>
+                    </select>
                 </div>
+                <div class="accordion" id="coDiv"></div>
             </div>
         </div>
     </div>

@@ -163,6 +163,8 @@
             sorter: addSelectAll,
             placeholder: "Select Topics",
         });
+        $("#topicselect").val(allTopics.map(ele=>ele._id)).trigger("change");
+        $("#topicselect").trigger("select2:close");
     });
     const addSelectAll = (matches) => {
         if (matches.length > 0) {
