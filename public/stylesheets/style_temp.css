@@ -188,3 +188,9 @@ body {
         text-align: center;
     }
 }
+.image {
+    position: relative;
+    top: 0.8rem;
+    height: 2.5rem;
+    border-radius: 0.375rem;
+}

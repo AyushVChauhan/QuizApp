@@ -8,6 +8,8 @@ router.post("/login", studentControllers.login);
 router.get('/login', studentControllers.loginPage);
 router.get('/forgetPassword', studentControllers.forgetPage);
 router.post('/forgetPassword', studentControllers.forgetPassword);
+router.get('/upcomingQuiz', studentControllers.upcomingQuiz);
+
 // router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
 // router.post("/enrollmentcheck", studentControllers.enrollment_check);
 // router.get("/register", studentControllers.register_page);

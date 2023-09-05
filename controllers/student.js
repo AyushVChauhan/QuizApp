@@ -67,6 +67,11 @@ async function forgetPassword(req, res) {
     }
     res.redirect("/student/login");
 }
+async function upcomingQuiz(req,res){
+    let error=null;
+    console.log("entered");
+    res.render("./student/upcomingQuiz",{error});
+}
 
 // async function enrollment_confirmation_page(req, res) {
 //   res.render("./student/enrollment_confirmation");
@@ -98,4 +103,5 @@ module.exports = {
     forgetPage,
     forgetPassword,
     dashboardPage,
+    upcomingQuiz,
 };
