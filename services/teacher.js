@@ -5,6 +5,7 @@ const subjects = require("../models/subjects");
 const departments = require("../models/departments");
 const courseOutcomes = require("../models/courseOutcomes");
 const questions = require("../models/questions");
+const quizzes = require("../models/quizzes");
 const { default: mongoose } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -16,6 +17,7 @@ async function viewGroup(group_id) {
     return group;
 }
 async function deptGroup(department, semester) {
+    let group_id = null;
     let student_ids = [];
     let student_id = await students.find(
         { department_id: department, semester: semester },
@@ -33,7 +35,13 @@ async function deptGroup(department, semester) {
             is_shown: 0,
         });
         await new_group.save();
+        return new_group._id;
     }
+    else
+    {
+        return group._id;
+    }
+
 }
 async function getStudentId(enrollment) {
     let id = await students.findOne(
@@ -67,7 +75,16 @@ async function addGroup(groupName, obj) {
         is_shown: 1,
     });
     await group.save();
+    return group._id;
 }
+
+async function setGroup(group_id, quiz_id)
+{
+    let quiz = await quizzes.findOne({_id:quiz_id});
+    quiz.group_id = new mongoose.Types.ObjectId(group_id);
+    await quiz.save();
+}
+
 
 async function loginFetch(username, password) {
     let data = await teachers.findOne({
@@ -135,7 +152,7 @@ async function getQuestion(data, id) {
     let questionData = null;
     console.log(data);
     let createdby =
-        data.createdby == "All" ? { $exists: true } : data.createdby;
+        data.createdby == "All" ? { $exists: true } : id;
     let type = data.type == "All" ? { $exists: true } : data.type;
     let mark = data.mark == "All" ? { $exists: true } : data.mark;
     let topic = data.topic == "All" ? { $exists: true } : { $in: data.topic };
@@ -185,247 +202,6 @@ async function getQuestion(data, id) {
             model: "teachers",
             select: "username",
         });
-    // console.log(questionData);
-    // if (data.createdby == "All") {
-    //     if (data.subject == "All") {
-    //         if (data.type == "All") {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions.find({}).populate({
-    //                     path: "course_outcome_id",
-    //                     model: "course_outcomes",
-    //                     populate: {
-    //                         path: "subjectId",
-    //                         model: "subjects",
-    //                         select: "name",
-    //                     },
-    //                 });
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             }
-    //         } else {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions
-    //                     .find({ type: data.type })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty, type: data.type })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             }
-    //         }
-    //     } else {
-    //         if (data.type == "All") {
-    //             if (data.difficulty == "All") {
-    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
-    //                 //     path:"subjectId",model:"subjects",select: "name"
-    //                 questionData = await questions
-    //                     .find({})
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             }
-    //         } else {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions
-    //                     .find({ type: data.type })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty, type: data.type })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             }
-    //         }
-    //     }
-    // } else {
-    //     if (data.subject == "All") {
-    //         if (data.type == "All") {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions
-    //                     .find({ created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty, created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             }
-    //         } else {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions
-    //                     .find({ type: data.type, created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({
-    //                         difficulty: data.difficulty,
-    //                         type: data.type,
-    //                         created_by: id,
-    //                     })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                             select: "name",
-    //                         },
-    //                     });
-    //             }
-    //         }
-    //     } else {
-    //         if (data.type == "All") {
-    //             if (data.difficulty == "All") {
-    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
-    //                 //     path:"subjectId",model:"subjects",select: "name"
-    //                 questionData = await questions
-    //                     .find({ created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({ difficulty: data.difficulty, created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         model: "course_outcomes",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             }
-    //         } else {
-    //             if (data.difficulty == "All") {
-    //                 questionData = await questions
-    //                     .find({ type: data.type, created_by: id })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             } else {
-    //                 questionData = await questions
-    //                     .find({
-    //                         difficulty: data.difficulty,
-    //                         type: data.type,
-    //                         created_by: id,
-    //                     })
-    //                     .populate({
-    //                         path: "course_outcome_id",
-    //                         match: { subjectId: { $eq: data.subject } },
-    //                         model: "course_outcomes",
-    //                         populate: {
-    //                             path: "subjectId",
-    //                             model: "subjects",
-    //                         },
-    //                     })
-    //                     .exec();
-    //             }
-    //         }
-    //     }
-    // }
-    // console.log(questionData);
     return questionData;
 }
 
@@ -454,6 +230,26 @@ async function getCOs(data) {
 
     return coData;
 }
+
+async function setQuiz(data)
+{
+    let quiz = new quizzes(data);
+    await quiz.save();
+    return quiz._id;
+}
+
+async function setQuestions(data, quizId)
+{
+    let quiz = await quizzes.findOne({_id:quizId});
+    quiz.random_questions = data;
+    await quiz.save();
+}
+async function setCompulsaryQuestionsPost(id,compulsaryQuestions,randomQuestions){
+    let quiz = await quizzes.findOne({_id:id});
+quiz.compulsary_questions=compulsaryQuestions;
+quiz.random_questions=randomQuestions;
+await quiz.save()
+}
 module.exports = {
     loginFetch,
     loginCheck,
@@ -472,4 +268,8 @@ module.exports = {
     fetchQuestions,
     questionDetail,
     getCOs,
+    setQuiz,
+    setGroup,
+    setQuestions,
+    setCompulsaryQuestionsPost
 };

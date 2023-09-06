@@ -12,13 +12,17 @@ const quizSchema = new mongoose.Schema({
     subject_id: { type: mongoose.SchemaTypes.ObjectId, ref: "subjects" },
     marks: Number,
     guest_flag: Number,
-    guest_to: Date,
     compulsary_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
     random_questions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "questions" }],
-    no_questions : [{marks:Number,count:Number}],
+    marks_questions : [{marks:Number,count:Number}],
     group_id: { type: mongoose.SchemaTypes.ObjectId, ref: "groups" },
-    is_active: Number,
+    is_active: {type:Number,default:1},
 }, { timestamps: true });
 
 const quizzesModel = mongoose.model("quizzes", quizSchema);
 module.exports = quizzesModel;
+//for compulsary students
+//quiz will be shown on dashboard === visible_from -> valid_to
+
+//for guests
+//quiz will be shown on dashboard === valid_to -> visible_to

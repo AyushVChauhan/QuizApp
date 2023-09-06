@@ -5,92 +5,333 @@
 <%- include('../partials/footer') -%>
 <div id="editor"></div>
 <script>
-	let editor;
-	CKEDITOR.ClassicEditor.create(document.querySelector("#editor"), {
-		toolbar: {
-			items: [
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"strikethrough",
-				"underline",
-				"code",
-				"subscript",
-				"superscript",
-				"|",
+    let editor;
+    CKEDITOR.ClassicEditor.create(document.querySelector("#editor"), {
+        toolbar: {
+            items: [
+                "heading",
+                "|",
+                "bold",
+                "italic",
+                "strikethrough",
+                "underline",
+                "code",
+                "subscript",
+                "superscript",
+                "|",
 
-				"bulletedList",
-				"numberedList",
+                "bulletedList",
+                "numberedList",
 
-				"|",
+                "|",
 
-				"undo",
-				"redo",
-				"-",
-				"fontSize",
-				"fontFamily",
-				"fontColor",
-				"fontBackgroundColor",
-				"highlight",
-				"|",
+                "undo",
+                "redo",
+                "-",
+                "fontSize",
+                "fontFamily",
+                "fontColor",
+                "fontBackgroundColor",
+                "highlight",
+                "|",
 
-				"insertImage",
-				"blockQuote",
-				"insertTable",
-				"codeBlock",
+                "insertImage",
+                "blockQuote",
+                "insertTable",
+                "codeBlock",
 
-				"|",
-				"specialCharacters",
-				"horizontalLine",
-				"pageBreak",
-			],
-			shouldNotGroupWhenFull: true,
-		},
+                "|",
+                "specialCharacters",
+                "horizontalLine",
+                "pageBreak",
+            ],
+            shouldNotGroupWhenFull: true,
+        },
 
-		placeholder: "Question",
-		// Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
-		removePlugins: [
-			// These two are commercial, but you can try them out without registering to a trial.
-			"ExportPdf",
-			"ExportWord",
-			"CKBox",
-			"CKFinder",
-			"EasyImage",
-			// This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
-			// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
-			// Storing images as Base64 is usually a very bad idea.
-			// Replace it on production website with other solutions:
-			// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
-			// 'Base64UploadAdapter',
-			"RealTimeCollaborativeComments",
-			"RealTimeCollaborativeTrackChanges",
-			"RealTimeCollaborativeRevisionHistory",
-			"PresenceList",
-			"Comments",
-			"TrackChanges",
-			"TrackChangesData",
-			"RevisionHistory",
-			"Pagination",
-			"WProofreader",
-			// Careful, with the Mathtype plugin CKEditor will not load when loading this sample
-			// from a local file system (file://) - load this site via HTTP server if you enable MathType.
-			"MathType",
-			// The following features are part of the Productivity Pack and require additional license.
-			"SlashCommand",
-			"Template",
-			"DocumentOutline",
-			"FormatPainter",
-			"TableOfContents",
-			"PasteFromOfficeEnhanced",
-		],
-	})
-		.then((newEditor) => {
-			editor = newEditor;
-            console.log(Array.from( editor.ui.componentFactory.names() ));
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+        placeholder: "Question",
+        // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
+        removePlugins: [
+            // These two are commercial, but you can try them out without registering to a trial.
+            "ExportPdf",
+            "ExportWord",
+            "CKBox",
+            "CKFinder",
+            "EasyImage",
+            // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
+            // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
+            // Storing images as Base64 is usually a very bad idea.
+            // Replace it on production website with other solutions:
+            // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
+            // 'Base64UploadAdapter',
+            "RealTimeCollaborativeComments",
+            "RealTimeCollaborativeTrackChanges",
+            "RealTimeCollaborativeRevisionHistory",
+            "PresenceList",
+            "Comments",
+            "TrackChanges",
+            "TrackChangesData",
+            "RevisionHistory",
+            "Pagination",
+            "WProofreader",
+            // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
+            // from a local file system (file://) - load this site via HTTP server if you enable MathType.
+            "MathType",
+            // The following features are part of the Productivity Pack and require additional license.
+            "SlashCommand",
+            "Template",
+            "DocumentOutline",
+            "FormatPainter",
+            "TableOfContents",
+            "PasteFromOfficeEnhanced",
+        ],
+    })
+        .then((newEditor) => {
+            editor = newEditor;
+            console.log(Array.from(editor.ui.componentFactory.names()));
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
+    // console.log(questionData);
+    // if (data.createdby == "All") {
+    //     if (data.subject == "All") {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions.find({}).populate({
+    //                     path: "course_outcome_id",
+    //                     model: "course_outcomes",
+    //                     populate: {
+    //                         path: "subjectId",
+    //                         model: "subjects",
+    //                         select: "name",
+    //                     },
+    //                 });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         }
+    //     } else {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+    //                 //     path:"subjectId",model:"subjects",select: "name"
+    //                 questionData = await questions
+    //                     .find({})
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, type: data.type })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         }
+    //     }
+    // } else {
+    //     if (data.subject == "All") {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({
+    //                         difficulty: data.difficulty,
+    //                         type: data.type,
+    //                         created_by: id,
+    //                     })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                             select: "name",
+    //                         },
+    //                     });
+    //             }
+    //         }
+    //     } else {
+    //         if (data.type == "All") {
+    //             if (data.difficulty == "All") {
+    //                 //  questionData = await questions.find({}).populate({path:"course_outcome_id",match:{'studentId':{$eq : data.subject}}, model:"course_outcomes" ,populate:{
+    //                 //     path:"subjectId",model:"subjects",select: "name"
+    //                 questionData = await questions
+    //                     .find({ created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({ difficulty: data.difficulty, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         model: "course_outcomes",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         } else {
+    //             if (data.difficulty == "All") {
+    //                 questionData = await questions
+    //                     .find({ type: data.type, created_by: id })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             } else {
+    //                 questionData = await questions
+    //                     .find({
+    //                         difficulty: data.difficulty,
+    //                         type: data.type,
+    //                         created_by: id,
+    //                     })
+    //                     .populate({
+    //                         path: "course_outcome_id",
+    //                         match: { subjectId: { $eq: data.subject } },
+    //                         model: "course_outcomes",
+    //                         populate: {
+    //                             path: "subjectId",
+    //                             model: "subjects",
+    //                         },
+    //                     })
+    //                     .exec();
+    //             }
+    //         }
+    //     }
+    // }
+    // console.log(questionData);
 </script>

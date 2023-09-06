@@ -3,8 +3,11 @@
 <link rel="stylesheet" href="/stylesheets/datatables.css" />
 <%- include('../partials/footer')-%>
 <script>
-    let subject = "<%- subject -%>";
+    //evaa badha count je extra chhe
     let marks_questions = JSON.parse('<%- JSON.stringify(marks_questions) %>');
+
+    //badhaa questions
+    let allQuestions = JSON.parse('<%- JSON.stringify(allQuestions) %>');
 </script>
 
 <style>
@@ -48,33 +51,16 @@
     <%- include("./teacherSidebar") %>
 
     <div class="main-container">
-        <div class="col h1">Select Questions</div>
+        <div class="col h1">Select Mandatory Questions</div>
         <div class="row">
             <div class="col-8">
                 <div class="row">
                     <div class="col-6">
-                        <button
-                            style="
-                                border-radius: 900px;
-                                height: min-content;
-                                width: 100%;
-                            "
-                            class="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#filterModal"
-                        >
-                            Filter
-                        </button>
-                    </div>
-                    <div class="col-6">
-                        <select id="fields" multiple>
-                            <option value="type">Type</option>
-                            <option value="subject">Subject</option>
-                            <option value="question">Question</option>
-                            <option value="mark">Mark</option>
-                            <option value="co">CO</option>
-                            <option value="difficulty">Difficulty</option>
-                            <option value="createdby">Created By</option>
+                        <select id="marksSelect" class="form-control" onchange="generateDataTable()">
+                            <option value="All" selected>All</option>
+                            <% marks_questions.forEach(element => { %>
+                                <option value="<%= element.marks %>"><%= element.marks %></option>
+                            <% }) %>
                         </select>
                     </div>
                 </div>
@@ -86,7 +72,7 @@
             </div>
             <div class="col-4">
                 <div class="row">
-                    <div class="col-6">
+                    <!-- <div class="col-6">
                         <select
                             id="marksORco"
                             class="form-control"
@@ -95,7 +81,7 @@
                             <option value="co" selected>CO</option>
                             <option value="marks">Marks</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col-6">
                         <button class="btn btn-primary rounded-pill" onclick="nextPage()">Next</button>
                     </div>
@@ -105,7 +91,7 @@
         </div>
     </div>
 </div>
-<%- include('./questionDetail')-%> <%- include('./filterModal')-%>
+<%- include('./questionDetail')-%>
 <script src="/scripts/teacherSidebar.js"></script>
-<script src="/scripts/addQuiz3.js"></script>
+<script src="/scripts/addQuiz4.js"></script>
 <%- include('../partials/footer2') -%>
