@@ -12,22 +12,16 @@ let allCos = [
     { co: 9, count: 0 },
     { co: 10, count: 0 },
 ];
-let allMarks = [
-    { marks: 1, count: 0 },
-    { marks: 2, count: 0 },
-    { marks: 3, count: 0 },
-    { marks: 4, count: 0 },
-    { marks: 5, count: 0 },
-    { marks: 6, count: 0 },
-    { marks: 7, count: 0 },
-    { marks: 8, count: 0 },
-    { marks: 9, count: 0 },
-    { marks: 10, count: 0 },
-];
+console.log(marks_questions);
+let allMarks = [];
+marks_questions.forEach((element) => {
+    allMarks.push({ marks: element.marks, count: 0 });
+});
 function selectall() {
     let elements = document.getElementsByClassName("adder");
     let temp = [];
     let flag = 0;
+    let markFlagCount = 0;
     allQuestions.forEach((element) => {
         let flag2 = 0;
         selectedQuestions.forEach((ele) => {
@@ -39,7 +33,17 @@ function selectall() {
             }
         });
         if (flag2 == 0) {
-            temp.push(element);
+            let markFlag = 0;
+            allMarks.forEach((allmark) => {
+                if (allmark.marks == element.marks) {
+                    markFlag = 1;
+                }
+            });
+            if (markFlag) {
+                temp.push(element);
+            } else {
+                markFlagCount++;
+            }
         }
     });
     // if(flag==0 && temp.length==0 && allQuestions.length>0)
@@ -64,10 +68,23 @@ function selectall() {
         selectedQuestions.push(...temp);
         for (let index = 0; index < elements.length; index++) {
             const element = elements[index];
-            $(element).html(
-                "<i class='fa-solid fa-minus text-danger ms-4'></i>"
-            );
+            let id = element.getAttribute("data-id");
+            selectedQuestions.forEach((xyz) => {
+                if (xyz._id == id) {
+                    $(element).html(
+                        "<i class='fa-solid fa-minus text-danger ms-4'></i>"
+                    );
+                    return;
+                }
+            });
         }
+    }
+    if (markFlagCount > 0) {
+        Swal.fire({
+            title: "Invalid Questions",
+            text: `${markFlagCount} questions were not selected, ${temp.length} questions selected`,
+            icon: "warning",
+        });
     }
     // console.log(allQuestions.length + "" + selectedQuestions.length);
     // if(selectedQuestions.length == allQuestions.length)
@@ -102,10 +119,26 @@ function adder(e) {
     if (!flag) {
         allQuestions.forEach((ele) => {
             if (ele._id == id) {
-                selectedQuestions.push(ele);
+                let markFlag = 0;
+                allMarks.forEach((element) => {
+                    if (ele.marks == element.marks) {
+                        markFlag = 1;
+                        return;
+                    }
+                });
+                if (markFlag) {
+                    selectedQuestions.push(ele);
+                    e.innerHTML =
+                        "<i class='fa-solid fa-minus text-danger ms-4'></i>";
+                } else {
+                    Swal.fire({
+                        title: "Invalid Question",
+                        text: "Marks does not match with previously selected data",
+                        icon: "error",
+                    });
+                }
             }
         });
-        e.innerHTML = "<i class='fa-solid fa-minus text-danger ms-4'></i>";
     }
     renderCos($("#marksORco").val());
 }
@@ -123,18 +156,10 @@ function renderCos(val) {
         { co: 9, count: 0 },
         { co: 10, count: 0 },
     ];
-    allMarks = [
-        { marks: 1, count: 0 },
-        { marks: 2, count: 0 },
-        { marks: 3, count: 0 },
-        { marks: 4, count: 0 },
-        { marks: 5, count: 0 },
-        { marks: 6, count: 0 },
-        { marks: 7, count: 0 },
-        { marks: 8, count: 0 },
-        { marks: 9, count: 0 },
-        { marks: 10, count: 0 },
-    ];
+    allMarks = [];
+    marks_questions.forEach((element) => {
+        allMarks.push({ marks: element.marks, count: 0 });
+    });
     if (val == "co") {
         allCos.forEach((ele) => {
             for (let index = 0; index < selectedQuestions.length; index++) {
@@ -285,7 +310,11 @@ function seer(e) {
             topicqdetail.forEach((ele) => {
                 html += `<li>${ele}</li>`;
             });
-            html += "</ul></div></div></div>";
+
+            html +=
+                "</ul></div></div></div><div><div class='modalQuestion me-2'><h4><b>Created By :</b></h4></div><div class='modalQuestion'>" +
+                data.created_by.username +
+                "</div></div></div>";
             $(".modal-body").html(html);
             // $('#largeModal').modal('show');
             $("#questionDetailModal").modal("show");
@@ -489,7 +518,49 @@ $(document).ready(function () {
         placeholder: "placeholder",
         multiple: true,
     });
-    $("#fields").val(["type","question"]).trigger("change");
-    $("#fields").on("change",generateDataTable);
+    $("#fields").val(["type", "question"]).trigger("change");
+    $("#fields").on("change", generateDataTable);
     $("#generateDataTable").trigger("click");
 });
+function nextPage() {
+    let alertMarks = "";
+    allMarks.forEach((ele) => {
+        for (let index = 0; index < selectedQuestions.length; index++) {
+            const element = selectedQuestions[index];
+            if (element.marks == ele.marks) {
+                ele.count++;
+            }
+        }
+    });
+    allMarks.forEach((ele) => {
+        marks_questions.forEach((element) => {
+            if (ele.marks == element.marks) {
+                if (ele.count < element.count) {
+                    alertMarks += `${element.count - ele.count} questions of ${ele.marks} marks<br>`;
+                }
+            }
+        });
+    });
+    if(alertMarks.length > 1)
+    {
+        Swal.fire({title:"Required Questions",text:alertMarks,icon:"warning"});
+    }
+    else
+    {
+        console.log(selectedQuestions);
+        $.ajax({
+            type: "POST",
+            url: "/teacher/addQuiz/setQuestions",
+            data: {selectedQuestions},
+            success: function (response) {
+                if(response.next_page)
+                {
+                    window.open("/teacher/addQuiz/setCompulsaryQuestions","_self");
+                }
+                else {
+                    window.open("/teacher","_self");
+                }
+            }
+        });
+    }
+}

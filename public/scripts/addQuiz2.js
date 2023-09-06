@@ -26,6 +26,19 @@ function see(e) {
         }
     });
 }
+
+function next(e) {
+    let grp_id = e.getAttribute("data-id");
+    $.ajax({
+        type: "POST",
+        url: "/teacher/addQuiz/setGroup",
+        data:{grp_id},
+        success: function (response) {
+            window.open("/teacher/addQuiz/questions","_self");
+        }
+    });
+}
+
 function changeSelect(e) {
     if (e.value === "department") {
         $("#dynamicDiv").html(dynamicDivdept);

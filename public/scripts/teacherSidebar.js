@@ -32,6 +32,7 @@ $(document).ready(function () {
     }
     else
     {
-        $("#dashboard").toggleClass("hovered")
+        document.getElementById("dashboard").classList.add("hovered");
+        // $("#dashboard").toggleClass("hovered")
     }
 });

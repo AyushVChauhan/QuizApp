@@ -62,6 +62,10 @@ async function uploadStudent(req, res) {
 
 function teacherDashboard(req, res) {
     let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
     res.render("./teacher/teacher_dashboard", { errors });
 }
 async function addQue_subSelect(req, res) {
@@ -94,7 +98,7 @@ async function addQuestion(req, res) {
     let options = [];
     let cookie = req.cookies.auth;
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
-	console.log(data);
+    console.log(data);
     topics.forEach((ele) => {
         course_outcome_id.push(new mongoose.Types.ObjectId(ele["_id"]));
     });
@@ -164,10 +168,24 @@ async function addGroup(req, res) {
             };
         }
     }
-    res.redirect("/teacher");
+    res.redirect("/teacher/addQuiz/getGroups");
 }
+
+//post method
 async function deptGroup(req, res) {
-    await teacherServices.deptGroup(req.body.department, req.body.semester);
+    let grp_id = await teacherServices.deptGroup(
+        req.body.department,
+        req.body.semester
+    );
+    await teacherServices.setGroup(grp_id, req.session.quizId);
+    req.session.groupId = grp_id;
+    res.redirect("/teacher/addQuiz/questions");
+}
+
+async function setGroup(req, res) {
+    req.session.groupId = req.body.grp_id;
+    await teacherServices.setGroup(req.body.grp_id, req.session.quizId);
+    res.json({ success: 1 });
 }
 async function createQuiz(req, res) {
     let subData = await teacherServices.subjectFetch();
@@ -175,7 +193,11 @@ async function createQuiz(req, res) {
 }
 async function setQuiz(req, res) {
     req.session.quiz = req.body;
-    console.log(req.body);
+    let data = req.body;
+    data.subject_id = new mongoose.Types.ObjectId(data.subject_id);
+    console.log(data);
+    let setQuiz = await teacherServices.setQuiz(data);
+    req.session.quizId = setQuiz;
     res.json({ success: 1 });
 }
 async function question(req, res) {
@@ -186,7 +208,7 @@ async function question(req, res) {
 async function getQuestion(req, res) {
     let cookie = req.cookies.auth;
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
-	// console.log(req.body);
+    // console.log(req.body);
     let questionData = await teacherServices.getQuestion(req.body, data.id);
 
     res.json({ success: 1, questionData });
@@ -198,22 +220,80 @@ async function questionDetail(req, res) {
 }
 
 async function addQuizQuestion(req, res) {
-    let topics=[];
+    let topics = [];
     // ayush 64e852425e5e7f3c61111360
-	let subject = "64e852425e5e7f3c61111360";
-    let coData= await teacherServices.getCOs(subject);
-    let cos=coData.course_outcomes;
+    let subject = req.session.quiz.subject_id;
+    let coData = await teacherServices.getCOs(subject);
+    let cos = coData.course_outcomes;
     for (let index = 1; index <= cos; index++) {
-        let temp=await teacherServices.getTopics({co:index,subject:subject});
+        let temp = await teacherServices.getTopics({
+            co: index,
+            subject: subject,
+        });
         console.log(temp);
         topics.push(...temp);
     }
     console.log(coData);
     console.log(topics);
-    res.render("./teacher/addQuiz3", {subject,cos,topics});
-
+    let marks_questions = req.session.quiz.marks_questions;
+    res.render("./teacher/addQuiz3", { subject, cos, topics, marks_questions });
 }
 
+async function setQuestions(req, res) {
+    let myArr = [];
+    let marks_question = req.session.quiz.marks_questions;
+    console.log(req.body);
+    let selectedQuestions = req.body.selectedQuestions;
+    let flag = 0;
+    marks_question.forEach((element) => {
+        flag = 0;
+        selectedQuestions.forEach((ele) => {
+            if (ele.marks == element.marks) {
+                flag++;
+            }
+        });
+        if (flag > element.count) {
+            myArr.push(element);
+        }
+    });
+    if (myArr.length == 0) {
+        let myIds = [];
+        selectedQuestions.forEach((ele) => {
+            myIds.push(new mongoose.Types.ObjectId(ele._id));
+        });
+        await teacherServices.setQuestions(myIds, req.session.quizId);
+        res.json({ next_page: 0 });
+    } else {
+        req.session.marks_questions = myArr;
+        req.session.allQuestions = selectedQuestions;
+        res.json({ next_page: 1 });
+    }
+}
+
+function setCompulsaryQuestions(req, res) {
+    let marks_questions = req.session.marks_questions;
+    let allQuestions = req.session.allQuestions;
+    res.render("./teacher/addQuiz4", { marks_questions, allQuestions });
+}
+async function setCompulsaryQuestionsPost(req, res) {
+    let selectedQuestions = req.body.selectedQuestions;
+    let compulsaryQuestions = [];
+    let randomQuestions = [];
+    selectedQuestions.forEach((element) => {
+        if (element.random == 0) {
+            compulsaryQuestions.push(new mongoose.Types.ObjectId(element._id));
+        } else {
+            randomQuestions.push(new mongoose.Types.ObjectId(element._id));
+        }
+    });
+    await teacherServices.setCompulsaryQuestionsPost(
+        req.session.quizId,
+        compulsaryQuestions,
+        randomQuestions
+    );
+    req.session.errors = { text: "Quiz Added Successfully", icon: "success" };
+    res.json({ success: 1 });
+}
 
 module.exports = {
     login,
@@ -237,5 +317,9 @@ module.exports = {
     question,
     getQuestion,
     questionDetail,
-	addQuizQuestion,
+    addQuizQuestion,
+    setGroup,
+    setQuestions,
+    setCompulsaryQuestions,
+    setCompulsaryQuestionsPost,
 };
