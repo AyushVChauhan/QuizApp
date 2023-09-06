@@ -1,343 +1,119 @@
 <%- include('../partials/header') %>
-    <link rel="stylesheet" href="/stylesheets/style_temp.css" />
-    <link rel="stylesheet" href="/stylesheets/upcomingQuiz.scss" />
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<!-- <link rel="stylesheet/scss" type="/scss" href="/stylesheets/upcomingQuiz.scss" /> -->
 
-    <div class="grid-container">
-        <!-- Header -->
-        <%- include("./studentHeader") %>
-            <!-- End Header -->
+<div class="grid-container">
+  <!-- Header -->
+  <%- include("./studentHeader") %>
+  <!-- End Header -->
 
-            <!-- Sidebar -->
-            <%- include("./studentSidebar") %>
-                <!-- End Sidebar -->
+  <!-- Sidebar -->
+  <%- include("./studentSidebar") %>
+  <!-- End Sidebar -->
 
-                <div class="main-container">
+  <div class="main-container">
 
-                 <!--   <div class="row">
-                         <div class="col-4">
-                            <div class="card text-dark  mb-3" style="max-width: 20rem; height: 17rem;">
-                                <div class="card-header bg-primary" style="height: 2.7rem;">
-                                   <img
-                                        src="data:image/png;base64,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" class="image">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title mt-4">QUIZ 1</h5>
-                                    <p class="card-text"></p>
-                                </div>
-                            </div> 
-                        </div>
-
-                        <div class="col-4">
-                            <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                                <div class="card-header">Header</div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Secondary card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up
-                                        the bulk
-                                        of the card's content.</p>
-                                </div>
-                            </div>
-                        </div>
-                            <div class="col-4">
-                                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                                    <div class="card-header">Header</div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">Secondary card title</h5>
-                                        <p class="card-text">Some quick example text to build on the card title and make
-                                            up the bulk
-                                            of the card's content.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
-                            <div class="card-body">
-                                <h5 class="card-title">Success card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk
-                                    of the card's content.</p>
-                            </div>
-                        </div>
-                        <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-                            <div class="card-header">Header</div>
-                            <div class="card-body">
-                                <h5 class="card-title">Danger card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the
-                                    bulk
-                                    of the card's content.</p>
-                            </div>
-                        </div>
-
--->
-
-<section>
-    <div class="container-lg py-5">
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 cross-card mb-5">
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">1</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/raw-flow-party-ii-edizione/64efa0f48f3aaf4937de1a09/" class="">Raw Flow Party II edizione</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/campobasso" class="">Campobasso</a></span><span class="badge text-uppercase me-1 bg-evento">Evento</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 17:00 -
-        01/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Campobasso"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">1</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/borgo-di-vino-in-tour/64d7505ad47d77cdf9f16639/" class="">Borgo di vino in Tour</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/oratino" class="">Oratino</a></span><span class="badge text-uppercase me-1 bg-enogastronomia">Enogastronomia</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 18:00 -
-        01/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Oratino"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">1</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/isabella-e-il-duca/64d7505ad47d77cdf9f165d7/" class="">Isabella e il Duca</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/larino" class="">Larino</a></span><span class="badge text-uppercase me-1 bg-evento">Evento</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 21:00 -
-        01/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Larino"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">2</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/serata-sotto-le-stelle/64ef2faf8f3aaf4937de1a04/" class="">Serata sotto le stelle</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/fornelli" class="">Fornelli</a></span><span class="badge text-uppercase me-1 bg-cultura">Cultura</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 18:30 -
-        02/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Fornelli"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">2</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/borgo-di-vino-in-tour/64d7505ad47d77cdf9f1663a/" class="">Borgo di vino in Tour</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/oratino" class="">Oratino</a></span><span class="badge text-uppercase me-1 bg-enogastronomia">Enogastronomia</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 18:00 -
-        02/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Oratino"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">2</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/samnium-race/64d7505ad47d77cdf9f1661a/" class="">Samnium Race</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/campitello-matese" class="">Campitello Matese</a></span><span class="badge text-uppercase me-1 bg-sport">Sport</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> N/D -
-        02/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Campitello Matese"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">2</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/the-end-festa-di-fine-estate/64d7505ad47d77cdf9f165d8/" class="">The End - festa di fine estate</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/larino" class="">Larino</a></span><span class="badge text-uppercase me-1 bg-evento">Evento</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 10:00 -
-        02/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Larino"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">3</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/xtreme-tuning-day/64d7505ad47d77cdf9f1664b/" class="">Xtreme Tuning Day</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/ripalimosani" class="">Ripalimosani</a></span><span class="badge text-uppercase me-1 bg-motori">Motori</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 10:00 -
-        03/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Ripalimosani"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">3</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/borgo-di-vino-in-tour/64d7505ad47d77cdf9f1663b/" class="">Borgo di vino in Tour</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/oratino" class="">Oratino</a></span><span class="badge text-uppercase me-1 bg-enogastronomia">Enogastronomia</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 12:00 -
-        03/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Oratino"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">3</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/festivita-di-santa-maria-delle-macchie/64d7505ad47d77cdf9f16627/" class="">Festività di Santa Maria delle Macchie</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/vinchiaturo" class="">Vinchiaturo</a></span><span class="badge text-uppercase me-1 bg-religione">Religione</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> N/D -
-        03/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Vinchiaturo"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">8</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/festa-di-fine-estate/64d7505ad47d77cdf9f16628/" class="">Festa di Fine Estate</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/vinchiaturo" class="">Vinchiaturo</a></span><span class="badge text-uppercase me-1 bg-evento">Evento</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> N/D -
-        08/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Vinchiaturo"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">9</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/ron-sono-un-figlio-live-tour/64efa0f48f3aaf4937de1a0a/" class="">Ron - Sono un figlio Live Tour</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/capracotta" class="">Capracotta</a></span><span class="badge text-uppercase me-1 bg-concerto">Concerto</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 21:00 -
-        09/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Capracotta"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">10</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/91a-festa-dell-uva/64ef333d8f3aaf4937de1a07/" class="">91ª Festa dell'Uva</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/riccia" class="">Riccia</a></span><span class="badge text-uppercase me-1 bg-evento">Evento</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 15:00 -
-        10/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Riccia"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">10</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/tra-acqua-e-vino-dal-lago-di-decorata-alla-festa-dell-uva-di-riccia/64ef2faf8f3aaf4937de1a05/" class="">Tra acqua e vino - Dal lago di Decorata alla Festa...</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/riccia" class="">Riccia</a></span><span class="badge text-uppercase me-1 bg-cultura">Cultura</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 10:00 -
-        10/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Riccia"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">10</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/emilio-casalini/64d7505ad47d77cdf9f1661b/" class="">Emilio Casalini</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/capracotta" class="">Capracotta</a></span><span class="badge text-uppercase me-1 bg-cultura">Cultura</span><span class="badge text-uppercase text-bg-free">
-          Free
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> N/D -
-        10/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Capracotta"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">16</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/le-stelle-nel-borgo/64ef2faf8f3aaf4937de1a06/" class="">Le stelle nel borgo</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/castel-del-giudice" class="">Castel del Giudice</a></span><span class="badge text-uppercase me-1 bg-cultura">Cultura</span><span class="badge text-uppercase text-bg-danger">
-          Ticket
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> 19:00 -
-        16/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Castel del Giudice"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-<div class="col">
-  <div class="card box-5 shadow-sm h-100">
-    <div class="card-body posiction-relative">
-      <div class="top-right"><i title="Condividi box evento" class="bi bi-arrow-up-right-circle-fill grow"></i></div>
-      <div class="card-title d-flex mb-2"><span class="day">30</span>
-        <div class="cal-y"><span class="month text-uppercase">set</span><span class="year text-uppercase">2023</span></div>
-      </div>
-      <h2 class="card-text my-4"><a target="_blank" href="https://www.molise20.it/evento/2023/settembre/clementino-summer-tour/64efa0f48f3aaf4937de1a0b/" class="">Clementino Summer Tour</a></h2><span class="attached"><span class="badge text-bg-town text-uppercase me-1"><a target="_blank" href="/citta/riccia" class="">Riccia</a></span><span class="badge text-uppercase me-1 bg-concerto">Concerto</span><span class="badge text-uppercase">
-
-        </span></span>
-    </div>
-    <div class="card-footer"><span class="badge rounded-pill text-bg-time"><i class="far fa-clock"></i> N/D -
-        30/09/2023</span><span></span><span class="float-end"><a target="_blank" href="https://www.google.com/maps/place/Riccia"><i class="fas fa-map-marker-alt grow"></i></a></span></div>
-  </div>
-</div>
-</div>
-</div>
-</section>
-
-                    </div>
-                    <!--MAIN-->
+    <section>
+      <div class="container-lg py-5">
+        <div class="row">
+          <div class="col-sm-6 col-md-4 mb-4">
+            <div class="card box-5 shadow-sm h-100">
+              <div class="card-body position-relative">
+                <div
+                  class="top-right"
+                  style="position: absolute; top: 13px; right: 16px"
+                >
+                  subject
                 </div>
-                <script src="/scripts/studentSidebar.js"></script>
+                <div class="row">
+                  <div class="card-title d-flex  col-auto" >
+                    <span style="font-size: 3.5rem">1</span>
+                    <div class="row mt-3">
+                      <div
+                        class="col-auto vstack ms-1"
+                        style="border-right: 1px solid #000000; height: 50px"
+                      >
+                        <span class="month text-uppercase">sept</span
+                        ><span class="year text-uppercase">2023</span>
+                      </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                  <div class="card-title d-flex col-auto" >
+                    <span class="day" style="font-size: 3.5rem">1</span>
+                    <div class="row mt-3">
+                      <div class="col-auto vstack ms-1">
+                        <span class="month text-uppercase">sept</span
+                        ><span class="year text-uppercase">2023</span>
+                      </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="row " style="position: relative; bottom: 25px;">
+                    <div class="col-auto ms-1">12:00 PM</div>
+                    <div class="col-auto ms-1">02:00 PM</div>
+                  
 
-                <%- include('../partials/footer2') -%>
+                </div>
+
+                <div class="quizname h4">Quiz 1</div>
+                <div class="quizmark">30 marks</div>
+                <div><i class="fas fa-stopwatch me-1"></i>120 minutes</div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4 mb-4">
+            <div class="card box-5 shadow-sm h-100">
+              <div class="card-body position-relative">
+                <div
+                  class="top-right"
+                  style="position: absolute; top: 13px; right: 16px"
+                >
+                  subject
+                </div>
+                <div class="row">
+                  <div class="card-title d-flex mb-2 col-auto">
+                    <span class="day" style="font-size: 3.5rem">1</span>
+                    <div class="row mt-3">
+                      <div
+                        class="col-auto vstack ms-1"
+                        style="border-right: 1px solid #000000; height: 50px"
+                      >
+                        <span class="month text-uppercase">sept</span
+                        ><span class="year text-uppercase">2023</span>
+                      </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                  <div class="card-title d-flex mb-2 col-auto">
+                    
+                    <div class="row mt-3">
+                      <div class="col-auto vstack ms-1">
+                        <span class="month text-uppercase">&nbsp;</span
+                        ><span class="year text-uppercase">12:00-2:00</span>
+                      </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="quizname h4">Quiz 1</div>
+                <div class="quizmark">30 marks</div>
+                <div><i class="fas fa-stopwatch me-1"></i>120 minutes</div>
+
+               
+              </div>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--MAIN-->
+</div>
+<script src="/scripts/studentSidebar.js"></script>
+
+<%- include('../partials/footer2') -%>
