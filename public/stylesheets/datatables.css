@@ -11,6 +11,8 @@
 	background-origin: padding-box;
 	background-clip: border-box;
 }
+
+
 table.dataTable thead {
 	background-color: rgb(0, 56, 101);
 }

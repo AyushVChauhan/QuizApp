@@ -132,6 +132,19 @@ body {
     overflow-x: scroll;
 }
 
+/* Quiz Detail table */
+.quizth{
+    width: 30%;
+}
+.quiztd{
+    width: 60%;
+}
+.quizName{
+font-weight: 1000;
+}
+
+
+
 /* ---------- MEDIA QUERIES ---------- */
 
 /* Medium <= 992px */
