@@ -1,0 +1,29 @@
+<%- include('../partials/header') %> 
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<%- include('../partials/footer') -%>
+<script src="/scripts/instructionPage.js"></script>
+<div class="grid-container">
+	<!-- Header -->
+    
+	<%- include("./studentHeader") %>
+	<!-- End Header -->
+
+	<!-- Sidebar -->
+	<%- include("./studentSidebar") %>
+	<!-- End Sidebar -->
+
+	<!-- Main -->
+	<main class="main-container">
+		<div class="main-title">
+			<div class="h1 ps-5 pe-5 dboard">Instructions</div>
+		</div>
+		<div class="instructions">
+            <button type="button" class="btn btn-primary rounded-pill" style="margin: auto 0;" onclick="takeQuiz(document.documentElement)">Take Quiz</button>    
+        </div>
+
+	</main>
+	<!-- End Main -->
+</div>
+<script src="/scripts/studentSidebar.js"></script>
+
+<%- include('../partials/footer2') -%>

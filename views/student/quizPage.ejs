@@ -1,7 +1,12 @@
 <%- include('../partials/header') -%>
 <link rel="stylesheet" href="/stylesheets/quizPageStyle.css" />
-
-<div class="grid-container">
+<script src="/scripts/quizPage.js"></script>
+<style>
+  body {
+    user-select: none;
+  }
+</style>
+<div class="grid-container" id="quiz">
   <!-- HEADER -->
   <div class="header">
     <!-- <div class="menu-icon">
@@ -130,4 +135,13 @@
     </div>
   </div>
   <%- include("./instructionmodal") %> <%- include('../partials/footer')-%>
+</div>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button onclick="activate(document.documentElement);">Enter FullScreen</button>
+      </div>
+    </div>
+  </div>
 </div>

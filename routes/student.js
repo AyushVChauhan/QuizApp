@@ -15,11 +15,12 @@ router.get('/availableQuiz', studentControllers.availableQuiz);
 // router.post("/enrollmentcheck", studentControllers.enrollment_check);
 // router.get("/register", studentControllers.register_page);
 // router.post("/register", studentControllers.enrollment_check);
-// router.use(middleware)
-router.get("/",middleware, studentControllers.dashboardPage);
+router.use(middleware)
+router.get("/instructions/:quizId", studentControllers.instructions);
+router.get("/takeQuiz",studentControllers.takeQuiz);
+router.get("/", studentControllers.dashboardPage);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
-  console.log(cookie)
   if (cookie) {
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
     if (data.role === 0) {

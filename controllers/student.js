@@ -20,8 +20,7 @@ async function login(req, res) {
         req.session.errors = { text: "Logged in", icon: "success" };
         let token = jwt.sign(
             {
-                username: req.body.username,
-                password: req.body.password,
+                _id : data._id,
                 role: 0,
             },
             process.env.JWT_SECRET
@@ -101,6 +100,34 @@ async function availableQuiz(req,res){
 //     res.redirect("/student/enrollmentcheck");
 //   }
 // }
+async function instructions(req, res)
+{
+    let quizId  = req.params.quizId;
+    let token = req.cookies.auth;
+    let studentId = jwt.verify(token,process.env.JWT_SECRET)["_id"];
+    console.log(studentId);
+    let quizCheck = await studentServices.quizCheck(quizId,studentId);
+    if(!quizCheck)
+    {
+        res.redirect("/");
+    }
+    else
+    {
+        req.session.quizId = quizId;
+        res.render("./student/instructionPage");
+    }
+}
+async function takeQuiz(req, res)
+{
+    let quizId  = req.session.quizId;
+    if(!quizId)
+    {
+        res.redirect("/");
+    }
+    else {
+        res.render("./student/quizPage");
+    }
+}
 
 module.exports = {
     login,
@@ -109,5 +136,7 @@ module.exports = {
     forgetPassword,
     dashboardPage,
     upcomingQuiz,
-    availableQuiz
+    availableQuiz,
+    takeQuiz,
+    instructions,
 };

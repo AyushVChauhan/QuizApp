@@ -27,7 +27,7 @@ async function deptGroup(department, semester) {
         student_ids.push(element._id);
     });
     let group = await groups.find({ students: student_ids });
-    if (group.length < 1) {
+    if (group.length == 0) {
         let new_group = new groups({
             students: student_ids,
             is_active: 1,
@@ -39,7 +39,8 @@ async function deptGroup(department, semester) {
     }
     else
     {
-        return group._id;
+        console.log(group);
+        return group[0]._id;
     }
 
 }
