@@ -250,6 +250,26 @@ quiz.compulsary_questions=compulsaryQuestions;
 quiz.random_questions=randomQuestions;
 await quiz.save()
 }
+async function getMyQuiz(data){
+
+    const nextDate = new Date();
+    const date = new Date(data.date);
+    nextDate.setTime(date.getTime() + 86400000);
+    console.log(date);
+    console.log(nextDate);
+    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gt:date}},{valid_from:{$lt:nextDate}}]};
+
+    let subjectquery = data.subject == "All" ? {subject_id: {$exists: true} } :{subject_id:data.subject};
+
+    // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
+    let quiz=await quizzes.find({$and:[subjectquery,datequery]});
+    return quiz;
+}
+async function quizDetails(data){
+    let quiz=await quizzes.findOne({_id:data}).populate("random_questions").populate("compulsary_questions").populate("subject_id");
+    return quiz;
+}
+
 module.exports = {
     loginFetch,
     loginCheck,
@@ -271,5 +291,7 @@ module.exports = {
     setQuiz,
     setGroup,
     setQuestions,
-    setCompulsaryQuestionsPost
+    setCompulsaryQuestionsPost,
+    getMyQuiz,
+    quizDetails
 };

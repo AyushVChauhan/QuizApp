@@ -294,7 +294,31 @@ async function setCompulsaryQuestionsPost(req, res) {
     req.session.errors = { text: "Quiz Added Successfully", icon: "success" };
     res.json({ success: 1 });
 }
+async function myQuizPage(req,res){
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let subData = await teacherServices.subjectFetch();
 
+    res.render("./teacher/myQuiz",{errors,subData});
+}
+async function getMyQuiz(req,res){
+    console.log(req.body);
+    let quizData= await teacherServices.getMyQuiz(req.body);
+    res.json({success:1,quizData:quizData})
+}
+async function quizDetails(req,res){
+    // console.log(req.params.quizId);
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let quiz=await teacherServices.quizDetails(req.params.quizId);
+    res.render("./teacher/quizDetails",{quiz:quiz,errors:errors});
+}
 module.exports = {
     login,
     loginGet,
@@ -322,4 +346,7 @@ module.exports = {
     setQuestions,
     setCompulsaryQuestions,
     setCompulsaryQuestionsPost,
+    myQuizPage,
+    getMyQuiz,
+    quizDetails
 };

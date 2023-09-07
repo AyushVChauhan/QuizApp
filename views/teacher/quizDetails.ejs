@@ -1,0 +1,26 @@
+<%- include('../partials/header') %> 
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+
+<div class="grid-container">
+	<!-- Header -->
+	<%- include("./teacherHeader") %>
+	<!-- End Header -->
+
+	<!-- Sidebar -->
+	<%- include("./teacherSidebar") %>
+	<!-- End Sidebar -->
+
+	<!-- Main -->
+	<main class="main-container">
+        <pre>          
+            <%= JSON.stringify(quiz) %>
+        </pre>
+    </main>
+	<!-- End Main -->
+</div>
+<%- include('../partials/footer') -%>
+
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<script src="/scripts/teacherSidebar.js"></script>
+<%- include('../partials/sweetalert') %>
+<%- include('../partials/footer2') -%>

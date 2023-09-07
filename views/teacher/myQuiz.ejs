@@ -1,0 +1,173 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./teacherHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./teacherSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="row">
+            <div class="col-9">
+                <div class="mb-3 h1">My Quiz</div>
+            </div>
+            <div class="col-3 text-end">
+                <a href="/teacher//addQuiz/setQuiz">
+                    <button
+                        style="border-radius: 900px; height: min-content"
+                        class="btn btn-primary"
+                    >
+                        <i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+                        QUIZ
+                    </button></a
+                >
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-sm-4 mb-4">
+                    <label>Date</label>
+                    <input
+                        type="date"
+                        name="dateselect"
+                        id="dateselect"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="col-sm-4 mb-4">
+                    <label>Subject</label>
+                    <select
+                        class="form-control"
+                        name="subjectselect"
+                        id="subjectselect"
+                    >
+                        <option selected="" value="All">All</option>
+                        <% subData.forEach(element=> { %>
+                        <option value="<%= element._id %>">
+                            <%= element.code %> : <%=element.name%>
+                        </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <!-- <div class="col-sm-3 mb-4">
+                    <label>Difficulty Level</label>
+                    <select
+                        class="form-control"
+                        name="difficultyselect"
+                        id="difficultyselect"
+                    >
+                        <option value="All" selected="">All</option>
+                        <option value="1">Easy</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Hard</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 mb-4">
+                    <label>Created By</label>
+                    <select
+                        class="form-control"
+                        name="createdbyselect"
+                        id="createdbyselect"
+                    >
+                        <option value="All" selected="">All</option>
+                        <option value="1">By me</option>
+                    </select>
+                </div> -->
+                <div class="col-sm-4">
+                    <button
+                        type="button"
+                        id="generateDataTable"
+                        class="btn btn-primary ms-3"
+                        style="margin-top: 24px"
+                    >
+                        Generate
+                    </button>
+                </div>
+            </div>
+            <div class="row"></div>
+
+            <div class="mb-3" id="tableDiv" style="overflow-x: scroll"></div>
+        </div>
+    </main>
+    <!-- End Main -->
+</div>
+<%- include('../partials/footer') -%>
+
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<script src="/scripts/teacherSidebar.js"></script>
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
+<script>
+
+
+    let subjects = JSON.parse('<%- JSON.stringify(subData) %>');
+    $("#generateDataTable").click(() => {
+        console.log("hii");
+        let subject = $("#subjectselect").val();
+        let date = $("#dateselect").val();
+        // console.log(date);
+        $.ajax({
+            type: "POST",
+            url: "/teacher/myQuiz/getMyQuiz",
+            data: { subject, date },
+            success: function (response) {
+                console.log(response.quizData);
+                if (response.length !== 0) {
+                    quizzes = response.quizData;
+                    // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
+                    let def =
+                        "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Quiz Name</th><th>Subject</th><th>Date</th><th>Marks</th><th>Duration</th><th>Actions</th></thead>";
+                    let data = "";
+                    quizzes.forEach((ele, ind) => {
+                        data += `<tr>`;
+                        data += `<td>${ind + 1}</td>`;
+                        data += `<td>${ele.name}</td>`;
+                        let subName = "";
+                        subjects.forEach((element) => {
+                            if (element._id == ele.subject_id) {
+                                subName = element.name;
+                                return;
+                            }
+                        });
+                        data += `<td>${subName}</td>`;
+                        let validFrom = new Date(ele.valid_from);
+                        let validTo = new Date(ele.valid_to);
+                        console.log(validFrom);
+                        data += `<td>From : ${validFrom.getDate()}-${
+                            validFrom.getMonth() + 1
+                        }-${validFrom.getFullYear()} ${validFrom.getHours()}:${validFrom.getMinutes()}<br>`;
+                        data += `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To : ${validTo.getDate()}-${
+                            validTo.getMonth() + 1
+                        }-${validTo.getFullYear()} ${validTo.getHours()}:${validTo.getMinutes()}</td>`;
+                        data += `<td>${ele.marks}</td>`;
+                        data += `<td>${ele.duration} minutes</td>`;
+                        data += `<td><a href="/teacher/myQuiz/quizDetails/${ele._id}"  class='adder' ><i class='fa-solid fa-eye fa-lg' title='More Details'></i></a><a><i class='fa-solid fa-trash text-danger fa-lg ms-3' title='Delete'></i></a><a><i class='fa-solid fa-clipboard-list fa-lg text-success ms-3' title='Report'></i></a></td>`;
+                        data += `</tr>`;
+                    });
+
+                    $("#tableDiv").html(def + data + "</table>");
+                    var myTable;
+
+                    myTable = $("#datatable").DataTable({
+                        pagingType: "simple_numbers",
+                        scrollCollapse: true,
+
+                        language: {
+                            paginate: {
+                                previous: "<",
+                                next: ">",
+                            },
+                        },
+                    });
+                }
+            },
+        });
+    });
+</script>

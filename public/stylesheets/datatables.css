@@ -19,6 +19,7 @@ table.dataTable thead th {
 	font-weight: 500;
 	font-family: "Nunito", sans-serif;
 	font-size: 15px;
+	text-align: center;
 }
 #datatable_wrapper {
 	margin: 50px;
