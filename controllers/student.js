@@ -69,8 +69,13 @@ async function forgetPassword(req, res) {
 }
 async function upcomingQuiz(req,res){
     let error=null;
-    console.log("entered");
+   
     res.render("./student/upcomingQuiz",{error});
+}
+async function availableQuiz(req,res){
+    let error=null;
+    
+    res.render("./student/availableQuiz",{error});
 }
 
 // async function enrollment_confirmation_page(req, res) {
@@ -104,4 +109,5 @@ module.exports = {
     forgetPassword,
     dashboardPage,
     upcomingQuiz,
+    availableQuiz
 };
