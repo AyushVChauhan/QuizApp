@@ -76,6 +76,11 @@ async function availableQuiz(req,res){
     
     res.render("./student/availableQuiz",{error});
 }
+async function otherQuiz(req,res){
+    let error=null;
+    
+    res.render("./student/otherQuiz",{error});
+}
 
 // async function enrollment_confirmation_page(req, res) {
 //   res.render("./student/enrollment_confirmation");
@@ -139,4 +144,5 @@ module.exports = {
     availableQuiz,
     takeQuiz,
     instructions,
+    otherQuiz,
 };
