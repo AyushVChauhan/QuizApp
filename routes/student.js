@@ -10,6 +10,8 @@ router.get('/forgetPassword', studentControllers.forgetPage);
 router.post('/forgetPassword', studentControllers.forgetPassword);
 router.get('/upcomingQuiz', studentControllers.upcomingQuiz);
 router.get('/availableQuiz', studentControllers.availableQuiz);
+router.get('/otherQuiz', studentControllers.otherQuiz);
+
 
 // router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
 // router.post("/enrollmentcheck", studentControllers.enrollment_check);
