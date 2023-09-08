@@ -182,14 +182,14 @@
 			</div>
 	</div>
 	<div class="row" id="questionDetails" style="display: none;">
-			<div class="col-8 offset-2">
+			<div class=" col-10 offset-1">
 				<table class="uk-table uk-table-hover uk-table-striped text-center" id="datatable1">
 					<thead>
-						<th class="text-center">Sr No.</th>
-						<th class="text-center">Type</th>
-						<th class="text-center">Question</th>
-						<th class="text-center">Random / Compulsory</th>
-						<th class="text-center">Marks</th>
+						<th class="text-center"   >Sr No.</th>
+						<th class="text-center" >Type</th>
+						<th class="text-center" >Question</th>
+						<th class="text-center" >Random / Compulsory</th>
+						<th class="text-center" >Marks</th>
 
 					 </thead>
 					<tbody>
@@ -210,10 +210,10 @@
 											<%type1 = "DESCRIPTIVE";%>
 											<%}%>
 									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
-									<td class="quiztd text-secondary"><%=  type1 %></td>
-									<td class="quiztd text-secondary"><%-  quiz.compulsary_questions[index].question %></td>
-									<td class="quiztd text-secondary">Compulsory</td>
-									<td class="quiztd text-secondary"><%=  quiz.compulsary_questions[index].marks %></td>
+									<td class="quiztd text-secondary" style="width: 20%;"><%=  type1 %></td>
+									<td class="quiztd text-secondary" style="width: 55%; text-justify: auto;text-align: justify;"><%-  quiz.compulsary_questions[index].question %></td>
+									<td class="quiztd text-secondary" >Compulsory</td>
+									<td class="quiztd text-secondary" ><%=  quiz.compulsary_questions[index].marks %></td>
 								</tr>
 								<% ind++ %>
 							<% } %>
@@ -230,10 +230,10 @@
 											<%type1 = "DESCRIPTIVE";%>
 											<%}%>
 									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
-									<td class="quiztd text-secondary"><%= type1 %></td>
-									<td class="quiztd text-secondary"><%- quiz.random_questions[index].question %></td>
-									<td class="quiztd text-secondary">Random</td>
-									<td class="quiztd text-secondary"><%= quiz.random_questions[index].marks %></td>
+									<td class="quiztd text-secondary" style="width: 20%;"><%= type1 %></td>
+									<td class="quiztd text-secondary" style="width:55%;text-justify: auto;text-align: justify;"><%- quiz.random_questions[index].question %></td>
+									<td class="quiztd text-secondary" >Random</td>
+									<td class="quiztd text-secondary" ><%= quiz.random_questions[index].marks %></td>
 								</tr>
 								<% ind++ %>
 							<% } %>
