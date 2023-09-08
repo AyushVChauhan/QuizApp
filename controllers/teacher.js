@@ -319,6 +319,21 @@ async function quizDetails(req,res){
     let quiz=await teacherServices.quizDetails(req.params.quizId);
     res.render("./teacher/quizDetails",{quiz:quiz,errors:errors});
 }
+async function students(req,res){
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let student_data = await teacherServices.fetchStudents();
+    res.render("./teacher/students", {student_data,errors});
+}
+async function subjects(req,res)
+{
+    let sub_data = await teacherServices.subjectFetch();
+    let dept_data = await teacherServices.fetchDepartments();
+    res.render("./teacher/subjects", {dept_data, sub_data});
+}
 module.exports = {
     login,
     loginGet,
@@ -348,5 +363,7 @@ module.exports = {
     setCompulsaryQuestionsPost,
     myQuizPage,
     getMyQuiz,
-    quizDetails
+    quizDetails,
+    students,
+    subjects,
 };

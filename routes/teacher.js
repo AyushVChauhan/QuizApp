@@ -28,6 +28,10 @@ router.get("/", teacherControllers.teacherDashboard);
 router.post("/addTopic", teacherControllers.addTopic);
 router.post("/viewGroup", teacherControllers.viewGroup);
 router.get("/addQuestion/topics", teacherControllers.addQue_subSelect);
+router.get("/students", teacherControllers.students);
+router.get("/subjects", teacherControllers.subjects);
+
+
 router.get(
     "/addQuestion/question",
     questionMiddleware,
