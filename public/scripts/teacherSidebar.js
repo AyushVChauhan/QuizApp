@@ -10,29 +10,48 @@ function openSidebar() {
 $(document).ready(function () {
     let path = window.location.pathname;
     let arr = path.split("/");
-    if(arr.includes("createQuiz"))
+    console.log(arr);
+    if(arr.includes("myQuiz"))
     {
-        $("#createQuiz").toggleClass("hovered")
+        // $("#myQuiz").toggleClass('hovered')
+        document.getElementById("myQuiz").classList.toggle("hovered");
     }
-    else if(arr.includes("viewQuiz"))
+    else if(arr.includes("addQuiz"))
     {
-        $("#viewQuiz").toggleClass("hovered")
+        document.getElementById("createQuiz").classList.toggle("hovered");
+
+        // $("#createQuiz").toggleClass("hovered")
     }
-    else if(arr.includes("questions"))
+    else if(arr.includes("allQuiz"))
     {
-        $("#questions").toggleClass("hovered")
+        document.getElementById("allQuiz").classList.toggle("hovered");
+
+        // console.log("hii");
+        // $("#allQuiz").toggleClass("hovered")
+    }
+    else if(arr.includes("question1"))
+    {
+        document.getElementById("questions").classList.toggle("hovered");
+        
+        // $("#questions").toggleClass("hovered")
     }
     else if(arr.includes("students"))
     {
-        $("#students").toggleClass("hovered")
+        document.getElementById("students").classList.toggle("hovered");
+        
+        // $("#students").toggleClass("hovered")
     }
     else if(arr.includes("subjects"))
     {
-        $("#subjects").toggleClass("hovered")
+        document.getElementById("subjects").classList.toggle("hovered");
+
+        // $("#subjects").toggleClass("hovered")
+        // $("#subjects").toggleClass("hovered")
     }
     else
     {
-        document.getElementById("dashboard").classList.add("hovered");
+        document.getElementById("dashboard").classList.toggle("hovered");
+
         // $("#dashboard").toggleClass("hovered")
     }
 });

@@ -252,7 +252,7 @@ quiz.compulsary_questions=compulsaryQuestions;
 quiz.random_questions=randomQuestions;
 await quiz.save()
 }
-async function getMyQuiz(data){
+async function getMyQuiz(data,id){
 
     const nextDate = new Date();
     const date = new Date(data.date);
@@ -262,9 +262,23 @@ async function getMyQuiz(data){
     let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gt:date}},{valid_from:{$lt:nextDate}}]};
 
     let subjectquery = data.subject == "All" ? {subject_id: {$exists: true} } :{subject_id:data.subject};
-
+    let createdbyquery={created_by:id}
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
-    let quiz=await quizzes.find({$and:[subjectquery,datequery]});
+    let quiz=await quizzes.find({$and:[subjectquery,datequery,createdbyquery]});
+    return quiz;
+}
+async function getAllQuiz(data,id){
+
+    const nextDate = new Date();
+    const date = new Date(data.date);
+    nextDate.setTime(date.getTime() + 86400000);
+    console.log(date);
+    console.log(nextDate);
+    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gt:date}},{valid_from:{$lt:nextDate}}]};
+
+    let subjectquery = data.subject == "All" ? {subject_id: {$exists: true} } :{subject_id:data.subject};
+    // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
+    let quiz=await quizzes.find({$and:[subjectquery,datequery]}).populate("created_by");
     return quiz;
 }
 async function quizDetails(data){
@@ -309,5 +323,5 @@ module.exports = {
     getMyQuiz,
     quizDetails,
     fetchStudents,
-    
+    getAllQuiz,
 };

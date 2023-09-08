@@ -52,8 +52,10 @@ router.post("/addQuestion/getTopics", teacherControllers.getTopics);
 router.post("/addQuestion/setTopics", teacherControllers.setTopics);
 
 router.get("/myQuiz",teacherControllers.myQuizPage);
+router.get("/allQuiz",teacherControllers.allQuizPage);
 router.post("/myQuiz/getMyQuiz",teacherControllers.getMyQuiz);
-router.get("/myQuiz/quizDetails/:quizId",teacherControllers.quizDetails);
+router.post("/myQuiz/getAllQuiz",teacherControllers.getAllQuiz);
+router.get("/quiz/quizDetails/:quizId",teacherControllers.quizDetails);
 router.get("/addQuiz/getGroups", teacherControllers.getGroups);
 router.post("/addGroup", upload.single("excel"), teacherControllers.addGroup);
 router.post("/addQuiz/deptGroup", teacherControllers.deptGroup);

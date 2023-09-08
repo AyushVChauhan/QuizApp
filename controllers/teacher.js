@@ -193,8 +193,11 @@ async function createQuiz(req, res) {
 }
 async function setQuiz(req, res) {
     req.session.quiz = req.body;
+    let cookie = req.cookies.auth;
+    let id = jwt.verify(cookie, process.env.JWT_SECRET);
     let data = req.body;
     data.subject_id = new mongoose.Types.ObjectId(data.subject_id);
+    data.created_by=id.id;
     console.log(data);
     let setQuiz = await teacherServices.setQuiz(data);
     req.session.quizId = setQuiz;
@@ -304,9 +307,27 @@ async function myQuizPage(req,res){
 
     res.render("./teacher/myQuiz",{errors,subData});
 }
+async function allQuizPage(req,res){
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let subData = await teacherServices.subjectFetch();
+
+    res.render("./teacher/allQuiz",{errors,subData});
+}
 async function getMyQuiz(req,res){
     console.log(req.body);
-    let quizData= await teacherServices.getMyQuiz(req.body);
+    let cookie = req.cookies.auth;
+    let data = jwt.verify(cookie, process.env.JWT_SECRET);
+    let quizData= await teacherServices.getMyQuiz(req.body,data.id);
+    res.json({success:1,quizData:quizData})
+}
+async function getAllQuiz(req,res){
+    console.log(req.body);
+   
+    let quizData= await teacherServices.getAllQuiz(req.body);
     res.json({success:1,quizData:quizData})
 }
 async function quizDetails(req,res){
@@ -363,6 +384,8 @@ module.exports = {
     setCompulsaryQuestionsPost,
     myQuizPage,
     getMyQuiz,
+    allQuizPage,
+    getAllQuiz,
     quizDetails,
     students,
     subjects,
