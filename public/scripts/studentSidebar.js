@@ -22,6 +22,10 @@ $(document).ready(function () {
     {
         $("#history").toggleClass("hovered")
     }
+    else if(arr.includes("otherQuiz"))
+    {
+        $("#otherQuiz").toggleClass("hovered")
+    }
     
     else
     {
