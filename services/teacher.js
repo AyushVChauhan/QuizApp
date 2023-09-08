@@ -2,6 +2,7 @@ const teachers = require("../models/teachers");
 const students = require("../models/students");
 const groups = require("../models/groups");
 const subjects = require("../models/subjects");
+
 const departments = require("../models/departments");
 const courseOutcomes = require("../models/courseOutcomes");
 const questions = require("../models/questions");
@@ -277,6 +278,11 @@ async function quizDetails(data){
     });
     return quiz;
 }
+async function fetchStudents() {
+    let student_data = await students.find({ is_active: 1 }).populate("department_id");
+    console.log(student_data);
+    return student_data;
+}
 
 module.exports = {
     loginFetch,
@@ -301,5 +307,7 @@ module.exports = {
     setQuestions,
     setCompulsaryQuestionsPost,
     getMyQuiz,
-    quizDetails
+    quizDetails,
+    fetchStudents,
+    
 };

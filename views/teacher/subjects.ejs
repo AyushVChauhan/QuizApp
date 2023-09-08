@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<div class="grid-container">
+	<%- include("./teacherHeader") %> <%- include("./teacherSidebar") %>
+
+	<div class="main-container">
+		<div class="row ps-5 pe-5 align-items-center d-flex">
+			<div class="col h1">
+				Subjects
+			</div>
+			
+		</div>
+		<table
+			class="uk-table uk-table-hover uk-table-striped text-center"
+			id="datatable"
+		>
+			<thead>
+				<th class="text-center">Sr no.</th>
+				<th class="text-center">Subject</th>
+				<th class="text-center">Subject Code</th>
+				<th class="text-center">Semester</th>
+				<th class="text-center">No. of COs</th>
+			</thead>
+			<tbody>
+				<% for( let index = 0; index < sub_data.length; index++ ) { %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= sub_data[index].name %></td>
+					<td><%= sub_data[index].code %></td>
+					<td><%= sub_data[index].semester %></td>
+					<td><%= sub_data[index].course_outcomes %></td>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<%- include('../partials/footer') -%>
+<script>
+	$(document).ready(() => {
+		console.log("hello");
+		var myTable;
+
+		myTable = $("#datatable").DataTable({
+			pagingType: "simple_numbers",
+			language: {
+				paginate: {
+					previous: "<",
+					next: ">",
+				},
+			},
+			columnDefs: [
+				// Center align the header content of column 1
+				{ className: "dt-head-center", targets: [0, 1] },
+			],
+		});
+	});
+</script>
+<script src="/scripts/teacherSidebar.js"></script>
+
+<%- include('../partials/footer2') -%>
