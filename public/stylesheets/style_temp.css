@@ -158,13 +158,20 @@ font-weight: 1000;
     }
 
     .sidebar {
-        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0%;
+        transform:translateX(-250px);
+        transition: all ease 0.5s;
+
     }
     .sidebar-open {
         position: absolute;
         top: 70px;
         left: 0%;
         display: block;
+        transform:translateX(0px);   
+    transition: all ease 0.5s;
     }
 
     .menu-icon {

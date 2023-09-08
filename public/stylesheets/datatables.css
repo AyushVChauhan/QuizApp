@@ -31,6 +31,14 @@ table.dataTable thead th {
 	overflow: hidden;
 	border-radius: 15px;
 }
+#datatable1_wrapper {
+	margin: 50px;
+}
+#datatable1 {
+	margin-top: 15px;
+	overflow: hidden;
+	border-radius: 15px;
+}
 table.dataTable tr.even {
 	background-color: #e6f4f1;
 }
