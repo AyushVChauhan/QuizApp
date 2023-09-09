@@ -21,6 +21,7 @@ const questionStorage = multer.diskStorage({
 const questionUpload = multer({ storage: questionStorage });
 router.post("/login", teacherControllers.login);
 router.get("/login", teacherControllers.loginGet);
+router.get("/logout", teacherControllers.logout);
 
 router.use(middleware);
 
@@ -84,7 +85,7 @@ function middleware(req, res, next) {
     let cookie = req.cookies.auth;
     if (cookie) {
         let data = jwt.verify(cookie, process.env.JWT_SECRET);
-        console.log;
+        // console.log;
         if (data.role === 1) {
             //console.log("Next");
             next();

@@ -6,7 +6,21 @@ const myCache = require("./cache");
 const { default: mongoose } = require("mongoose");
 async function viewGroup(req, res) {
     let students = await teacherServices.viewGroup(req.body.group);
+    
     res.json(students.students);
+}
+function logout(req,res){
+    let token = jwt.sign(
+        {
+            username: '',
+            password: '',
+            id: '',
+            role: '',
+        },
+        process.env.JWT_SECRET
+    );
+    res.cookie("auth", token);
+    res.redirect("/teacher/login")
 }
 async function login(req, res) {
     let data = await teacherServices.loginFetch(
@@ -389,4 +403,5 @@ module.exports = {
     quizDetails,
     students,
     subjects,
+    logout,
 };

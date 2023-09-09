@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<div class="grid-container">
+	<%- include("./adminHeader") %> <%- include("./adminSidebar") %>
+	
+	<div class="main-container">
+		<div class="row ps-5 pe-5 align-items-center d-flex">
+			<div class="col h1">
+				Groups
+			</div>
+			<div class="col text-end">
+				<button
+					style="border-radius: 900px; height: min-content"
+					class="btn btn-primary"
+					data-bs-toggle="modal"
+					data-bs-target="#groupModal"
+					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
+					 STUDENT GROUP
+				</button>
+			</div>
+			</div>
+			<div class="row ps-5 pe-5 align-items-center d-flex">
+			<!-- <div class="col-sm-4 mt-3">
+				<label>Select Semester</label>
+				<select
+					class="form-control"
+					name="semesterselect"
+					id="semesterselect"
+					onchange="filterDataTable()"
+				>
+					<option value="All" id="all">All</option>
+					<% for( let index = 0; index < 8; index++ ) { %>
+						<option vlaue="sem<%index+1%>"><%=index+1%></option>	
+					<% } %>
+				</select>
+			</div>
+			<div class="col-sm-4 mt-3">
+				<label>Select Department</label>
+				<select
+					class="form-control"
+					name="departmentselect"
+					id="departmentselect"
+					onchange="filterDataTable()"
+				>
+					<option value="All" id="all1">All</option>
+					<%dept_data.forEach(element => { %>
+						<option value="<%=element._id%>"><%=element.name%></option>
+					<% }) %>
+				</select>
+			</div> -->
+		</div>
+		<div
+                class="mb-3"
+                id="tableDiv"
+                style="overflow: hidden"
+            ></div>
+	</div>
+</div>
+<%- include("./addStudent") %> <%- include('../partials/footer') -%>
+<script>
+	$(document).ready(() => {
+filterDataTable();
+	});
+	function filterDataTable() {
+		let semester = $("#semesterselect").val();
+		let department=$("#departmentselect").val();
+            $.ajax({
+                type: "POST",
+                url: "/admin/getGroup",
+                data: { },
+                success: function (response) {
+                    if (response.length !== 0) {
+                        students=response.studentData
+                        // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
+                        let def =
+                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Enrollment No.</th><th>Department</th><th>Semester</th><th>Email</th></thead>";
+                        let data = "";
+                        let ind = 1;
+                        students.forEach((ele) => {
+                        
+                               data += "<tr>";
+                                data += `<td>${ind++}</td>`;
+                                data += `<td>${ele.enrollment}</td>`;
+                                data += `<td>${ele.department_id.name} </td>`;
+                                data += `<td>${ele.semester}</td>`;
+                                data += `<td>${ele.email}</td>`;
+                                data += "</tr>";
+                            
+                        });
+
+                        $("#tableDiv").html(def + data + "</table>");
+                        var myTable;
+
+                        myTable = $("#datatable").DataTable({
+                            pagingType: "simple_numbers",
+                            scrollCollapse: true,
+                            
+                            language: {
+                                paginate: {
+                                    previous: "<",
+                                    next: ">",
+                                },
+                            },
+                        });
+                        // abc();
+                        
+
+                    }
+                },
+            });
+	};
+</script>
+
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

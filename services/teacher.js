@@ -256,6 +256,7 @@ async function getMyQuiz(data,id){
 
     const nextDate = new Date();
     const date = new Date(data.date);
+    date.setTime(date.getTime() - 19800000);
     nextDate.setTime(date.getTime() + 86400000);
     console.log(date);
     console.log(nextDate);
@@ -270,11 +271,12 @@ async function getMyQuiz(data,id){
 async function getAllQuiz(data,id){
 
     const nextDate = new Date();
-    const date = new Date(data.date);
+    const date = new Date(data.date );
+    date.setTime(date.getTime() - 19800000);
     nextDate.setTime(date.getTime() + 86400000);
     console.log(date);
     console.log(nextDate);
-    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gt:date}},{valid_from:{$lt:nextDate}}]};
+    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gte:date}},{valid_from:{$lte:nextDate}}]};
 
     let subjectquery = data.subject == "All" ? {subject_id: {$exists: true} } :{subject_id:data.subject};
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});

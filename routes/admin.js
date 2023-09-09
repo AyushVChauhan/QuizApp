@@ -12,6 +12,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 15000000 } });
 
+router.use(middleware);
 router.get("/", adminControllers.adminDashboard);
 router.post("/addDepartment", adminControllers.addDepartment);
 router.get("/departments/delete/:id", adminControllers.deleteDepartment);
@@ -34,7 +35,6 @@ router.post("/getTeacher", adminControllers.getTeacher);
 
 
 //move middleware above get() afterwards
-// router.use(middleware);
 function middleware(req, res, next) {
     let cookie = req.cookies.auth;
     if (cookie) {

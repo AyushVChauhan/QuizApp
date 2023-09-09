@@ -53,28 +53,25 @@ function adder(e) {
     })
 }
 function selectedTable() {
-    let def = "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable1'><thead><th>Sr No.</th><th>Topic</th><th>CO</th></thead>";
-    let data = "";
+    let def = `<h2>Selected Topics</h2><table class="table table-hover"  >`;
+    let data = `<tr>
+    <th style="width:90px">SR NO.</th><th>TOPIC</th><th>CO</td></tr>`;
 
-    selectedTopics.forEach((ele, ind) => {
-        data += "<tr>";
-        data += `<td>${ind + 1}</td>`;
-        data += `<td>${ele.topic}</td>`;
-        data += `<td>${ele.course_outcome}</td>`;
-        data += "</tr>";
+    selectedTopics.forEach((ele,ind) => {
+        data += `<tr><td class="text-secondary" style="width:90px">${ind+1}</td><td class="text-secondary">${ele.topic}</td><td class="text-secondary">${ele.course_outcome}</td></tr> `;
     })
     $("#selectedTableDiv").html(def + data + "</table>");
-    var myTable;
+    // var myTable;
 
-    myTable = $("#datatable1").DataTable({
-        pagingType: "simple_numbers",
-        language: {
-            paginate: {
-                previous: "<",
-                next: ">",
-            },
-        },
-    });
+    // myTable = $("#datatable1").DataTable({
+    //     pagingType: "simple_numbers",
+    //     language: {
+    //         paginate: {
+    //             previous: "<",
+    //             next: ">",
+    //         },
+    //     },
+    // });
 
 }
 $(function () {
