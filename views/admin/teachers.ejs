@@ -9,64 +9,98 @@
 			<div class="col h1">
 				Teachers
 			</div>
+			
 			<div class="col  text-end">
 				<button style="border-radius: 900px; height:min-content" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teacherModal"
 					><i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
 					TEACHER
 				</button>
 			</div>
-		</div>
-		<table
-			class="uk-table uk-table-hover uk-table-striped text-center"
-			id="datatable"
-		>
-			<thead>
-				<th class="text-center">Sr no.</th>
-                <th class="text-center">UserName</th>
-				<th class="text-center">First Name</th>
-                <th class="text-center">Middle Name</th>
-                <th class="text-center">Last Name</th>
-                <th class="text-center">Department</th>
-                <th class="text-center">Email</th>
-			</thead>
-			<tbody>
-				<% for( let index = 0; index < teacher_data.length; index++ ) { %>
-				<tr>
-					<td><%= index+1 %></td>
-					<td><%= teacher_data[index].username %></td>
-                    <td><%= teacher_data[index].first_name %></td>
-                    <td><%= teacher_data[index].middle_name %></td>
-                    <td><%= teacher_data[index].last_name %></td>
-                    <td><%= teacher_data[index].department_id.name %></td>
-                    <td><%= teacher_data[index].email %></td>
-                   
-				</tr>
-				<% } %>
-			</tbody>
-		</table>
+			</div>
+			<div class="row ps-5 pe-5 align-items-center d-flex">
+				<div class="col-sm-4  mt-3">
+					<label>Select Department</label>
+					<select
+						class="form-control"
+						name="departmentselect"
+						id="departmentselect"
+						onchange="filterDataTable()"
+					>
+						<option value="All" id="all1">All</option>
+						<%dept_data.forEach(element => { %>
+							<option value="<%=element._id%>"><%=element.name%></option>
+						<% }) %>
+					</select>
+				</div>
+				</div>
+		
+		<div
+                class="mb-3"
+                id="tableDiv"
+                style="overflow: hidden"
+            ></div>
 	</div>
 </div>
 <%- include("./addTeacher") %> <%- include('../partials/footer') -%>
 <script>
 	$(document).ready(() => {
-		console.log("hello");
-		var myTable;
-
-		myTable = $("#datatable").DataTable({
-			pagingType: "simple_numbers",
-			language: {
-				paginate: {
-					previous: "<",
-					next: ">",
-				},
-			},
-			columnDefs: [
-				// Center align the header content of column 1
-				{ className: "dt-head-center", targets: [0, 1] },
-			],
-		});
+		$("#all1").change();
+		
 	});
+	function filterDataTable() {
+		
+		let department=$("#departmentselect").val();
+            $.ajax({
+                type: "POST",
+                url: "/admin/getTeacher",
+                data: { department },
+                success: function (response) {
+                    if (response.length !== 0) {
+                        teachers=response.teacherData
+                        // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
+                        let def =
+                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Username</th><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Department</th><th>Email</th></thead>";
+                        let data = "";
+                        let ind = 1;
+                        teachers.forEach((ele) => {
+                        
+                               data += "<tr>";
+                                data += `<td>${ind++}</td>`;
+                                data += `<td>${ele.username}</td>`;
+
+                                data += `<td>${ele.first_name}</td>`;
+                                data += `<td>${ele.middle_name}</td>`;
+                                data += `<td>${ele.last_name}</td>`;
+
+                                data += `<td>${ele.department_id.name} </td>`;
+                                
+                                data += `<td>${ele.email}</td>`;
+                                data += "</tr>";
+                            
+                        });
+
+                        $("#tableDiv").html(def + data + "</table>");
+                        var myTable;
+
+                        myTable = $("#datatable").DataTable({
+                            pagingType: "simple_numbers",
+                            scrollCollapse: true,
+                            
+                            language: {
+                                paginate: {
+                                    previous: "<",
+                                    next: ">",
+                                },
+                            },
+                        });
+                        // abc();
+                        
+
+                    }
+                },
+            });
+	};
 </script>
-<script src="/scripts/adminSidebar.js"></script>
+
 <script src="/scripts/addTeacher.js"></script>
-< <%- include('../partials/footer2') -%>
+ <%- include('../partials/footer2') -%>

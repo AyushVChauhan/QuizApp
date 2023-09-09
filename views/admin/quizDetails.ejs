@@ -1,0 +1,350 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<script>
+    let quiz = JSON.parse('<%- JSON.stringify(quiz) %>' );
+</script>
+<style>
+	#datatable_wrapper{
+		margin: 0;
+	}
+	#datatable1_wrapper{
+		margin: 0;
+	}
+	.expandingDiv{
+		margin-top: -100%;
+		transition: all 1s;	
+	}
+	#basicDetails{
+		opacity: 0;
+	}
+	#studentDetails{
+		opacity: 0;
+	}
+	#questionDetails{
+		opacity: 0;
+	}
+	.animate{
+		animation: fadeIn 1s linear forwards;
+	}
+	
+@keyframes fadeIn {
+	0% {opacity: 0}
+	100% {opacity: 1;}
+}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,1000&display=swap" rel="stylesheet">
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./adminHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./adminSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <!-- <pre>         
+            <%= quiz.random_questions %>
+        </pre> -->
+   		 <div class="row mb-3">
+            <div class="col h1">Quiz Details</div>
+        </div>
+        <div class="row text-center mb-5">
+            <div class="col-4">
+                <button class="btn  rounded-pill" style="background-color: blue;" id="basicBtn" onclick="showBasic()">
+                    Basic Details
+                </button>
+            </div>
+            <div class="col-4">
+                <button class="btn  rounded-pill" id="studentBtn" onclick="showStudent()">
+                    Student Details
+                </button>
+            </div>
+            <div class="col-4">
+                <button class="btn  rounded-pill" id="questionBtn" onclick="showQuestion()">
+                    Question Details
+                </button>
+            </div>
+        </div>
+        <div class="row" id="basicDetails" >
+			<div class="col-8 offset-2" >
+				<table class="table table-bordered table-hover" >
+					
+					<tr>
+						<th class="quizth">Quiz Name :</th>
+						<td class="quiztd text-secondary"><%= quiz.name %></td>
+					</tr>
+					<tr>
+						<th class="quizth">Subject :</th>
+						<td class="quiztd text-secondary"><%= quiz.subject_id.name%>(<%=quiz.subject_id.code%>)</td>
+					</tr>
+					<tr>
+						<th class="quizth">Semester :</th>
+						<td class="quiztd text-secondary"><%= quiz.subject_id.semester %></td>
+				</tr>
+				<tr>
+					<th class="quizth "  ><div style="margin-top: 11px;">Quiz Validity:</div>  </th>
+					<td class="quiztd text-secondary"> From : <%= quiz.valid_from.getDate() %>/<%=
+						quiz.valid_from.getMonth()+1 %>/<%=
+						quiz.valid_from.getFullYear() %> <%=
+						quiz.valid_from.getHours() %>:<%=
+						quiz.valid_from.getMinutes() %><br>
+			
+					<!-- <th class="quizth"> To : </th> -->
+					To :  <%= quiz.valid_to.getDate() %>/<%=
+						quiz.valid_to.getMonth()+1 %>/<%=
+						quiz.valid_to.getFullYear() %> <%=
+						quiz.valid_to.getHours() %>:<%=
+						quiz.valid_to.getMinutes() %>
+				</tr>
+				<tr>
+					<th class="quizth">Quiz Visible From : </th>
+					<td class="quiztd text-secondary"> <%= quiz.visible_from.getDate() %>/<%=
+				quiz.visible_from.getMonth()+1 %>/<%=
+				quiz.visible_from.getFullYear() %> <%=
+				quiz.visible_from.getHours() %>:<%=
+				quiz.visible_from.getMinutes() %></td>
+		</tr>
+				<tr>
+					<th class="quizth">Guest : </th>
+					<td class="quiztd text-secondary"> <% if(quiz.guest_flag==1) { %>
+						 Allowed
+						 <%}else{ %>
+							Not Allowed
+							<% } %></td>
+						</tr>
+				<tr>
+					<th class="quizth"> To : </th>
+					<td class="quiztd text-secondary"> <%= quiz.visible_to.getDate() %>/<%=
+						quiz.visible_to.getMonth()+1 %>/<%=
+						quiz.visible_to.getFullYear() %> <%=
+						quiz.visible_to.getHours() %>:<%=
+						quiz.visible_to.getMinutes() %></td>
+				</tr>
+				<tr>
+					<th class="quizth">Duration : </th>
+					<td class="quiztd text-secondary"><%= quiz.duration%> Minutes</td>
+				</tr>
+				<tr>
+					<th class="quizth">Marks : </th>
+					<td class="quiztd text-secondary"><%= quiz.marks%> </td>
+				</tr>
+				<tr>
+					<th class="quizth">Marks Structure:</th>
+					<td class="quiztd text-secondary">
+						
+						<% for( let index = 0; index < quiz.marks_questions.length;index++ ) { %>
+							<div>
+								<%= quiz.marks_questions[index].marks %>
+								<% if(quiz.marks_questions[index].marks==1){%>
+									Mark
+									<%}else{%>
+										Marks
+										<%}%>
+										- <%= quiz.marks_questions[index].count %> 
+										<% if(quiz.marks_questions[index].count==1){%>
+											Question
+											<%}else{%>
+												Questions
+												<%}%>
+											</div>
+											<%}%>		
+										</td>
+				</tr>
+			</table>
+		</div>	
+	</div>
+        <div class="row" id="studentDetails" style="display: none;">
+			<div class=" offset-2 col-8">
+
+				<table class="uk-table uk-table-hover uk-table-striped text-center" id="datatable">
+					<thead>
+						<th class="text-center">Sr No.</th>
+						<th class="text-center">Enrollment</th>
+						<th class="text-center">Semester</th>
+					</thead>	
+					<tbody>
+						 <% quiz.group_id.students.forEach((element,ind) => { %>
+							
+							<tr>
+								<td class="quiztd text-secondary" style="width: 10%;"><%= ind+1 %></td>
+								<td class="quiztd text-secondary"><%= element.enrollment %></td>
+								<td class="quiztd text-secondary"><%= element.semester %></td>
+							</tr>
+							
+							<% }) %>	
+					</tbody>
+				</table>
+		
+			</div>
+	</div>
+	<div class="row" id="questionDetails" style="display: none;">
+			<div class=" col-10 offset-1">
+				<table class="uk-table uk-table-hover uk-table-striped text-center" id="datatable1">
+					<thead>
+						<th class="text-center"   >Sr No.</th>
+						<th class="text-center" >Type</th>
+						<th class="text-center" >Question</th>
+						<th class="text-center" >Random / Compulsory</th>
+						<th class="text-center" >Marks</th>
+
+					 </thead>
+					<tbody>
+						<% let ind=1%>
+						 
+							
+							
+							<% for( let index = 0; index < quiz.compulsary_questions.length; index++ ) { %>
+								<tr>
+									<% let type1='' %>
+									<%  if (quiz.compulsary_questions[index].type == 1) {%>
+									<%	type1 = "MCQ";%>
+									<%}%>
+									<%if (quiz.compulsary_questions[index].type == 2) {%>
+										<%	type1 = "ONE WORD";%>
+										<%}%>
+										<%if (quiz.compulsary_questions[index].type == 3) {%>
+											<%type1 = "DESCRIPTIVE";%>
+											<%}%>
+									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
+									<td class="quiztd text-secondary" style="width: 20%;"><%=  type1 %></td>
+									<td class="quiztd text-secondary" style="width: 55%; text-justify: auto;text-align: justify;"><%-  quiz.compulsary_questions[index].question %></td>
+									<td class="quiztd text-secondary" >Compulsory</td>
+									<td class="quiztd text-secondary" ><%=  quiz.compulsary_questions[index].marks %></td>
+								</tr>
+								<% ind++ %>
+							<% } %>
+							<% for( let index = 0; index < quiz.random_questions.length; index++ ) { %>
+								<tr>
+									<% let type1='' %>
+									<%  if (quiz.random_questions[index].type == 1) {%>
+									<%	type1 = "MCQ";%>
+									<%}%>
+									<%if (quiz.random_questions[index].type == 2) {%>
+										<%	type1 = "ONE WORD";%>
+										<%}%>
+										<%if (quiz.random_questions[index].type == 3) {%>
+											<%type1 = "DESCRIPTIVE";%>
+											<%}%>
+									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
+									<td class="quiztd text-secondary" style="width: 20%;"><%= type1 %></td>
+									<td class="quiztd text-secondary" style="width:55%;text-justify: auto;text-align: justify;"><%- quiz.random_questions[index].question %></td>
+									<td class="quiztd text-secondary" >Random</td>
+									<td class="quiztd text-secondary" ><%= quiz.random_questions[index].marks %></td>
+								</tr>
+								<% ind++ %>
+							<% } %>
+					</tbody>
+				</table>
+		</div>
+	
+		</div>
+		
+		
+	</div>
+	
+    </main>
+    <!-- End Main -->
+</div>
+<script>
+function showBasic(){
+	$("#basicDetails").show();
+	document.getElementById("basicDetails").classList.add("animate");
+	$("#studentDetails").hide();
+	$("#questionDetails").hide();
+	$("#basicBtn").css('background-color','white')
+	$("#basicBtn").css('color','#11467b')
+	$("#basicBtn").css('box-shadow','5px 5px')
+	$("#studentBtn").css('background-color','#11467b')
+	$("#studentBtn").css('color','white')
+	$("#studentBtn").css('box-shadow','none')
+
+	$("#questionBtn").css('background-color','#11467b')
+	$("#questionBtn").css('color','white')
+	$("#questionBtn").css('box-shadow','none')
+
+
+}
+function showStudent(){
+	$("#basicDetails").hide();
+	$("#studentDetails").show();
+	document.getElementById("studentDetails").classList.add("animate");
+	$("#questionDetails").hide();
+	$("#basicBtn").css('background-color','#11467b')
+	$("#basicBtn").css('color','white')
+	$("#basicBtn").css('box-shadow','none')
+
+	$("#studentBtn").css('background-color','white')
+	$("#studentBtn").css('color','#11467b')
+	$("#studentBtn").css('box-shadow','5px 5px')
+
+	$("#questionBtn").css('background-color','#11467b')
+	$("#questionBtn").css('color','white')
+	$("#questionBtn").css('box-shadow','none')
+
+
+}
+function showQuestion(){
+	$("#basicDetails").hide();
+	$("#studentDetails").hide();
+	$("#questionDetails").show();
+	document.getElementById("questionDetails").classList.add("animate");
+	$("#basicBtn").css('background-color','#11467b')
+	$("#basicBtn").css('color','white')
+	$("#basicBtn").css('box-shadow','none')
+
+	$("#studentBtn").css('background-color','#11467b')
+	$("#studentBtn").css('color','white')
+	$("#studentBtn").css('box-shadow','none')
+
+	$("#questionBtn").css('background-color','white')
+	$("#questionBtn").css('color','#11467b')
+	$("#questionBtn").css('box-shadow','5px 5px')
+
+
+}
+
+$(document).ready(() => {
+		console.log("hello");
+		var myTable;
+
+		myTable = $("#datatable").DataTable({
+			pagingType: "simple_numbers",
+			language: {
+				paginate: {
+					previous: "<",
+					next: ">",
+				},
+			},
+			columnDefs: [
+				// Center align the header content of column 1
+				{ className: "dt-head-center", targets: [0, 1] },
+			],
+		});
+		$("#basicBtn").click();
+		var myTable1;
+
+		myTable1 = $("#datatable1").DataTable({
+			pagingType: "simple_numbers",
+			language: {
+				paginate: {
+					previous: "<",
+					next: ">",
+				},
+			},
+			columnDefs: [
+				// Center align the header content of column 1
+				{ className: "dt-head-center", targets: [0, 1] },
+			],
+		});
+	});
+	
+</script>
+
+<%- include('../partials/footer') -%>
+
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

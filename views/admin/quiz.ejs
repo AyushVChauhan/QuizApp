@@ -2,54 +2,51 @@
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 <link rel="stylesheet" href="/stylesheets/datatables.css" />
 <%- include('../partials/footer') -%>
-
+<style>
+    #datatable_wrapper{
+        margin-left: 0px;
+    }
+</style>
 <div class="grid-container">
     <!-- Header -->
-    <%- include("./teacherHeader") %>
+    <%- include("./adminHeader") %>
     <!-- End Header -->
 
     <!-- Sidebar -->
-    <%- include("./teacherSidebar") %>
+    <%- include("./adminSidebar") %>
     <!-- End Sidebar -->
 
     <!-- Main -->
     <main class="main-container">
-        <div class="row">
-            <div class="col-9">
-                <div class="mb-3 h1">My Quiz</div>
-            </div>
-            <div class="col-3 text-end">
-                <a href="/teacher/addQuiz/setQuiz">
-                    <button
-                        style="border-radius: 900px; height: min-content"
-                        class="btn btn-primary"
-                    >
-                        <i class="fa-regular fa-square-plus"></i>&nbsp;&nbsp;ADD
-                        QUIZ
-                    </button></a
-                >
-            </div>
-        </div>
+        
+            <div class="row ps-5 pe-5 align-items-center d-flex">
+                <div class="col h1">
+                    Quiz
+                </div>
+           
+        
         <div>
             <div class="row">
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-4 mt-3">
                     <label>Date</label>
                     <input
                         type="date"
                         name="dateselect"
                         id="dateselect"
                         class="form-control"
+                        onchange="filterDataTable()"
                     />
                 </div>
 
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-4 mt-3">
                     <label>Subject</label>
                     <select
                         class="form-control"
                         name="subjectselect"
                         id="subjectselect"
+                        onchange="filterDataTable()"
                     >
-                        <option selected="" value="All">All</option>
+                        <option id="all" value="All">All</option>
                         <% subData.forEach(element=> { %>
                         <option value="<%= element._id %>">
                             <%= element.code %> : <%=element.name%>
@@ -82,20 +79,11 @@
                         <option value="1">By me</option>
                     </select>
                 </div> -->
-                <div class="col-sm-4">
-                    <button
-                        type="button"
-                        id="generateDataTable"
-                        class="btn btn-primary ms-3"
-                        style="margin-top: 24px"
-                    >
-                        Generate
-                    </button>
-                </div>
+                
             </div>
-            <div class="row"></div>
+           
 
-            <div class="mb-3" id="tableDiv" style="overflow-x: scroll"></div>
+            <div class="mb-3" id="tableDiv" style="overflow:hidden"></div>
         </div>
     </main>
     <!-- End Main -->
@@ -107,17 +95,17 @@
 <script>
 
     $(document).ready(()=>{
-        $("#generateDataTable").click()
+        $("#all").change()
     })
     let subjects = JSON.parse('<%- JSON.stringify(subData) %>');
-    $("#generateDataTable").click(() => {
+    function filterDataTable() {
         console.log("hii");
         let subject = $("#subjectselect").val();
         let date = $("#dateselect").val();
         // console.log(date);
         $.ajax({
             type: "POST",
-            url: "/teacher/myQuiz/getMyQuiz",
+            url: "/admin/getQuiz",
             data: { subject, date },
             success: function (response) {
                 console.log(response.quizData);
@@ -125,7 +113,7 @@
                     quizzes = response.quizData;
                     // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
                     let def =
-                        "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Quiz Name</th><th>Subject</th><th>Date</th><th>Marks</th><th>Duration</th><th>Actions</th></thead>";
+                        "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Quiz Name</th><th>Subject</th><th>Date</th><th>Marks</th><th>Duration</th><th>Created By</th><th>Actions</th></thead>";
                     let data = "";
                     quizzes.forEach((ele, ind) => {
                         data += `<tr>`;
@@ -150,7 +138,9 @@
                         }-${validTo.getFullYear()} ${validTo.getHours()}:${validTo.getMinutes()}</td>`;
                         data += `<td>${ele.marks}</td>`;
                         data += `<td>${ele.duration} minutes</td>`;
-                        data += `<td><a href="/teacher/quiz/quizDetails/${ele._id}"  class='adder' ><i class='fa-solid fa-eye fa-lg' title='More Details'></i></a><a><i class='fa-solid fa-trash text-danger fa-lg ms-3' title='Delete'></i></a><a><i class='fa-solid fa-clipboard-list fa-lg text-success ms-3' title='Report'></i></a></td>`;
+                        data += `<td>${ele.created_by.username} </td>`;
+
+                        data += `<td><a href="/admin/quiz/quizDetails/${ele._id}"  class='adder' ><i class='fa-solid fa-eye fa-lg' title='More Details'></i></a><a><i class='fa-solid fa-trash text-danger fa-lg ms-3' title='Delete'></i></a><a><i class='fa-solid fa-clipboard-list fa-lg text-success ms-3' title='Report'></i></a></td>`;
                         data += `</tr>`;
                     });
 
@@ -171,5 +161,5 @@
                 }
             },
         });
-    });
+    };
 </script>

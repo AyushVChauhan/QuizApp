@@ -45,7 +45,7 @@
 					<p><%= student_count %></p>
 				</div>
 				<div class="col-md-1 extraBox"></div>
-				<div onclick="window.open('/admin/viewQuiz','_self')" class="col-md-3 m-1 box dashboard-tile">
+				<div onclick="window.open('/admin/quiz','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building fa-xl"></i> -->
 					<div class="dashboard-tile-header h4">Quizzes</div>
 					<p><%= quiz_count %></p>
@@ -74,7 +74,7 @@
 	});
 </script>
 <script src="/scripts/addSubject.js"></script>
-<script src="/scripts/adminSidebar.js"></script>
+
 <%- include('../partials/sweetalert') %>
 <%- include('../partials/footer2') -%>
 

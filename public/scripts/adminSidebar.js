@@ -26,6 +26,10 @@ $(document).ready(function () {
     {
         $("#teachers").toggleClass("hovered")
     }
+    else if(arr.includes("quiz"))
+    {
+        $("#quiz").toggleClass("hovered")
+    }
     else
     {
         $("#dashboard").toggleClass("hovered")

@@ -259,7 +259,7 @@ async function getMyQuiz(data,id){
     nextDate.setTime(date.getTime() + 86400000);
     console.log(date);
     console.log(nextDate);
-    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gt:date}},{valid_from:{$lt:nextDate}}]};
+    let datequery = data.date == "" ? { _id:{$exists: true} } : {$and:[{valid_from:{$gte:date}},{valid_from:{$lte:nextDate}}]};
 
     let subjectquery = data.subject == "All" ? {subject_id: {$exists: true} } :{subject_id:data.subject};
     let createdbyquery={created_by:id}

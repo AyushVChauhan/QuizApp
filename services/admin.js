@@ -75,7 +75,6 @@ async function addTeacher(teacherObject) {
 }
 async function fetchTeachers() {
     let teacher_data = await teachers.find({}).populate("department_id");
-    console.log(teacher_data);
     return teacher_data;
 }
 async function countTeachers() {
@@ -109,8 +108,7 @@ async function addStudent(enrollment, email, password, semester, department) {
                 console.log(`${enrollment} : SENT`);
             }
         });
-        if(record)
-        {
+        if (record) {
             let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department), is_active: 1 });
             await data.save();
         }
@@ -123,19 +121,84 @@ function timeout(ms) {
 }
 async function fetchStudents() {
     let student_data = await students.find({ is_active: 1 }).populate("department_id");
-    console.log(student_data);
     return student_data;
 }
 async function countStudents() {
     let student_count = await students.count({ is_active: 1 });
     return student_count;
 }
+async function getSubject(data) {
+    let subData = null;
+    console.log(data);
+    let semester = data.semester == "All" ? { $exists: true } : data.semester;
+
+    subData = await subjects
+        .find({
+            semester: semester,
+            is_active: 1,
+        })
+
+    return subData;
+}
+async function getStudent(data) {
+    let studentData = null;
+    console.log(data);
+    let semester = data.semester == "All" ? { $exists: true } : data.semester;
+    let department = data.department == "All" ? { $exists: true } : data.department;
+
+
+    studentData = await students
+        .find({
+            semester: semester,
+            department_id: department,
+            is_active: 1,
+        }).populate("department_id")
+
+    return studentData;
+}
+async function getTeacher(data) {
+    let teacherData = null;
+    let department = data.department == "All" ? { $exists: true } : data.department;
+
+    teacherData = await teachers
+        .find({
+            department_id: department,
+            is_active: 1,
+        }).populate("department_id")
+
+    return teacherData;
+}
 /* ------ QUIZZES ------ */
 async function countQuizzes() {
     let quiz_count = await quizzes.count({ is_active: 1 });
     return quiz_count;
 }
-module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, fetchStudents, countStudents, countQuizzes };
+async function getQuiz(data) {
+    const nextDate = new Date();
+    const date = new Date(data.date);
+    nextDate.setTime(date.getTime() + 86400000);
+    console.log(date);
+    console.log(nextDate);
+    let datequery = data.date == "" ? { _id: { $exists: true } } : { $and: [{ valid_from: { $gte: date } }, { valid_from: { $lte: nextDate } }] };
+
+    let subjectquery = data.subject == "All" ? { subject_id: { $exists: true } } : { subject_id: data.subject };
+
+    // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
+    let quiz = await quizzes.find({ $and: [subjectquery, datequery] }).populate("created_by");
+    return quiz;
+}
+async function quizDetails(data) {
+    let quiz = await quizzes.findOne({ _id: data }).populate("random_questions").populate("compulsary_questions").populate("subject_id").populate({
+        path: "group_id",
+        model: "groups",
+        populate: {
+            path: "students",
+            model: "students",
+        },
+    });
+    return quiz;
+}
+module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, fetchStudents, countStudents, countQuizzes, getSubject, getStudent, getTeacher, getQuiz, quizDetails };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department

@@ -20,8 +20,19 @@ router.post("/addSubject", adminControllers.addSubject);
 router.get("/subjects", adminControllers.subjects);
 router.post("/addStudent", upload.single("excel"), adminControllers.addStudent);
 router.get("/students", adminControllers.students);
+router.get("/quiz", adminControllers.quiz);
+router.post("/getQuiz", adminControllers.getQuiz);
+router.get("/quiz/quizDetails/:quizId",adminControllers.quizDetails);
+
+
 router.post("/addTeacher", adminControllers.addTeacher);
 router.get("/teachers", adminControllers.teachers);
+router.post("/getSubject", adminControllers.getSubject);
+
+router.post("/getStudent", adminControllers.getStudent);
+router.post("/getTeacher", adminControllers.getTeacher);
+
+
 //move middleware above get() afterwards
 // router.use(middleware);
 function middleware(req, res, next) {

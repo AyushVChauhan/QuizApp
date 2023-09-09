@@ -107,14 +107,60 @@ async function students(req,res)
 {
     let sub_data = await adminServices.fetchSubjects();
     let dept_data = await adminServices.fetchDepartments();
+    console.log(dept_data);
     let student_data = await adminServices.fetchStudents();
     res.render("./admin/students", {dept_data, sub_data,student_data, errors:null});
 }
 async function teachers(req,res)
+
 {
     let sub_data = await adminServices.fetchSubjects();
     let dept_data = await adminServices.fetchDepartments()
     let teacher_data = await adminServices.fetchTeachers()
     res.render("./admin/teachers", {dept_data, sub_data,teacher_data,errors:null});
 }
-module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students,teachers,addTeacher,deleteDepartment };
+async function getSubject(req, res) {
+    
+    let subData = await adminServices.getSubject(req.body);
+
+    res.json({ success: 1, subData });
+}
+async function getStudent(req, res) {
+    
+    let studentData = await adminServices.getStudent(req.body);
+
+    res.json({ success: 1, studentData });
+}
+async function getTeacher(req, res) {
+    
+    let teacherData = await adminServices.getTeacher(req.body);
+
+    res.json({ success: 1,teacherData });
+}
+async function quiz(req,res){
+    let errors = null
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let subData = await adminServices.fetchSubjects();
+    res.render("./admin/quiz",{subData,errors
+    });
+}
+async function getQuiz(req,res){
+    console.log(req.body);
+   
+    let quizData= await adminServices.getQuiz(req.body);
+    res.json({success:1,quizData:quizData})
+}
+async function quizDetails(req,res){
+    // console.log(req.params.quizId);
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let quiz=await adminServices.quizDetails(req.params.quizId);
+    res.render("./admin/quizDetails",{quiz:quiz,errors:errors});
+}
+module.exports = { addDepartment, adminDashboard, addSubject, departments, addStudent, subjects, students,teachers,addTeacher,deleteDepartment,getSubject,getStudent,getTeacher,quiz,getQuiz,quizDetails};

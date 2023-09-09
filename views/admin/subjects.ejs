@@ -15,54 +15,91 @@
 					SUBJECT
 				</button>
 			</div>
+            </div>
+            <div class="row ps-5 pe-5 align-items-center d-flex">
+			<div class="col-sm-4 mt-3">
+				<label>Select Semester</label>
+				<select
+					class="form-control"
+					name="semesterselect"
+					id="semesterselect"
+					placeholder="Select Semester"
+					onchange="filterDataTable()"
+				>
+					<option  value="All" id="all">All</option>
+					<% for( let index = 0; index < 8; index++ ) { %>
+						<option vlaue="sem<%index+1%>"><%=index+1%></option>	
+					<% } %>
+				</select>
+			</div>
+			
 		</div>
-		<table
-			class="uk-table uk-table-hover uk-table-striped text-center"
-			id="datatable"
-		>
-			<thead>
-				<th class="text-center">Sr no.</th>
-				<th class="text-center">Subject</th>
-				<th class="text-center">Subject Code</th>
-				<th class="text-center">Semester</th>
-				<th class="text-center">No. of COs</th>
-			</thead>
-			<tbody>
-				<% for( let index = 0; index < sub_data.length; index++ ) { %>
-				<tr>
-					<td><%= index+1 %></td>
-					<td><%= sub_data[index].name %></td>
-					<td><%= sub_data[index].code %></td>
-					<td><%= sub_data[index].semester %></td>
-					<td><%= sub_data[index].course_outcomes %></td>
-				</tr>
-				<% } %>
-			</tbody>
-		</table>
+		<div
+                class="mb-3"
+                id="tableDiv"
+                style="overflow: hidden"
+            ></div>
+		
 	</div>
 </div>
 <%- include("./addSubject") %><%- include('../partials/footer') -%>
 <script>
 	$(document).ready(() => {
-		console.log("hello");
-		var myTable;
-
-		myTable = $("#datatable").DataTable({
-			pagingType: "simple_numbers",
-			language: {
-				paginate: {
-					previous: "<",
-					next: ">",
-				},
-			},
-			columnDefs: [
-				// Center align the header content of column 1
-				{ className: "dt-head-center", targets: [0, 1] },
-			],
-		});
+		$("#all").change();
 	});
+	function filterDataTable() {
+		let semester = $("#semesterselect").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/getSubject",
+                data: { semester },
+                success: function (response) {
+                    if (response.length !== 0) {
+                        subjects = response.subData;
+                        // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
+                        let def =
+                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Subject</th><th>Subject Code</th><th>Semester</th><th>CO's</th></thead>";
+                        let data = "";
+                        let type1 = null;
+                        let subject1 = null;
+                        let ind = 1;
+                        subjects.forEach((ele) => {
+                        
+                               data += "<tr>";
+                                data += `<td>${ind++}</td>`;
+                                data += `<td>${ele.name}</td>`;
+                                data += `<td>${ele.code} </td>`;
+                                data += `<td>${ele.semester}</td>`;
+                                data += `<td>${ele.course_outcomes}</td>`;
+                                data += "</tr>";
+                            
+                        });
+
+                        $("#tableDiv").html(def + data + "</table>");
+                        var myTable;
+
+                        myTable = $("#datatable").DataTable({
+                            pagingType: "simple_numbers",
+                            scrollCollapse: true,
+                            
+                            language: {
+                                paginate: {
+                                    previous: "<",
+                                    next: ">",
+                                },
+                            },
+                        });
+                        // abc();
+                        
+
+                    }
+                },
+            });
+	};
+	
 </script>
-<script src="/scripts/adminSidebar.js"></script>
+
 <script src="/scripts/addSubject.js"></script>
 
 <%- include('../partials/footer2') -%>
