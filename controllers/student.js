@@ -1,6 +1,7 @@
 const studentServices = require("../services/student");
 const jwt = require("jsonwebtoken");
 const myCache = require("./cache");
+const { default: mongoose } = require("mongoose");
 
 function dashboardPage(req, res) {
     let errors = null;
@@ -21,6 +22,8 @@ async function login(req, res) {
         let token = jwt.sign(
             {
                 _id : data._id,
+                enrollment : data.enrollment,
+                department : data.department_id.name,
                 role: 0,
             },
             process.env.JWT_SECRET
@@ -118,19 +121,58 @@ async function instructions(req, res)
     }
     else
     {
-        req.session.quizId = quizId;
+        req.session.quiz = quizCheck;
         res.render("./student/instructionPage");
     }
 }
 async function takeQuiz(req, res)
 {
-    let quizId  = req.session.quizId;
+    let quizId  = req.session.quiz._id;
+    let token = req.cookies.auth;
+    let student_data = jwt.verify(token,process.env.JWT_SECRET);
+    let studentId = student_data["_id"];
+    console.log(quizId);
     if(!quizId)
     {
         res.redirect("/");
     }
     else {
-        res.render("./student/quizPage");
+        let session = await studentServices.createSession(quizId,studentId);
+        let quiz = req.session.quiz;
+        req.session.session = session;
+        let questions = session.questions_answers;
+        let enrollment = student_data["enrollment"];
+        let department = student_data["department"];
+        let valid_to = new Date(quiz.valid_to);
+        let duration = quiz.duration;
+        let quizTitle = quiz.name;
+        let subject = quiz.subject_id.name;
+        // let current_date = new Date();
+        // current_date.setTime(current_date.getTime() + 1000*60*30);
+        // console.log(current_date.toISOString());
+        if((valid_to - Date.now())/(1000*60) < duration)
+        {
+            duration = (valid_to - Date.now())/(1000*60);
+        }
+
+        res.render("./student/quizPage",{questions,enrollment,duration,quizTitle,department,subject});
+        //questions(session), enrollment(jwt), duration, quiz title, department(jwt), subject
+    }
+}
+
+async function getQuestion(req, res) {
+    let questionId = req.body.questionId;
+    if(!req.session.session)
+    {
+        res.json({error:"Invalid Request"});
+    }
+    else {
+        // console.log(questionId);
+        questionId = new mongoose.Types.ObjectId(questionId);
+
+        let question = await studentServices.getQuestion(questionId);
+        
+        res.json({question:question, success:1});
     }
 }
 
@@ -145,4 +187,5 @@ module.exports = {
     takeQuiz,
     instructions,
     otherQuiz,
+    getQuestion,
 };

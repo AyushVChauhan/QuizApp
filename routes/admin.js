@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 15000000 } });
 
-router.use(middleware);
+// router.use(middleware);
 router.get("/", adminControllers.adminDashboard);
 router.post("/addDepartment", adminControllers.addDepartment);
 router.get("/departments/delete/:id", adminControllers.deleteDepartment);

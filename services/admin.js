@@ -98,16 +98,10 @@ async function addStudent(enrollment, email, password, semester, department) {
             from: 'avcthehero@gmail.com',
             to: email,
             subject: 'Registration',
-            text: `Your Username is ${enrollment} and Password is ${password}`,
+            text: `Hellow User Welcome to QuizApp \n Your Crendentials are:\nUsername:${enrollment}\nPassword:${password}`,
         };
-        await timeout(300);
-        mailer.sendMail(mailDetails, function (err, data) {
-            if (err) {
-                record = 0;
-            } else {
-                console.log(`${enrollment} : SENT`);
-            }
-        });
+        let msg = await mailer.sendMail(mailDetails);
+        console.log(enrollment +":"+ msg.accepted);
         if (record) {
             let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department), is_active: 1 });
             await data.save();

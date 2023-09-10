@@ -1,5 +1,9 @@
 <%- include('../partials/header') -%>
 <link rel="stylesheet" href="/stylesheets/quizPageStyle.css" />
+<script>
+  let duration = '<%= duration %>';
+  let questionsId = JSON.parse('<%- JSON.stringify(questions) %>');
+</script>
 <script src="/scripts/quizPage.js"></script>
 <style>
   body {
@@ -14,12 +18,12 @@
                 <span><i class="fa-solid fa-bars fa-xl"></i></span>
         </div> -->
     <div class="header-left">
-      <h2 class="mt-3 header-left">QuizApp</h2>
+      <h2 class="mt-3 header-left"><%= quizTitle %></h2>
     </div>
     <div class="header-right" id="header-right">
-      <div class="enroll">Enrollment :</div>
-      <div class="sub">Subject :</div>
-      <div class="dept">Department :</div>
+      <div class="enroll">Enrollment : <%= enrollment %></div>
+      <div class="sub">Subject : <%= subject %></div>
+      <div class="dept">Department : <%= department %></div>
     </div>
   </div>
 
@@ -30,11 +34,8 @@
       <div class="col-8 question-box">
         <div class="mb-3 h3 question-header">Question:</div>
         <div class="mb-3 question-scroll">
-          <div class="mb-3 question-content">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero,
-            nam illo adipisci ipsum alias, incidunt quae iure incidunt ipsum
-            dolores quis impedit unde Lorem ipsum, dolor sit amet consectetur
-            adipisicing elit
+          <div class="mb-3 question-content" id="questionContent">
+            Loading...
           </div>
         </div>
 
@@ -42,7 +43,7 @@
         <div class="footer-buttons box-shadow">
           <div class="footer-buttonsEnd">
             <button type="reset" id="clear" class="btn btn-dark">Clear</button>
-            <button type="button" id="next" class="btn btn-warning">
+            <button type="button" id="next" class="btn btn-warning" onclick="nextQuestion(this)">
               Next
             </button>
           </div>
@@ -57,9 +58,8 @@
       <!-- MAIN-RIGHT -->
       <div class="col-4 questionlist-box ps-2">
         <div class="timeLabel mb-2">
-          <p align="right">
-            Remaining Time : <span>hr : </span><span> min :</span
-            ><span> sec </span>
+          <p style="align-self: self-end;" id="remTime">
+
           </p>
         </div>
         <div class="sub-box">
@@ -67,8 +67,8 @@
             class="question-list question-list-scroll mb-3"
             id="question-list"
           >
-            <% for(let i = 1; i <= 30; i++){ %>
-            <div class="span"><%= i %></div>
+            <% for(let i = 0; i < questions.length; i++){ %>
+            <div onclick="clickQuestion(this)" id="<%= i+1 %>" data-id="<%= questions[i].question %>" class="span"><%= i+1 %></div>
             <% } %>
           </div>
 
@@ -78,6 +78,7 @@
                 <div
                   class="not-visited badge rounded-pill bg-secondary"
                   style="font-size: 1rem"
+                  id="notVisited"
                 >
                   1
                 </div>

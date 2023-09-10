@@ -276,7 +276,7 @@ async function setQuestions(req, res) {
     if (myArr.length == 0) {
         let myIds = [];
         selectedQuestions.forEach((ele) => {
-            myIds.push(new mongoose.Types.ObjectId(ele._id));
+            myIds.push({question:new mongoose.Types.ObjectId(ele._id), marks:ele.marks});
         });
         await teacherServices.setQuestions(myIds, req.session.quizId);
         res.json({ next_page: 0 });
@@ -298,9 +298,9 @@ async function setCompulsaryQuestionsPost(req, res) {
     let randomQuestions = [];
     selectedQuestions.forEach((element) => {
         if (element.random == 0) {
-            compulsaryQuestions.push(new mongoose.Types.ObjectId(element._id));
+            compulsaryQuestions.push({question:new mongoose.Types.ObjectId(element._id), marks:element.marks});
         } else {
-            randomQuestions.push(new mongoose.Types.ObjectId(element._id));
+            randomQuestions.push({question:new mongoose.Types.ObjectId(element._id), marks:element.marks});
         }
     });
     await teacherServices.setCompulsaryQuestionsPost(

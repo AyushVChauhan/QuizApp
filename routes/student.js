@@ -20,6 +20,7 @@ router.get('/otherQuiz', studentControllers.otherQuiz);
 router.use(middleware)
 router.get("/instructions/:quizId", studentControllers.instructions);
 router.get("/takeQuiz",studentControllers.takeQuiz);
+router.post("/getQuestion",studentControllers.getQuestion);
 router.get("/", studentControllers.dashboardPage);
 function middleware(req, res, next) {
   let cookie = req.cookies.auth;
