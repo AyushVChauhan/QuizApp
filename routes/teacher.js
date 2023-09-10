@@ -68,7 +68,7 @@ router.post("/addQuiz/setQuestions", teacherControllers.setQuestions);
 router.get("/addQuiz/setCompulsaryQuestions", teacherControllers.setCompulsaryQuestions);
 router.post("/addQuiz/setCompulsaryQuestions", teacherControllers.setCompulsaryQuestionsPost);
 
-router.get("/question1", teacherControllers.question);
+router.get("/questions", teacherControllers.question);
 router.post("/addQuestion/getQuestion", teacherControllers.getQuestion);
 router.post("/questionDetail", teacherControllers.questionDetail);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);

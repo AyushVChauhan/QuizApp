@@ -220,7 +220,7 @@ async function setQuiz(req, res) {
 async function question(req, res) {
     let subData = await teacherServices.subjectFetch();
 
-    res.render("./teacher/question1", { subData });
+    res.render("./teacher/questions", { subData });
 }
 async function getQuestion(req, res) {
     let cookie = req.cookies.auth;

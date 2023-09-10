@@ -29,7 +29,7 @@ $(document).ready(function () {
         // console.log("hii");
         // $("#allQuiz").toggleClass("hovered")
     }
-    else if(arr.includes("question1"))
+    else if(arr.includes("questions"))
     {
         document.getElementById("questions").classList.toggle("hovered");
         
