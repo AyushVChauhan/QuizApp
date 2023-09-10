@@ -114,7 +114,9 @@ async function createSession(quizId, studentId)
                 }
             });
             for (let index = 0; index < ele.count - flag; index++) {
-                selectedQuestions.push(random_questions[Math.floor(Math.random() * random_questions.length)]);
+                let temp=Math.floor(Math.random() * random_questions.length)
+                selectedQuestions.push(random_questions[temp]);
+                random_questions.splice(temp,1);
             }
         }
     })
@@ -128,6 +130,21 @@ async function getQuestion(questionId) {
     return question;
 }
 
+async function getSession(studentId,quizId,validTo){
+    let session=await sessions.findOne({student_id:studentId,quiz_id:quizId,start_time:{$lt:validTo}});
+    return session;
+}
+async function submitQuiz(sessionId,questionAnswer){
+    let session= await sessions.findOne({_id:sessionId});
+    if(session){
+        session.questions_answers=questionAnswer;
+        session.end_time=new Date();
+        await session.save();
+        console.log(session);
+        return 1;
+    }
+    return 0;
+}
 module.exports = {
     loginFetch,
     loginCheck,
@@ -136,4 +153,6 @@ module.exports = {
     quizCheck,
     createSession,
     getQuestion,
+    getSession,
+    submitQuiz
 };

@@ -21,9 +21,9 @@ async function login(req, res) {
         req.session.errors = { text: "Logged in", icon: "success" };
         let token = jwt.sign(
             {
-                _id : data._id,
-                enrollment : data.enrollment,
-                department : data.department_id.name,
+                _id: data._id,
+                enrollment: data.enrollment,
+                department: data.department_id.name,
                 role: 0,
             },
             process.env.JWT_SECRET
@@ -69,20 +69,20 @@ async function forgetPassword(req, res) {
     }
     res.redirect("/student/login");
 }
-async function upcomingQuiz(req,res){
-    let error=null;
-   
-    res.render("./student/upcomingQuiz",{error});
+async function upcomingQuiz(req, res) {
+    let error = null;
+
+    res.render("./student/upcomingQuiz", { error });
 }
-async function availableQuiz(req,res){
-    let error=null;
-    
-    res.render("./student/availableQuiz",{error});
+async function availableQuiz(req, res) {
+    let error = null;
+
+    res.render("./student/availableQuiz", { error });
 }
-async function otherQuiz(req,res){
-    let error=null;
-    
-    res.render("./student/otherQuiz",{error});
+async function otherQuiz(req, res) {
+    let error = null;
+
+    res.render("./student/otherQuiz", { error });
 }
 
 // async function enrollment_confirmation_page(req, res) {
@@ -108,37 +108,41 @@ async function otherQuiz(req,res){
 //     res.redirect("/student/enrollmentcheck");
 //   }
 // }
-async function instructions(req, res)
-{
-    let quizId  = req.params.quizId;
+async function instructions(req, res) {
+    let quizId = req.params.quizId;
     let token = req.cookies.auth;
-    let studentId = jwt.verify(token,process.env.JWT_SECRET)["_id"];
+    let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
     console.log(studentId);
-    let quizCheck = await studentServices.quizCheck(quizId,studentId);
-    if(!quizCheck)
-    {
+    let quizCheck = await studentServices.quizCheck(quizId, studentId);
+    if (!quizCheck) {
         res.redirect("/");
-    }
-    else
-    {
+    } else {
         req.session.quiz = quizCheck;
         res.render("./student/instructionPage");
     }
 }
-async function takeQuiz(req, res)
-{
-    let quizId  = req.session.quiz._id;
+async function takeQuiz(req, res) {
+    let quizId = req.session.quiz._id;
     let token = req.cookies.auth;
-    let student_data = jwt.verify(token,process.env.JWT_SECRET);
+    let student_data = jwt.verify(token, process.env.JWT_SECRET);
     let studentId = student_data["_id"];
+    let guest = 0;
     console.log(quizId);
-    if(!quizId)
-    {
+    if (!quizId) {
         res.redirect("/");
-    }
-    else {
-        let session = await studentServices.createSession(quizId,studentId);
+    } else {
         let quiz = req.session.quiz;
+        let session = req.session.session;
+        if (!guest && !session) {
+            session = await studentServices.getSession(
+                studentId,
+                quizId,
+                quiz.valid_to
+            );
+        }
+        if (!session) {
+            session = await studentServices.createSession(quizId, studentId);
+        }
         req.session.session = session;
         let questions = session.questions_answers;
         let enrollment = student_data["enrollment"];
@@ -150,32 +154,63 @@ async function takeQuiz(req, res)
         // let current_date = new Date();
         // current_date.setTime(current_date.getTime() + 1000*60*30);
         // console.log(current_date.toISOString());
-        if((valid_to - Date.now())/(1000*60) < duration)
-        {
-            duration = (valid_to - Date.now())/(1000*60);
+        if ((valid_to - Date.now()) / (1000 * 60) < duration) {
+            duration = (valid_to - Date.now()) / (1000 * 60);
         }
-
-        res.render("./student/quizPage",{questions,enrollment,duration,quizTitle,department,subject});
+        if(session.end_time){
+        req.session.errors = { text: "Quiz Already Given", icon: "error" };
+        res.redirect("/student");
+        }
+        else{
+            res.render("./student/quizPage", {
+                questions,
+                enrollment,
+                duration,
+                quizTitle,
+                department,
+                subject,
+            });
+        }
         //questions(session), enrollment(jwt), duration, quiz title, department(jwt), subject
     }
 }
 
 async function getQuestion(req, res) {
     let questionId = req.body.questionId;
-    if(!req.session.session)
-    {
-        res.json({error:"Invalid Request"});
-    }
-    else {
+    if (!req.session.session) {
+        res.json({ error: "Invalid Request" });
+    } else {
         // console.log(questionId);
         questionId = new mongoose.Types.ObjectId(questionId);
 
         let question = await studentServices.getQuestion(questionId);
-        
-        res.json({question:question, success:1});
+
+        res.json({ question: question, success: 1 });
     }
 }
-
+async function submitQuiz(req, res) {
+    let questions_answers = req.body.allQuestions;
+    let session = req.session.session._id;
+    let questionAnswer = [];
+    questions_answers.forEach((element) => {
+        questionAnswer.push({
+            question: element.questionId,
+            marks: 0,
+            answer: element.answer,
+        });
+    });
+    let flag = await studentServices.submitQuiz(session, questionAnswer);
+    if (flag) {
+        req.session.errors = {
+            text: "Quiz Submitted Successfully",
+            icon: "success",
+        };
+        res.json({ success: 1 });
+    } else {
+        req.session.errors = { text: "Quiz Submission failed!", icon: "error" };
+        res.json({ error: "Invalid Request" });
+    }
+}
 module.exports = {
     login,
     loginPage,
@@ -188,4 +223,5 @@ module.exports = {
     instructions,
     otherQuiz,
     getQuestion,
+    submitQuiz,
 };

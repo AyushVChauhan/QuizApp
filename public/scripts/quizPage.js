@@ -2,93 +2,192 @@ let a = 0;
 let currentQuestion = 1;
 
 let allQuestions = [];
-questionsId.forEach(element => {
-    allQuestions.push({questionId:element.question,question:null,type:null,options:[],marks:null,files:null});
+questionsId.forEach((element) => {
+    allQuestions.push({
+        questionId: element.question,
+        question: null,
+        type: null,
+        options: [],
+        marks: null,
+        files: null,
+        answer: null,
+        saved: 0,
+    });
 });
 
 function nextQuestion(e) {
     currentQuestion++;
-    if(allQuestions[currentQuestion - 1].question == null)
-    {
+    if (allQuestions[currentQuestion - 1].question == null) {
         getQuestion(allQuestions[currentQuestion - 1].questionId);
     }
     showQuestion();
-    
 
-    if(currentQuestion == allQuestions.length)
-    {
+    if (currentQuestion == allQuestions.length) {
         e.style.display = "none";
-    }
-    else {
+    } else {
         e.style.display = "inline";
     }
 }
+function answerSelect(e) {
+    let optionValue = e.value;
+    allQuestions.forEach((ele) => {
+        if (ele.questionId == e.getAttribute("data-id")) {
+            ele.answer = optionValue;
+            return;
+        }
+    });
+}
 
-function showQuestion() {
-    if(currentQuestion == allQuestions.length)
-    {
-        document.getElementById("next").style.display = "none";
+function saveAndNext() {
+    let question = allQuestions[currentQuestion - 1];
+    if (question.answer) {
+        allQuestions[currentQuestion - 1].saved = 1;
+        if (currentQuestion < allQuestions.length)
+            nextQuestion(document.getElementById("next"));
+        else showQuestion();
+    } else {
+        Swal.fire({
+            title: "Select Answer",
+            icon: "warning",
+        });
     }
-    else {
+}
+function showQuestion() {
+    if (currentQuestion == allQuestions.length) {
+        document.getElementById("next").style.display = "none";
+    } else {
         document.getElementById("next").style.display = "inline";
     }
+    let notVisited = allQuestions.length;
+    let notAnswered = 0;
+    let answered = 0;
+
+    let id = allQuestions[currentQuestion - 1].questionId;
     let question = allQuestions[currentQuestion - 1].question;
+    let option = allQuestions[currentQuestion - 1].options;
+    let file = allQuestions[currentQuestion - 1].files;
+    console.log(allQuestions);
     for (let index = 0; index < allQuestions.length; index++) {
         const element = allQuestions[index];
-        if(element.question)
-        {
-            if(!$(`#${index+1}`).hasClass("text-bg-warning"))
-            {
-                $(`#${index+1}`).addClass("text-bg-warning");
+        if (element.question) {
+            if ($(`#${index + 1}`).hasClass("text-bg-dark")) {
+                $(`#${index + 1}`).removeClass("text-bg-dark");
             }
-            if($(`#${index+1}`).hasClass("text-bg-dark"))
-            {
-                $(`#${index+1}`).removeClass("text-bg-dark");
+            if ($(`#${index + 1}`).hasClass("text-bg-warning")) {
+                $(`#${index + 1}`).removeClass("text-bg-warning");
+            }
+            if ($(`#${index + 1}`).hasClass("text-bg-success")) {
+                $(`#${index + 1}`).removeClass("text-bg-success");
+            }
+            notVisited--;
+            if (element.saved) {
+                $(`#${index + 1}`).addClass("text-bg-success");
+                answered++;
+            } else {
+                $(`#${index + 1}`).addClass("text-bg-warning");
+                notAnswered++;
             }
         }
     }
     $(`#${currentQuestion}`).addClass("text-bg-dark");
     $("#questionContent").html(question);
-}
+    $("#notVisited").html(notVisited);
+    $("#notAnswered").html(notAnswered);
+    $("#answered").html(answered);
+    $("#marksContent").html("Marks:"+allQuestions[currentQuestion-1].marks)
+    let temp = null;
+    let fileBody = `<div class="row">`;
+    if (file) {
+        file.forEach((element) => {
+            fileBody += `<div class="col-12"><div><img src="${element.file}"><p>${element.description}</p></div></div>`;
+        });
+    }
+    fileBody += `</div>`;
+    $("#fileContent").html(fileBody);
 
+    optionBody = `<form>`;
+    for (let index = 0; index < option.length; index++) {
+        const element = option[index];
+        if (
+            allQuestions[currentQuestion - 1].answer &&
+            allQuestions[currentQuestion - 1].answer == element.option
+        ) {
+            temp = index + 1;
+        }
+        optionBody += `<label ><input type="radio" name="${id}" value="${
+            element.option
+        }" id="option-${
+            index + 1
+        }" data-id="${id}" onchange="answerSelect(this)" ${temp}/><span>${
+            element.option
+        }</span></label>`;
+    }
+    optionBody += `</form>`;
+    $("#optionContent").html(optionBody);
+    if (temp) {
+        $(`#option-${temp}`).trigger("click");
+    }
+}
+function resetAnswer() {
+    allQuestions[currentQuestion - 1].saved = 0;
+    allQuestions[currentQuestion - 1].answer = null;
+    showQuestion();
+}
+function submitQuiz() {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to submit the quiz ",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Submit it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "post",
+                url: "/student/submitQuiz",
+                data: { allQuestions },
+                success: function (response) {
+                    //   Swal.fire("Submitted!", "Your Quiz has been Submitted.", "success");
+                    window.open("/student","_self");
+                },
+            });
+        }
+    });
+}
 function getQuestion(questionId) {
     $.ajax({
         type: "POST",
         url: "/student/getQuestion",
-        data: {questionId},
+        data: { questionId },
         success: function (response) {
             console.log(response);
-            allQuestions.forEach(ele=>{
-                if(ele.questionId == questionId)
-                {
+            allQuestions.forEach((ele) => {
+                if (ele.questionId == questionId) {
                     ele.question = response.question.question;
                     ele.type = response.question.type;
-                    if(response.question.options)
-                    {
+                    if (response.question.options) {
                         ele.options = response.question.options;
                     }
-                    ele.marks = response.question.files;
-                    if(response.question.files)
-                    {
+                    ele.marks = response.question.marks;
+                    if (response.question.files) {
                         ele.files = response.question.files;
                     }
+
                     return;
                 }
-            })
+            });
             showQuestion();
-        }
+        },
     });
 }
 
-function clickQuestion(e)
-{
+function clickQuestion(e) {
     currentQuestion = e.id;
-    if(allQuestions[currentQuestion - 1].question == null)
-    {
+    if (allQuestions[currentQuestion - 1].question == null) {
         getQuestion(allQuestions[currentQuestion - 1].questionId);
-    }
-    else
-    {
+    } else {
         showQuestion();
     }
 }

@@ -139,7 +139,7 @@ async function addQuestion(req, res) {
 async function addQuestionFiles(req, res) {
     for (let index = 0; index < req.files.length; index++) {
         const element = req.files[index];
-        let filePath = element.destination + element.filename;
+        let filePath =  "/files/questions/"+element.filename;
         let description = element.originalname;
         await teacherServices.addQuestionFile(
             req.body.questionId,
