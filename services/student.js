@@ -74,76 +74,94 @@ async function quizCheck(quizId, studentId) {
             console.log(quiz.valid_to - current_date);
             let flag = 0;
             quiz.group_id.students.forEach(element => {
-                if(element == studentId)
-                {
+                if (element == studentId) {
                     flag = 1;
                     return;
                 }
             });
-            if(flag)
-            {
+            if (flag) {
                 return quiz;
             }
         } else {
             return 0;
         }
-    } 
+    }
     return 0;
 }
 
-async function createSession(quizId, studentId)
-{
-    let quiz = await quizzes.findOne({_id:quizId});
+async function createSession(quizId, studentId) {
+    let quiz = await quizzes.findOne({ _id: quizId });
     let selectedQuestions = [];
-    quiz.marks_questions.forEach(ele=>{
+    quiz.marks_questions.forEach(ele => {
         let flag = 0;
-        quiz.compulsary_questions.forEach(compQues=>{
-            if(compQues.marks == ele.marks)
-            {
+        quiz.compulsary_questions.forEach(compQues => {
+            if (compQues.marks == ele.marks) {
                 flag++;
-                selectedQuestions.push({question:compQues.question,answer:"",marks:0});
+                selectedQuestions.push({ question: compQues.question, answer: "", marks: 0 });
             }
         });
         let random_questions = [];
-        if(flag < ele.count)
-        {
-            quiz.random_questions.forEach(randQues=>{
-                if(randQues.marks == ele.marks)
-                {
-                    random_questions.push({question:randQues.question,answer:"",marks:0});
+        if (flag < ele.count) {
+            quiz.random_questions.forEach(randQues => {
+                if (randQues.marks == ele.marks) {
+                    random_questions.push({ question: randQues.question, answer: "", marks: 0 });
                 }
             });
             for (let index = 0; index < ele.count - flag; index++) {
-                let temp=Math.floor(Math.random() * random_questions.length)
+                let temp = Math.floor(Math.random() * random_questions.length)
                 selectedQuestions.push(random_questions[temp]);
-                random_questions.splice(temp,1);
+                random_questions.splice(temp, 1);
             }
         }
     })
-    let session = new sessions({quiz_id:quizId,is_active:1,student_id:studentId,start_time:Date.now(),status:0,questions_answers:selectedQuestions});
+    let session = new sessions({ quiz_id: quizId, is_active: 1, student_id: studentId, start_time: Date.now(), status: 0, questions_answers: selectedQuestions });
     await session.save();
     return session;
 }
 
-async function getQuestion(questionId) {  
-    let question = await questions.findOne({_id:questionId});
+async function getQuestion(questionId) {
+    let question = await questions.findOne({ _id: questionId });
     return question;
 }
 
-async function getSession(studentId,quizId,validTo){
-    let session=await sessions.findOne({student_id:studentId,quiz_id:quizId,start_time:{$lt:validTo}});
+async function getSession(studentId, quizId, validTo) {
+    let session = await sessions.findOne({ student_id: studentId, quiz_id: quizId, start_time: { $lt: validTo } });
     return session;
 }
-async function submitQuiz(sessionId,questionAnswer){
-    let session= await sessions.findOne({_id:sessionId});
-    if(session){
-        session.questions_answers=questionAnswer;
-        session.end_time=new Date();
+async function submitQuiz(sessionId, questionAnswer) {
+    let session = await sessions.findOne({ _id: sessionId });
+    if (session) {
+        session.questions_answers = questionAnswer;
+        session.end_time = new Date();
         await session.save();
         console.log(session);
         return 1;
     }
     return 0;
+}
+async function upcomingQuiz(studentId) {
+    let quizData = await quizzes.find({ is_active: 1 }).populate({
+        path: "group_id",
+        model: "groups",
+        match: { students: { $in: [studentId] } },
+    })
+    console.log(studentId);
+    let current_date = new Date();
+    // current_date=current_date.toUTCString();
+    console.log(current_date);
+    for (let index = 0; index < quizData.length; index++) {
+        const element = quizData[index];
+        console.log(element.visible_from);
+        if ((element.visible_from <= current_date) && (current_date <= element.valid_from)) {
+
+        }
+        else {
+            quizData.splice(index, 1);
+            index--;
+        }
+    }
+    console.log(quizData);
+    return quizData;
 }
 module.exports = {
     loginFetch,
@@ -154,5 +172,5 @@ module.exports = {
     createSession,
     getQuestion,
     getSession,
-    submitQuiz
+    submitQuiz, upcomingQuiz
 };
