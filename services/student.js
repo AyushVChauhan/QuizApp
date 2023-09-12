@@ -144,16 +144,40 @@ async function upcomingQuiz(studentId) {
         path: "group_id",
         model: "groups",
         match: { students: { $in: [studentId] } },
-    })
-    console.log(studentId);
+    }).populate('subject_id');
+    // console.log(studentId);
     let current_date = new Date();
     // current_date=current_date.toUTCString();
-    console.log(current_date);
+    // console.log(current_date);
     for (let index = 0; index < quizData.length; index++) {
         const element = quizData[index];
-        console.log(element.visible_from);
+        // console.log(element.visible_from);
         if ((element.visible_from <= current_date) && (current_date <= element.valid_from)) {
-
+        }
+        else {
+            quizData.splice(index, 1);
+            index--;
+        }
+    }
+    // console.log(quizData);
+    return quizData;
+}
+async function availableQuiz(studentId) {
+    let quizData = await quizzes.find({ is_active: 1 }).populate({
+        path: "group_id",
+        model: "groups",
+        match: { students: { $in: [studentId] } },
+    }).populate('subject_id');
+    let current_date = new Date();
+    console.log(current_date);
+    console.log(quizData);
+   
+    for (let index = 0; index < quizData.length; index++) {
+        const element = quizData[index];
+        console.log(element.valid_from);
+        console.log(element.valid_to);
+        if ((element.valid_from <= current_date) && (current_date <= element.valid_to)) {
+           console.log("hii");
         }
         else {
             quizData.splice(index, 1);
@@ -172,5 +196,6 @@ module.exports = {
     createSession,
     getQuestion,
     getSession,
-    submitQuiz, upcomingQuiz
+    submitQuiz, upcomingQuiz,
+    availableQuiz
 };
