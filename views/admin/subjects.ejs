@@ -46,7 +46,30 @@
 <script>
 	$(document).ready(() => {
 		$("#all").change();
-	});
+        $(document).on("click", ".delete", (e) => {
+        e.preventDefault();
+      //   console.log($(this).data("fruit"));
+      let id = e.currentTarget.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location = "/admin/subjects/delete/" + id;
+          //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
+      });
+    });
+  });
+
+
+	
 	function filterDataTable() {
 		let semester = $("#semesterselect").val();
 
@@ -59,19 +82,23 @@
                         subjects = response.subData;
                         // questions.forEach((ele)=>{console.log(ele.course_outcome_id)})
                         let def =
-                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Subject</th><th>Subject Code</th><th>Semester</th><th>CO's</th></thead>";
+                            "<table class='uk-table uk-table-hover uk-table-striped text-center' id='datatable'><thead><th>Sr No.</th><th>Subject</th><th>Subject Code</th><th>Semester</th><th>CO's</th><th>Action</th></thead>";
                         let data = "";
                         let type1 = null;
                         let subject1 = null;
                         let ind = 1;
+                        console.log(subjects);
                         subjects.forEach((ele) => {
-                        
+                        console.log(
+                            ele._id
+                        );
                                data += "<tr>";
                                 data += `<td>${ind++}</td>`;
                                 data += `<td>${ele.name}</td>`;
                                 data += `<td>${ele.code} </td>`;
                                 data += `<td>${ele.semester}</td>`;
                                 data += `<td>${ele.course_outcomes}</td>`;
+                                data += `<td> <div><a href=""><i class="fa-solid fa-edit edit fa-lg"></i></a><a class="delete" data-id="${ele._id}"><i style="color: red" class="fa-solid fa-trash icon fa-lg"></i></a></div></td>`;
                                 data += "</tr>";
                             
                         });
@@ -101,5 +128,5 @@
 </script>
 
 <script src="/scripts/addSubject.js"></script>
-
+<%- include('../partials/sweetalert') %>
 <%- include('../partials/footer2') -%>

@@ -284,7 +284,7 @@ async function getAllQuiz(data,id){
     return quiz;
 }
 async function quizDetails(data){
-    let quiz=await quizzes.findOne({_id:data}).populate("random_questions").populate("compulsary_questions").populate("subject_id").populate({
+    let quiz=await quizzes.findOne({_id:data}).populate("random_questions.question").populate("compulsary_questions.question").populate("subject_id").populate({
         path: "group_id",
         model: "groups",
         populate: {
@@ -292,6 +292,7 @@ async function quizDetails(data){
             model: "students",
         },
     });
+    console.log(quiz);
     return quiz;
 }
 async function fetchStudents() {
