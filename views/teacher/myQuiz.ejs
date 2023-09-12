@@ -150,7 +150,7 @@
                         }-${validTo.getFullYear()} ${validTo.getHours()}:${validTo.getMinutes()}</td>`;
                         data += `<td>${ele.marks}</td>`;
                         data += `<td>${ele.duration} minutes</td>`;
-                        data += `<td><a href="/teacher/quiz/quizDetails/${ele._id}"  class='adder' ><i class='fa-solid fa-eye fa-lg' title='More Details'></i></a><a><i class='fa-solid fa-trash text-danger fa-lg ms-3' title='Delete'></i></a><a><i class='fa-solid fa-clipboard-list fa-lg text-success ms-3' title='Report'></i></a></td>`;
+                        data += `<td><a href="/teacher/quiz/quizDetails/${ele._id}"  class='adder' ><i class='fa-solid fa-eye fa-lg' title='More Details'></i></a><a><i class='fa-solid fa-trash text-danger fa-lg ms-3' title='Delete'></i></a><a href='/teacher/generateReport/${ele._id}'><i class='fa-solid fa-clipboard-list fa-lg text-success ms-3' title='Report'></i></a></td>`;
                         data += `</tr>`;
                     });
 

@@ -71,8 +71,12 @@ async function forgetPassword(req, res) {
 }
 async function upcomingQuiz(req, res) {
     let error = null;
-
-    res.render("./student/upcomingQuiz", { error });
+    //subject,quizData
+    let token = req.cookies.auth;
+    let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
+    console.log(studentId);
+    let quizData=await studentServices.upcomingQuiz(studentId);
+    res.render("./student/upcomingQuiz", { error ,quizData});
 }
 async function availableQuiz(req, res) {
     let error = null;

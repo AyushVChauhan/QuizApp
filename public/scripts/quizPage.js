@@ -215,8 +215,7 @@ var x = setInterval(function () {
     // If the count down is finished, write some text
     if (distance < 0) {
         //submit
-        clearInterval(x);
-        document.getElementById("remTime").innerHTML = "EXPIRED";
+        submitQuiz();
     }
 }, 1000);
 async function activate(ele) {

@@ -369,6 +369,33 @@ async function subjects(req,res)
     let dept_data = await teacherServices.fetchDepartments();
     res.render("./teacher/subjects", {dept_data, sub_data});
 }
+
+async function generateReport(req, res)
+{
+    let quizId = req.params.quizId;
+    let report = await teacherServices.generateReport(quizId);
+    // let toSheet = [{enrollment,co1,co2,co3,totalmarks}]
+    let toSheet = [];
+    report[0].forEach(element => {
+        let myObject = {}
+        let enrollment = element[0];
+        let totalMarks = element[1].totalMarks;
+        let allCos = Array.from(element[1].cos);
+        // console.log(allCos);
+        myObject["Enrollment No."] = enrollment;
+        allCos.forEach(ele=>{
+            myObject["CO-"+ele[0]] = ele[1].marks;
+        })
+        myObject["Total Marks/" + report[1]] = totalMarks;
+        toSheet.push(myObject);
+    });
+    let newSheet = xlsx.utils.json_to_sheet(toSheet);
+    let newBook = xlsx.utils.book_new();
+    let fileName = report[2];
+    xlsx.utils.book_append_sheet(newBook, newSheet, "Report");
+    await xlsx.writeFile(newBook, `./public/files/reports/${fileName}.xlsx`);
+    res.download(`./public/files/reports/${fileName}.xlsx`)
+}
 module.exports = {
     login,
     loginGet,
@@ -404,4 +431,5 @@ module.exports = {
     students,
     subjects,
     logout,
+    generateReport,
 };
