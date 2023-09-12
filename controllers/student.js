@@ -80,8 +80,11 @@ async function upcomingQuiz(req, res) {
 }
 async function availableQuiz(req, res) {
     let error = null;
+    let token = req.cookies.auth;
+    let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
+    let quizData=await studentServices.availableQuiz(studentId);
 
-    res.render("./student/availableQuiz", { error });
+    res.render("./student/availableQuiz", { error ,quizData});
 }
 async function otherQuiz(req, res) {
     let error = null;

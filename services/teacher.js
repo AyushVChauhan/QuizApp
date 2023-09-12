@@ -304,20 +304,16 @@ async function getAllQuiz(data, id) {
         .populate("created_by");
     return quiz;
 }
-async function quizDetails(data) {
-    let quiz = await quizzes
-        .findOne({ _id: data })
-        .populate("random_questions")
-        .populate("compulsary_questions")
-        .populate("subject_id")
-        .populate({
-            path: "group_id",
-            model: "groups",
-            populate: {
-                path: "students",
-                model: "students",
-            },
-        });
+async function quizDetails(data){
+    let quiz=await quizzes.findOne({_id:data}).populate("random_questions.question").populate("compulsary_questions.question").populate("subject_id").populate({
+        path: "group_id",
+        model: "groups",
+        populate: {
+            path: "students",
+            model: "students",
+        },
+    });
+    console.log(quiz);
     return quiz;
 }
 async function fetchStudents() {

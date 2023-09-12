@@ -16,6 +16,8 @@ const upload = multer({ storage: storage, limits: { fileSize: 15000000 } });
 router.get("/", adminControllers.adminDashboard);
 router.post("/addDepartment", adminControllers.addDepartment);
 router.get("/departments/delete/:id", adminControllers.deleteDepartment);
+router.get("/subjects/delete/:id", adminControllers.deleteSubject);
+router.get("/students/delete/:id", adminControllers.deleteStudent);
 router.get("/departments", adminControllers.departments);
 router.post("/addSubject", adminControllers.addSubject);
 router.get("/subjects", adminControllers.subjects);
