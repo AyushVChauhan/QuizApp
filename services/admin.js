@@ -18,7 +18,21 @@ async function newDepartment(name) {
     return data;
 }
 async function deleteDepartment(id) {
-    let data = await departments.findOne({ _id: new mongoose.Types.ObjectId(id) });
+    let data = await departments.findOne({
+        _id: new mongoose.Types.ObjectId(id),
+    });
+    data.is_active = 0;
+    await data.save();
+    return data;
+}
+async function deleteSubject(id) {
+    let data = await subjects.findOne({ _id: new mongoose.Types.ObjectId(id) });
+    data.is_active = 0;
+    await data.save();
+    return data;
+}
+async function deleteStudent(id){
+    let data = await students.findOne({ _id: new mongoose.Types.ObjectId(id)});
     data.is_active = 0;
     await data.save();
     return data;
@@ -38,14 +52,20 @@ async function addSubject(subObject) {
     let subjectData = await subjects.findOne({ code: subObject.subcode });
     if (subjectData) {
         return 1;
-    }
-    else {
+    } else {
         let deptids = [];
-        subObject.departments.forEach(element => {
+        subObject.departments.forEach((element) => {
             deptids.push(new mongoose.Types.ObjectId(element));
         });
         console.log(subObject);
-        let subject = new subjects({ name: subObject.subname, code: subObject.subcode, is_active: 1, semester: subObject.semester, course_outcomes: subObject.co, departments: deptids });
+        let subject = new subjects({
+            name: subObject.subname,
+            code: subObject.subcode,
+            is_active: 1,
+            semester: subObject.semester,
+            course_outcomes: subObject.co,
+            departments: deptids,
+        });
         await subject.save();
         return 0;
     }
@@ -62,13 +82,25 @@ async function countSubjects() {
 
 /* ------ TEACHER ------- */
 async function addTeacher(teacherObject) {
-    let teacherData = await teachers.findOne({ username: teacherObject.username });
+    let teacherData = await teachers.findOne({
+        username: teacherObject.username,
+    });
     if (teacherData) {
         return 1;
-    }
-    else {
-
-        let teacher = new teachers({ username: teacherObject.username, first_name: teacherObject.firstname, is_active: 1, middle_name: teacherObject.middlename, last_name: teacherObject.lastname, department_id: new mongoose.Types.ObjectId(teacherObject.department), email: teacherObject.email, password: teacherObject.password, role: 0 });
+    } else {
+        let teacher = new teachers({
+            username: teacherObject.username,
+            first_name: teacherObject.firstname,
+            is_active: 1,
+            middle_name: teacherObject.middlename,
+            last_name: teacherObject.lastname,
+            department_id: new mongoose.Types.ObjectId(
+                teacherObject.department
+            ),
+            email: teacherObject.email,
+            password: teacherObject.password,
+            role: 0,
+        });
         await teacher.save();
         return 0;
     }
@@ -95,15 +127,22 @@ async function addStudent(enrollment, email, password, semester, department) {
         let record = 1;
         //send mail
         let mailDetails = {
-            from: 'avcthehero@gmail.com',
+            from: "avcthehero@gmail.com",
             to: email,
-            subject: 'Registration',
+            subject: "Registration",
             text: `Hellow User Welcome to QuizApp \n Your Crendentials are:\nUsername:${enrollment}\nPassword:${password}`,
         };
         let msg = await mailer.sendMail(mailDetails);
-        console.log(enrollment +":"+ msg.accepted);
+        console.log(enrollment + ":" + msg.accepted);
         if (record) {
-            let data = new students({ enrollment: enrollment, email: email, password: md5(password), semester: semester, department_id: new mongoose.Types.ObjectId(department), is_active: 1 });
+            let data = new students({
+                enrollment: enrollment,
+                email: email,
+                password: md5(password),
+                semester: semester,
+                department_id: new mongoose.Types.ObjectId(department),
+                is_active: 1,
+            });
             await data.save();
         }
         return record;
@@ -111,10 +150,12 @@ async function addStudent(enrollment, email, password, semester, department) {
     return 0;
 }
 function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 async function fetchStudents() {
-    let student_data = await students.find({ is_active: 1 }).populate("department_id");
+    let student_data = await students
+        .find({ is_active: 1 })
+        .populate("department_id");
     return student_data;
 }
 async function countStudents() {
@@ -126,39 +167,41 @@ async function getSubject(data) {
     console.log(data);
     let semester = data.semester == "All" ? { $exists: true } : data.semester;
 
-    subData = await subjects
-        .find({
-            semester: semester,
-            is_active: 1,
-        })
-
+    subData = await subjects.find({
+        semester: semester,
+        is_active: 1,
+    });
+    
     return subData;
 }
 async function getStudent(data) {
     let studentData = null;
     console.log(data);
     let semester = data.semester == "All" ? { $exists: true } : data.semester;
-    let department = data.department == "All" ? { $exists: true } : data.department;
-
+    let department =
+        data.department == "All" ? { $exists: true } : data.department;
 
     studentData = await students
         .find({
             semester: semester,
             department_id: department,
             is_active: 1,
-        }).populate("department_id")
+        })
+        .populate("department_id");
 
     return studentData;
 }
 async function getTeacher(data) {
     let teacherData = null;
-    let department = data.department == "All" ? { $exists: true } : data.department;
+    let department =
+        data.department == "All" ? { $exists: true } : data.department;
 
     teacherData = await teachers
         .find({
             department_id: department,
             is_active: 1,
-        }).populate("department_id")
+        })
+        .populate("department_id");
 
     return teacherData;
 }
@@ -173,26 +216,67 @@ async function getQuiz(data) {
     nextDate.setTime(date.getTime() + 86400000);
     console.log(date);
     console.log(nextDate);
-    let datequery = data.date == "" ? { _id: { $exists: true } } : { $and: [{ valid_from: { $gte: date } }, { valid_from: { $lte: nextDate } }] };
+    let datequery =
+        data.date == ""
+            ? { _id: { $exists: true } }
+            : {
+                  $and: [
+                      { valid_from: { $gte: date } },
+                      { valid_from: { $lte: nextDate } },
+                  ],
+              };
 
-    let subjectquery = data.subject == "All" ? { subject_id: { $exists: true } } : { subject_id: data.subject };
+    let subjectquery =
+        data.subject == "All"
+            ? { subject_id: { $exists: true } }
+            : { subject_id: data.subject };
 
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
-    let quiz = await quizzes.find({ $and: [subjectquery, datequery] }).populate("created_by");
+    let quiz = await quizzes
+        .find({ $and: [subjectquery, datequery] })
+        .populate("created_by");
     return quiz;
 }
 async function quizDetails(data) {
-    let quiz = await quizzes.findOne({ _id: data }).populate("random_questions").populate("compulsary_questions").populate("subject_id").populate({
-        path: "group_id",
-        model: "groups",
-        populate: {
-            path: "students",
-            model: "students",
-        },
-    });
+    let quiz = await quizzes
+        .findOne({ _id: data })
+        .populate("random_questions")
+        .populate("compulsary_questions")
+        .populate("subject_id")
+        .populate({
+            path: "group_id",
+            model: "groups",
+            populate: {
+                path: "students",
+                model: "students",
+            },
+        });
     return quiz;
 }
-module.exports = { departmentFetch, newDepartment, deleteDepartment, fetchDepartments, countDepartments, addSubject, fetchSubjects, countSubjects, fetchTeachers, addTeacher, countTeachers, addStudent, fetchStudents, countStudents, countQuizzes, getSubject, getStudent, getTeacher, getQuiz, quizDetails };
+module.exports = {
+    departmentFetch,
+    newDepartment,
+    deleteDepartment,
+    fetchDepartments,
+    countDepartments,
+    addSubject,
+    fetchSubjects,
+    countSubjects,
+    fetchTeachers,
+    addTeacher,
+    countTeachers,
+    addStudent,
+    fetchStudents,
+    countStudents,
+    countQuizzes,
+    getSubject,
+    getStudent,
+    getTeacher,
+    getQuiz,
+    quizDetails,
+    deleteSubject,
+    deleteStudent
+};
 //Role=0 Teacher accept
 //Add subject,Delete,Edit
 //Department

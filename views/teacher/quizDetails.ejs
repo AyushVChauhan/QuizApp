@@ -193,6 +193,7 @@
 
 					 </thead>
 					<tbody>
+						<% console.log(quiz); %>
 						<% let ind=1%>
 						 
 							
@@ -200,40 +201,40 @@
 							<% for( let index = 0; index < quiz.compulsary_questions.length; index++ ) { %>
 								<tr>
 									<% let type1='' %>
-									<%  if (quiz.compulsary_questions[index].type == 1) {%>
+									<%  if (quiz.compulsary_questions[index].question.type == 1) {%>
 									<%	type1 = "MCQ";%>
 									<%}%>
-									<%if (quiz.compulsary_questions[index].type == 2) {%>
+									<%if (quiz.compulsary_questions[index].question.type == 2) {%>
 										<%	type1 = "ONE WORD";%>
 										<%}%>
-										<%if (quiz.compulsary_questions[index].type == 3) {%>
+										<%if (quiz.compulsary_questions[index].question.type == 3) {%>
 											<%type1 = "DESCRIPTIVE";%>
 											<%}%>
 									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
 									<td class="quiztd text-secondary" style="width: 20%;"><%=  type1 %></td>
-									<td class="quiztd text-secondary" style="width: 55%; text-justify: auto;text-align: justify;"><%-  quiz.compulsary_questions[index].question %></td>
+									<td class="quiztd text-secondary" style="width: 55%; text-justify: auto;text-align: justify;"><%-  quiz.compulsary_questions[index].question.question %></td>
 									<td class="quiztd text-secondary" >Compulsory</td>
-									<td class="quiztd text-secondary" ><%=  quiz.compulsary_questions[index].marks %></td>
+									<td class="quiztd text-secondary" ><%=  quiz.compulsary_questions[index].question.marks %></td>
 								</tr>
 								<% ind++ %>
 							<% } %>
 							<% for( let index = 0; index < quiz.random_questions.length; index++ ) { %>
 								<tr>
 									<% let type1='' %>
-									<%  if (quiz.random_questions[index].type == 1) {%>
+									<%  if (quiz.random_questions[index].question.type == 1) {%>
 									<%	type1 = "MCQ";%>
 									<%}%>
-									<%if (quiz.random_questions[index].type == 2) {%>
+									<%if (quiz.random_questions[index].question.type == 2) {%>
 										<%	type1 = "ONE WORD";%>
 										<%}%>
-										<%if (quiz.random_questions[index].type == 3) {%>
+										<%if (quiz.random_questions[index].question.type == 3) {%>
 											<%type1 = "DESCRIPTIVE";%>
 											<%}%>
 									<td class="quiztd text-secondary" style="width: 10%;"><%= ind %></td>
 									<td class="quiztd text-secondary" style="width: 20%;"><%= type1 %></td>
-									<td class="quiztd text-secondary" style="width:55%;text-justify: auto;text-align: justify;"><%- quiz.random_questions[index].question %></td>
+									<td class="quiztd text-secondary" style="width:55%;text-justify: auto;text-align: justify;"><%- quiz.random_questions[index].question.question %></td>
 									<td class="quiztd text-secondary" >Random</td>
-									<td class="quiztd text-secondary" ><%= quiz.random_questions[index].marks %></td>
+									<td class="quiztd text-secondary" ><%= quiz.random_questions[index].question.marks %></td>
 								</tr>
 								<% ind++ %>
 							<% } %>
