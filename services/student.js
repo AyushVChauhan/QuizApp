@@ -131,10 +131,16 @@ async function getSession(studentId, quizId, validTo) {
 async function submitQuiz(sessionId, questionAnswer) {
     let session = await sessions.findOne({ _id: sessionId });
     if (session) {
+        let quiz = await quizzes.findOne({_id: session.quiz_id}, {duration:1});
         session.questions_answers = questionAnswer;
         session.end_time = new Date();
-        await session.save();
-        console.log(session);
+        if((session.end_time - session.start_time) < (quiz.duration*60 + 10)*1000)
+        {
+            await session.save();
+        }
+        else{
+            return 0;
+        }
         return 1;
     }
     return 0;

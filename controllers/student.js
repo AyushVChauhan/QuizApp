@@ -75,8 +75,8 @@ async function upcomingQuiz(req, res) {
     let token = req.cookies.auth;
     let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
     console.log(studentId);
-    let quizData=await studentServices.upcomingQuiz(studentId);
-    res.render("./student/upcomingQuiz", { error ,quizData});
+    let quizData = await studentServices.upcomingQuiz(studentId);
+    res.render("./student/upcomingQuiz", { error, quizData });
 }
 async function availableQuiz(req, res) {
     let error = null;
@@ -136,7 +136,7 @@ async function takeQuiz(req, res) {
         res.redirect("/");
     } else {
         let quiz = req.session.quiz;
-        let session = req.session.session;
+        let session = null;
         if (!guest && !session) {
             session = await studentServices.getSession(
                 studentId,
@@ -161,11 +161,18 @@ async function takeQuiz(req, res) {
         if ((valid_to - Date.now()) / (1000 * 60) < duration) {
             duration = (valid_to - Date.now()) / (1000 * 60);
         }
-        if(session.end_time){
-        req.session.errors = { text: "Quiz Already Given", icon: "error" };
-        res.redirect("/student");
+        if (session.start_time) {
+            duration -= (new Date() - session.start_time) / (1000 * 60);
         }
-        else{
+        if(duration <= 0)
+        {
+            req.session.errors = { text: "Quiz Expired", icon: "error" };
+            res.redirect("/student");
+        }
+        else if (session.end_time) {
+            req.session.errors = { text: "Quiz Already Given", icon: "error" };
+            res.redirect("/student");
+        } else {
             res.render("./student/quizPage", {
                 questions,
                 enrollment,
@@ -195,14 +202,16 @@ async function getQuestion(req, res) {
 async function submitQuiz(req, res) {
     let questions_answers = req.body.allQuestions;
     let session = req.session.session._id;
-    let questionAnswer = [];
-    questions_answers.forEach((element) => {
-        questionAnswer.push({
-            question: element.questionId,
-            marks: 0,
-            answer: element.answer,
-        });
-    });
+    let questionAnswer = req.session.session.questions_answers;
+    questionAnswer.forEach(element=>{
+        questions_answers.forEach(ele=>{
+            if(ele.questionId == element.question)
+            {
+                element.answer = ele.answer;
+                return;
+            }
+        })
+    })
     let flag = await studentServices.submitQuiz(session, questionAnswer);
     if (flag) {
         req.session.errors = {

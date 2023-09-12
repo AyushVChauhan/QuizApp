@@ -334,7 +334,7 @@ async function generateReport(quizId) {
         .populate({path:"group_id",populate:{path:"students",model:"students"}})
         .populate({path:"compulsary_questions.question",populate:{path:"course_outcome_id",model:"course_outcomes"}})
         .populate({path:"random_questions.question",populate:{path:"course_outcome_id",model:"course_outcomes"}})
-    let random_questions = quiz.random_questions;
+    let random_questions = quiz.random_questions != undefined ? quiz.random_questions : [];
     let compulsary_questions = quiz.compulsary_questions != undefined ? quiz.compulsary_questions : [];
     let students = quiz.group_id.students;
     let studentsMap = new Map();
