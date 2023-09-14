@@ -376,21 +376,37 @@ async function generateReport(req, res) {
     let quizId = req.params.quizId;
     let report = await teacherServices.generateReport(quizId);
     // let toSheet = [{enrollment,co1,co2,co3,totalmarks}]
-    let toSheet = [];
+    let toSheet = [[" "]];
+    let AllCOS = Array.from(report[0][0][1].cos);
+    AllCOS.forEach(ele=>{
+        toSheet[0].push("CO-" + ele[0]);
+        toSheet[0].push(" ");
+    })
+    toSheet[0].push(" ");
+    toSheet.push(["Enrollment Number"]);
+    for (let index = 0; index < AllCOS.length; index++) {
+        toSheet[1].push("Total Marks");
+        toSheet[1].push("Obtained Marks");
+    }
+    toSheet[1].push("Total Marks/" + report[1]);
     report[0].forEach(element => {
-        let myObject = {}
+        let myObject = [];
         let enrollment = element[0];
         let totalMarks = element[1].totalMarks;
         let allCos = Array.from(element[1].cos);
         // console.log(allCos);
-        myObject["Enrollment No."] = enrollment;
-        allCos.forEach(ele => {
-            myObject["CO-" + ele[0]] = ele[1].marks;
+        myObject.push(enrollment);
+        allCos.forEach(ele=>{
+            myObject.push(ele[1].totalMarks)
+            myObject.push(ele[1].marks)
+            // myObject["CO-"+ele[0]] = ele[1].marks;
         })
-        myObject["Total Marks/" + report[1]] = totalMarks;
+        myObject.push(totalMarks);
+        // myObject["Total Marks/" + report[1]] = totalMarks;
         toSheet.push(myObject);
     });
-    let newSheet = xlsx.utils.json_to_sheet(toSheet);
+    console.log(toSheet);
+    let newSheet = xlsx.utils.aoa_to_sheet(toSheet);
     let newBook = xlsx.utils.book_new();
     let fileName = report[2];
     xlsx.utils.book_append_sheet(newBook, newSheet, "Report");
