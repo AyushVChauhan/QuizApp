@@ -94,7 +94,7 @@ function showQuestion() {
     $("#notVisited").html(notVisited);
     $("#notAnswered").html(notAnswered);
     $("#answered").html(answered);
-    $("#marksContent").html("Marks:"+allQuestions[currentQuestion-1].marks)
+    $("#marksContent").html("Marks:" + allQuestions[currentQuestion - 1].marks)
     let temp = null;
     let fileBody = `<div class="row">`;
     if (file) {
@@ -104,29 +104,41 @@ function showQuestion() {
     }
     fileBody += `</div>`;
     $("#fileContent").html(fileBody);
-
-    optionBody = `<form>`;
-    for (let index = 0; index < option.length; index++) {
-        const element = option[index];
-        if (
-            allQuestions[currentQuestion - 1].answer &&
-            allQuestions[currentQuestion - 1].answer == element.option
-        ) {
-            temp = index + 1;
+    let optionBody=null;
+    if (allQuestions[currentQuestion - 1].type == 1) {
+          optionBody = `<form>`;
+        for (let index = 0; index < option.length; index++) {
+            const element = option[index];
+            if (
+                allQuestions[currentQuestion - 1].answer &&
+                allQuestions[currentQuestion - 1].answer == element.option
+            ) {
+                temp = index + 1;
+            }
+            optionBody += `<label ><input type="radio" name="${id}" value="${element.option
+                }" id="option-${index + 1
+                }" data-id="${id}" onchange="answerSelect(this)" ${temp}/><span>${element.option
+                }</span></label>`;
         }
-        optionBody += `<label ><input type="radio" name="${id}" value="${
-            element.option
-        }" id="option-${
-            index + 1
-        }" data-id="${id}" onchange="answerSelect(this)" ${temp}/><span>${
-            element.option
-        }</span></label>`;
+        optionBody += `</form>`;
+
+        
+        if (temp) {
+            $(`#option-${temp}`).trigger("click");
+        }
     }
-    optionBody += `</form>`;
+    else if(allQuestions[currentQuestion - 1].type == 2){
+        optionBody=`<input type="text" class="form-control" placeholder="Answer" oninput="answerSet(this)" value="${allQuestions[currentQuestion-1].answer  != null?allQuestions[currentQuestion-1].answer : ""}"/>`
+    }
+    else{
+        optionBody=`<textarea class="form-control" placeholder="Answer" oninput="answerSet(this)" value="${allQuestions[currentQuestion-1].answer}"></textarea>`
+        
+    }
     $("#optionContent").html(optionBody);
-    if (temp) {
-        $(`#option-${temp}`).trigger("click");
-    }
+}
+function answerSet(e){
+    let ans=e.value;
+    allQuestions[currentQuestion-1].answer=ans;
 }
 function resetAnswer() {
     allQuestions[currentQuestion - 1].saved = 0;
@@ -150,7 +162,7 @@ function submitQuiz() {
                 data: { allQuestions },
                 success: function (response) {
                     //   Swal.fire("Submitted!", "Your Quiz has been Submitted.", "success");
-                    window.open("/student","_self");
+                    window.open("/student", "_self");
                 },
             });
         }

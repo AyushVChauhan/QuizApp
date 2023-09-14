@@ -130,19 +130,22 @@ function fileChange(e) {
     // fileData += "</tr></table>";
 }
 function addQuestion() {
-    let marks = 0;
-    let type = 0;
+    let marks = $("#marks").val();
+    let type = $("#type").val();
     let difficulty = $('input[name="opt"]:checked').val();
-    if ($("#type").val() == 1) {
-        marks = 1;
-        type = 1;
-    }
+
     let allOptions = [];
     for (let index = 1; index < count; index++) {
         const element = options["option" + index];
         allOptions.push(element);
     }
-    let answer = $("#option").val();
+    let answer = null;
+    if(type==1){
+        answer=$("#option").val();
+    }
+    else if(type==2){
+        answer=$("#answer").val();
+    }
     $.ajax({
         type: "post",
         url: "/teacher/addQuestion/question",
@@ -171,10 +174,8 @@ function addQuestion() {
                     if (myName.length == 0) myName = ind;
                     formdata.append("questionFiles", myFile, myName);
                 });
-                console.log(formdata);
                 let questionId = response.questionId;
                 formdata.append("questionId", questionId);
-                console.log(questionId);
                 $.ajax({
                     type: "post",
                     url: "/teacher/addQuestion/question/files",
@@ -311,7 +312,7 @@ $(document).ready(function () {
             let y = document.getElementById("ans");
             y.style.display = "none";
             let z = document.getElementById("mark");
-            z.style.display = "none";
+            z.style.display = "block";
         }
         if (value == 2) {
             // toAppend = " <label>Answer :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#answer").html(toAppend); return;
@@ -320,7 +321,7 @@ $(document).ready(function () {
             let y = document.getElementById("ans");
             y.style.display = "block";
             let z = document.getElementById("mark");
-            z.style.display = "none";
+            z.style.display = "block";
         }
         if (value == 3) {
             // toAppend = " <label>Marks :</label> &nbsp;&nbsp;&nbsp;<input type='text' >"; $("#mark").html(toAppend); return;

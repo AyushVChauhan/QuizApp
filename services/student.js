@@ -80,9 +80,13 @@ async function quizCheck(quizId, studentId) {
                 }
             });
             if (flag) {
-                return quiz;
+                return [quiz, 0];
             }
+
         } else {
+            if (quiz.visible_to > current_date && current_date > quiz.valid_to && quiz.guest_flag) {
+                return [quiz, 1];
+            }
             return 0;
         }
     }
@@ -114,6 +118,13 @@ async function createSession(quizId, studentId) {
             }
         }
     })
+    let i = selectedQuestions.length
+    let randomIndex = 0;
+    while (i != 0) {
+        randomIndex = Math.floor(Math.random() * i);
+        i--;
+        [selectedQuestions[i], selectedQuestions[randomIndex]] = [selectedQuestions[randomIndex], selectedQuestions[i]];
+    }
     let session = new sessions({ quiz_id: quizId, is_active: 1, student_id: studentId, start_time: Date.now(), status: 0, questions_answers: selectedQuestions });
     await session.save();
     return session;
@@ -128,17 +139,27 @@ async function getSession(studentId, quizId, validTo) {
     let session = await sessions.findOne({ student_id: studentId, quiz_id: quizId, start_time: { $lt: validTo } });
     return session;
 }
+async function getOtherQuizSession(studentId, quizId, validTo, duration) {
+    let session = await sessions.find({ student_id: studentId, quiz_id: quizId, start_time: { $gt: validTo } });
+    for (let index = 0; index < session.length; index++) {
+        const element = session[index];
+        if ((new Date() - element.start_time) / (1000 * 60) < duration) {
+            return element;
+        }
+
+    }
+    return null;
+}
 async function submitQuiz(sessionId, questionAnswer) {
     let session = await sessions.findOne({ _id: sessionId });
     if (session) {
-        let quiz = await quizzes.findOne({_id: session.quiz_id}, {duration:1});
+        let quiz = await quizzes.findOne({ _id: session.quiz_id }, { duration: 1 });
         session.questions_answers = questionAnswer;
         session.end_time = new Date();
-        if((session.end_time - session.start_time) < (quiz.duration*60 + 10)*1000)
-        {
+        if ((session.end_time - session.start_time) < (quiz.duration * 60 + 10) * 1000) {
             await session.save();
         }
-        else{
+        else {
             return 0;
         }
         return 1;
@@ -177,13 +198,13 @@ async function availableQuiz(studentId) {
     let current_date = new Date();
     console.log(current_date);
     console.log(quizData);
-   
+
     for (let index = 0; index < quizData.length; index++) {
         const element = quizData[index];
         console.log(element.valid_from);
         console.log(element.valid_to);
         if ((element.valid_from <= current_date) && (current_date <= element.valid_to)) {
-           console.log("hii");
+
         }
         else {
             quizData.splice(index, 1);
@@ -191,6 +212,23 @@ async function availableQuiz(studentId) {
         }
     }
     console.log(quizData);
+    return quizData;
+}
+async function otherQuiz(studentId) {
+    let quizData = await quizzes.find({ is_active: 1, guest_flag: 1 }).populate('subject_id');
+    let current_date = new Date();
+
+    for (let index = 0; index < quizData.length; index++) {
+        const element = quizData[index];
+
+        if ((element.valid_to <= current_date) && (current_date <= element.visible_to)) {
+            
+        }
+        else {
+            quizData.splice(index, 1);
+            index--;
+        }
+    }
     return quizData;
 }
 module.exports = {
@@ -203,5 +241,7 @@ module.exports = {
     getQuestion,
     getSession,
     submitQuiz, upcomingQuiz,
-    availableQuiz
+    availableQuiz,
+    otherQuiz,
+    getOtherQuizSession
 };

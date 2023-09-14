@@ -82,14 +82,17 @@ async function availableQuiz(req, res) {
     let error = null;
     let token = req.cookies.auth;
     let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
-    let quizData=await studentServices.availableQuiz(studentId);
+    let quizData = await studentServices.availableQuiz(studentId);
 
-    res.render("./student/availableQuiz", { error ,quizData});
+    res.render("./student/availableQuiz", { error, quizData });
 }
 async function otherQuiz(req, res) {
     let error = null;
+    let token = req.cookies.auth;
+    let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
+    let quizData = await studentServices.otherQuiz(studentId);
 
-    res.render("./student/otherQuiz", { error });
+    res.render("./student/otherQuiz", { error, quizData });
 }
 
 // async function enrollment_confirmation_page(req, res) {
@@ -124,7 +127,8 @@ async function instructions(req, res) {
     if (!quizCheck) {
         res.redirect("/");
     } else {
-        req.session.quiz = quizCheck;
+        req.session.quiz = quizCheck[0];
+        req.session.guestFlag= quizCheck[1];
         res.render("./student/instructionPage");
     }
 }
@@ -133,57 +137,103 @@ async function takeQuiz(req, res) {
     let token = req.cookies.auth;
     let student_data = jwt.verify(token, process.env.JWT_SECRET);
     let studentId = student_data["_id"];
-    let guest = 0;
+    let guest = req.session.guestFlag;
     console.log(quizId);
     if (!quizId) {
         res.redirect("/");
     } else {
         let quiz = req.session.quiz;
         let session = null;
-        if (!guest && !session) {
-            session = await studentServices.getSession(
-                studentId,
-                quizId,
-                quiz.valid_to
-            );
+        if (!guest) {
+            if (!session) {
+                session = await studentServices.getSession(
+                    studentId,
+                    quizId,
+                    quiz.valid_to
+                );
+            }
+            if (!session) {
+                session = await studentServices.createSession(quizId, studentId);
+            }
+            req.session.session = session;
+            let questions = session.questions_answers;
+            let enrollment = student_data["enrollment"];
+            let department = student_data["department"];
+            let valid_to = new Date(quiz.valid_to);
+            let duration = quiz.duration;
+            let quizTitle = quiz.name;
+            let subject = quiz.subject_id.name;
+            // let current_date = new Date();
+            // current_date.setTime(current_date.getTime() + 1000*60*30);
+            // console.log(current_date.toISOString());
+            if ((valid_to - Date.now()) / (1000 * 60) < duration) {
+                duration = (valid_to - Date.now()) / (1000 * 60);
+            }
+            if (session.start_time) {
+                duration -= (new Date() - session.start_time) / (1000 * 60);
+            }
+            if (duration <= 0) {
+                req.session.errors = { text: "Quiz Expired", icon: "error" };
+                res.redirect("/student");
+            }
+            else if (session.end_time) {
+                req.session.errors = { text: "Quiz Already Given", icon: "error" };
+                res.redirect("/student");
+            } else {
+                res.render("./student/quizPage", {
+                    questions,
+                    enrollment,
+                    duration,
+                    quizTitle,
+                    department,
+                    subject,
+                });
+            }
         }
-        if (!session) {
-            session = await studentServices.createSession(quizId, studentId);
-        }
-        req.session.session = session;
-        let questions = session.questions_answers;
-        let enrollment = student_data["enrollment"];
-        let department = student_data["department"];
-        let valid_to = new Date(quiz.valid_to);
-        let duration = quiz.duration;
-        let quizTitle = quiz.name;
-        let subject = quiz.subject_id.name;
-        // let current_date = new Date();
-        // current_date.setTime(current_date.getTime() + 1000*60*30);
-        // console.log(current_date.toISOString());
-        if ((valid_to - Date.now()) / (1000 * 60) < duration) {
-            duration = (valid_to - Date.now()) / (1000 * 60);
-        }
-        if (session.start_time) {
-            duration -= (new Date() - session.start_time) / (1000 * 60);
-        }
-        if(duration <= 0)
-        {
-            req.session.errors = { text: "Quiz Expired", icon: "error" };
-            res.redirect("/student");
-        }
-        else if (session.end_time) {
-            req.session.errors = { text: "Quiz Already Given", icon: "error" };
-            res.redirect("/student");
-        } else {
-            res.render("./student/quizPage", {
-                questions,
-                enrollment,
-                duration,
-                quizTitle,
-                department,
-                subject,
-            });
+        else {
+            if (!session) {
+                session = await studentServices.getOtherQuizSession(
+                    studentId,
+                    quizId,
+                    quiz.valid_to,
+                    quiz.duration
+                );
+            }
+            if (!session) {
+                session = await studentServices.createSession(quizId, studentId);
+            }
+            req.session.session = session;
+            let questions = session.questions_answers;
+            let enrollment = student_data["enrollment"];
+            let department = student_data["department"];
+            let duration = quiz.duration;
+            let quizTitle = quiz.name;
+            let subject = quiz.subject_id.name;
+            let visible_to=new Date(quiz.visible_to);
+            if ((visible_to - Date.now()) / (1000 * 60) < duration) {
+                duration = (visible_to - Date.now()) / (1000 * 60);
+            }
+            if (session.start_time) {
+                duration -= (new Date() - session.start_time) / (1000 * 60);
+            }
+            if (duration <= 0) {
+                req.session.errors = { text: "Quiz Expired", icon: "error" };
+                res.redirect("/student");
+            }
+            else if (session.end_time) {
+                req.session.errors = { text: "Retry after sometime.", icon: "error" };
+                res.redirect("/student");
+            } else {
+                res.render("./student/quizPage", {
+                    questions,
+                    enrollment,
+                    duration,
+                    quizTitle,
+                    department,
+                    subject,
+                });
+            }
+        
         }
         //questions(session), enrollment(jwt), duration, quiz title, department(jwt), subject
     }
@@ -206,10 +256,9 @@ async function submitQuiz(req, res) {
     let questions_answers = req.body.allQuestions;
     let session = req.session.session._id;
     let questionAnswer = req.session.session.questions_answers;
-    questionAnswer.forEach(element=>{
-        questions_answers.forEach(ele=>{
-            if(ele.questionId == element.question)
-            {
+    questionAnswer.forEach(element => {
+        questions_answers.forEach(ele => {
+            if (ele.questionId == element.question) {
                 element.answer = ele.answer;
                 return;
             }

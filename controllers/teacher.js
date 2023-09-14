@@ -6,10 +6,10 @@ const myCache = require("./cache");
 const { default: mongoose } = require("mongoose");
 async function viewGroup(req, res) {
     let students = await teacherServices.viewGroup(req.body.group);
-    
+
     res.json(students.students);
 }
-function logout(req,res){
+function logout(req, res) {
     let token = jwt.sign(
         {
             username: '',
@@ -116,9 +116,12 @@ async function addQuestion(req, res) {
     topics.forEach((ele) => {
         course_outcome_id.push(new mongoose.Types.ObjectId(ele["_id"]));
     });
-    req.body.options.forEach((ele) => {
-        options.push({ option: ele, file: null });
-    });
+    let type = req.body.type;
+    if (type==1) {
+        req.body.options.forEach((ele) => {
+            options.push({ option: ele, file: null });
+        });
+    }
     console.log(data.id);
     let question = {
         course_outcome_id: course_outcome_id,
@@ -127,7 +130,7 @@ async function addQuestion(req, res) {
         type: req.body.type,
         difficulty: req.body.difficulty,
         options: options,
-        answer: req.body.options[req.body.answer - 1],
+        answer: type==1 ?  req.body.options[req.body.answer - 1]: req.body.answer,
         is_active: 1,
         created_by: data.id,
     };
@@ -139,7 +142,7 @@ async function addQuestion(req, res) {
 async function addQuestionFiles(req, res) {
     for (let index = 0; index < req.files.length; index++) {
         const element = req.files[index];
-        let filePath =  "/files/questions/"+element.filename;
+        let filePath = "/files/questions/" + element.filename;
         let description = element.originalname;
         await teacherServices.addQuestionFile(
             req.body.questionId,
@@ -211,7 +214,7 @@ async function setQuiz(req, res) {
     let id = jwt.verify(cookie, process.env.JWT_SECRET);
     let data = req.body;
     data.subject_id = new mongoose.Types.ObjectId(data.subject_id);
-    data.created_by=id.id;
+    data.created_by = id.id;
     console.log(data);
     let setQuiz = await teacherServices.setQuiz(data);
     req.session.quizId = setQuiz;
@@ -276,7 +279,7 @@ async function setQuestions(req, res) {
     if (myArr.length == 0) {
         let myIds = [];
         selectedQuestions.forEach((ele) => {
-            myIds.push({question:new mongoose.Types.ObjectId(ele._id), marks:ele.marks});
+            myIds.push({ question: new mongoose.Types.ObjectId(ele._id), marks: ele.marks });
         });
         await teacherServices.setQuestions(myIds, req.session.quizId);
         res.json({ next_page: 0 });
@@ -298,9 +301,9 @@ async function setCompulsaryQuestionsPost(req, res) {
     let randomQuestions = [];
     selectedQuestions.forEach((element) => {
         if (element.random == 0) {
-            compulsaryQuestions.push({question:new mongoose.Types.ObjectId(element._id), marks:element.marks});
+            compulsaryQuestions.push({ question: new mongoose.Types.ObjectId(element._id), marks: element.marks });
         } else {
-            randomQuestions.push({question:new mongoose.Types.ObjectId(element._id), marks:element.marks});
+            randomQuestions.push({ question: new mongoose.Types.ObjectId(element._id), marks: element.marks });
         }
     });
     await teacherServices.setCompulsaryQuestionsPost(
@@ -311,7 +314,7 @@ async function setCompulsaryQuestionsPost(req, res) {
     req.session.errors = { text: "Quiz Added Successfully", icon: "success" };
     res.json({ success: 1 });
 }
-async function myQuizPage(req,res){
+async function myQuizPage(req, res) {
     let errors = null;
     if (req.session.errors) {
         errors = req.session.errors;
@@ -319,9 +322,9 @@ async function myQuizPage(req,res){
     }
     let subData = await teacherServices.subjectFetch();
 
-    res.render("./teacher/myQuiz",{errors,subData});
+    res.render("./teacher/myQuiz", { errors, subData });
 }
-async function allQuizPage(req,res){
+async function allQuizPage(req, res) {
     let errors = null;
     if (req.session.errors) {
         errors = req.session.errors;
@@ -329,49 +332,47 @@ async function allQuizPage(req,res){
     }
     let subData = await teacherServices.subjectFetch();
 
-    res.render("./teacher/allQuiz",{errors,subData});
+    res.render("./teacher/allQuiz", { errors, subData });
 }
-async function getMyQuiz(req,res){
+async function getMyQuiz(req, res) {
     console.log(req.body);
     let cookie = req.cookies.auth;
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
-    let quizData= await teacherServices.getMyQuiz(req.body,data.id);
-    res.json({success:1,quizData:quizData})
+    let quizData = await teacherServices.getMyQuiz(req.body, data.id);
+    res.json({ success: 1, quizData: quizData })
 }
-async function getAllQuiz(req,res){
+async function getAllQuiz(req, res) {
     console.log(req.body);
-   
-    let quizData= await teacherServices.getAllQuiz(req.body);
-    res.json({success:1,quizData:quizData})
+
+    let quizData = await teacherServices.getAllQuiz(req.body);
+    res.json({ success: 1, quizData: quizData })
 }
-async function quizDetails(req,res){
+async function quizDetails(req, res) {
     // console.log(req.params.quizId);
     let errors = null;
     if (req.session.errors) {
         errors = req.session.errors;
         req.session.errors = null;
     }
-    let quiz=await teacherServices.quizDetails(req.params.quizId);
-    res.render("./teacher/quizDetails",{quiz:quiz,errors:errors});
+    let quiz = await teacherServices.quizDetails(req.params.quizId);
+    res.render("./teacher/quizDetails", { quiz: quiz, errors: errors });
 }
-async function students(req,res){
+async function students(req, res) {
     let errors = null;
     if (req.session.errors) {
         errors = req.session.errors;
         req.session.errors = null;
     }
     let student_data = await teacherServices.fetchStudents();
-    res.render("./teacher/students", {student_data,errors});
+    res.render("./teacher/students", { student_data, errors });
 }
-async function subjects(req,res)
-{
+async function subjects(req, res) {
     let sub_data = await teacherServices.subjectFetch();
     let dept_data = await teacherServices.fetchDepartments();
-    res.render("./teacher/subjects", {dept_data, sub_data});
+    res.render("./teacher/subjects", { dept_data, sub_data });
 }
 
-async function generateReport(req, res)
-{
+async function generateReport(req, res) {
     let quizId = req.params.quizId;
     let report = await teacherServices.generateReport(quizId);
     // let toSheet = [{enrollment,co1,co2,co3,totalmarks}]
@@ -383,8 +384,8 @@ async function generateReport(req, res)
         let allCos = Array.from(element[1].cos);
         // console.log(allCos);
         myObject["Enrollment No."] = enrollment;
-        allCos.forEach(ele=>{
-            myObject["CO-"+ele[0]] = ele[1].marks;
+        allCos.forEach(ele => {
+            myObject["CO-" + ele[0]] = ele[1].marks;
         })
         myObject["Total Marks/" + report[1]] = totalMarks;
         toSheet.push(myObject);

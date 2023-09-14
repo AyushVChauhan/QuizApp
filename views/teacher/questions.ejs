@@ -161,17 +161,23 @@
                     }
                     let html =
                         "<div class='question'><div class='modalQuestion me-2'><h4><b>Question :</b></h4></div><div class='modalQuestion'> " +
-                        data.question +
-                        "</div></div><div class='row' ><div class='modalQuestion col-auto'><h4><b>Option :</b></h4></div><div class='modalQuestion col'><ol style='list-style-type: upper-alpha;font-size:20px'>";
-                    data.options.forEach((element) => {
+                        data.question + `</div></div>`;
+
+                       if(data.type==1){
+                       html+=" <div class='row' ><div class='modalQuestion col-auto'><h4><b>Option :</b></h4></div><div class='modalQuestion col'><ol style='list-style-type: upper-alpha;font-size:20px'>";
+                   
+                            data.options.forEach((element) => {
                         if(element.option == data.answer)
                             html += "<li style='color:green;'>" + element.option + "</li>";
                         else
                             html += "<li>" + element.option + "</li>";
 
                     });
+                    html+="</ol></div>"
+                }
+
                     html +=
-                        "</ol></div><div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
+                        "<div><div class='modalQuestion me-2'><h4><b>Answer :</b></h4></div><div class='modalQuestion' style='color:green; font-size: 20px '> " +
                         data.answer +
                         "</b></div></div></div><div><div class='modalQuestion me-2'><h4><b>Marks :</b></h4></div><div class='modalQuestion'> " +
                         data.marks +
