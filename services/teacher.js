@@ -274,7 +274,7 @@ async function getMyQuiz(data, id) {
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
     let quiz = await quizzes.find({
         $and: [subjectquery, datequery, createdbyquery],
-    });
+    }).sort({"createdAt":-1});
     return quiz;
 }
 async function getAllQuiz(data, id) {
@@ -301,7 +301,7 @@ async function getAllQuiz(data, id) {
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
     let quiz = await quizzes
         .find({ $and: [subjectquery, datequery] })
-        .populate("created_by");
+        .populate("created_by").sort({"createdAt":-1});
     return quiz;
 }
 async function quizDetails(data){
@@ -358,6 +358,7 @@ async function generateReport(quizId) {
     // console.log(session);
     session.forEach((element) => {
         let cos = new Map();
+        let status=element.status;
         allCos.forEach(ele=>{
             cos.set(ele,{totalMarks:0,marks:0});
         })
@@ -418,7 +419,11 @@ async function generateReport(quizId) {
                 return;
             }
         });
-        generateReportArray.set(studentsMap.get(element.student_id.toString()), {totalMarks,cos});
+        let remark=null;
+        if(status==0){
+            remark="Pending";
+        }
+        generateReportArray.set(studentsMap.get(element.student_id.toString()), {totalMarks,cos,remark});
     });
     let cos = new Map();
     allCos.forEach(ele=>{
@@ -427,9 +432,11 @@ async function generateReport(quizId) {
     students.forEach(ele=>{
         if(generateReportArray.get(ele.enrollment) == undefined)
         {
-            generateReportArray.set(ele.enrollment , {totalMarks:0, cos:cos});
+            generateReportArray.set(ele.enrollment , {totalMarks:0, cos:cos,remark:"Absent"});
         }
     })
+    
+    //["Enrollment",{totalmarks,cos=(Array[co no.,{totalmarks,marks}]),remarks]
     const sortedMap = Array.from(generateReportArray).sort((a,b)=>a[0]-b[0]);
     return [sortedMap, quiz.marks, quiz.name];
 }

@@ -157,6 +157,7 @@ async function submitQuiz(sessionId, questionAnswer) {
         session.questions_answers = questionAnswer;
         session.end_time = new Date();
         if ((session.end_time - session.start_time) < (quiz.duration * 60 + 10) * 1000) {
+            session.status=1;//submitted
             await session.save();
         }
         else {

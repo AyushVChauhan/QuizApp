@@ -389,10 +389,12 @@ async function generateReport(req, res) {
         toSheet[1].push("Obtained Marks");
     }
     toSheet[1].push("Total Marks/" + report[1]);
+    toSheet[1].push("Remaks");
     report[0].forEach(element => {
         let myObject = [];
         let enrollment = element[0];
         let totalMarks = element[1].totalMarks;
+        let remark=element[1].remark;
         let allCos = Array.from(element[1].cos);
         // console.log(allCos);
         myObject.push(enrollment);
@@ -401,7 +403,9 @@ async function generateReport(req, res) {
             myObject.push(ele[1].marks)
             // myObject["CO-"+ele[0]] = ele[1].marks;
         })
+
         myObject.push(totalMarks);
+        myObject.push(remark);
         // myObject["Total Marks/" + report[1]] = totalMarks;
         toSheet.push(myObject);
     });

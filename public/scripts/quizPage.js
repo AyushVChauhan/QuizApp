@@ -227,7 +227,15 @@ var x = setInterval(function () {
     // If the count down is finished, write some text
     if (distance < 0) {
         //submit
-        submitQuiz();
+        $.ajax({
+            type: "post",
+            url: "/student/submitQuiz",
+            data: { allQuestions },
+            success: function (response) {
+                //   Swal.fire("Submitted!", "Your Quiz has been Submitted.", "success");
+                window.open("/student", "_self");
+            },
+        });
     }
 }, 1000);
 async function activate(ele) {
@@ -243,6 +251,7 @@ document.documentElement.addEventListener("fullscreenchange", (e) => {
         a++;
         $("#staticBackdrop").modal("show");
         console.log(a);
+        Swal.fire({ title: "Restricted Action", text: "Further Action will lead to Disqualification", icon: "warning" }).then(()=>{activate(document.documentElement)});
     }
 });
 document.documentElement.addEventListener("copy", (e) => {

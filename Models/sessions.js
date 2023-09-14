@@ -4,7 +4,7 @@ const sessionSchema = new mongoose.Schema(
     {
         student_id: { type: mongoose.SchemaTypes.ObjectId, ref: "students" },
         quiz_id: { type: mongoose.SchemaTypes.ObjectId, ref: "quiz" },
-        status: Number,
+        status: Number,//0=Pending,1=Submitted,2=Disqualify
         start_time: Date,
         end_time: Date,
         ip: String,
