@@ -1,0 +1,177 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<%- include('../partials/footer') -%>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
+</script>
+<style>
+    #datatable_wrapper {
+        margin: 0;
+    }
+    #datatable1_wrapper {
+        margin: 0;
+    }
+    .expandingDiv {
+        margin-top: -100%;
+        transition: all 1s;
+    }
+    #basicDetails {
+        opacity: 0;
+    }
+    #studentDetails {
+        opacity: 0;
+    }
+    #questionDetails {
+        opacity: 0;
+    }
+    .animate {
+        animation: fadeIn 1s linear forwards;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+<%- include('../partials/footer') -%>
+<link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,1000&display=swap"
+    rel="stylesheet"
+/>
+
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./teacherHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./teacherSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="row mb-3">
+            <div class="col h1">Quiz Details</div>
+        </div>
+        <div class="row text-center mb-5">
+            <div class="col-5 me-1">
+                <button
+                    class="btn rounded-pill"
+                    style="background-color: blue"
+                    id="chartBtn"
+                    onclick="showChart()"
+                >
+                    Chart Analysis
+                </button>
+            </div>
+            <div class="col-5">
+                <button
+                    class="btn rounded-pill"
+                    id="studentBtn"
+                    onclick="showStudent()"
+                >
+                    Student Details
+                </button>
+            </div>
+        </div>
+
+        <div class="row " id="chartDetails">
+            <div id="piechart" class="col-6" style=" height: 400px;"></div>
+        </div>
+        <div class="row" id="studentDetails"></div>
+        <!-- End Main -->
+    </main>
+</div>
+<script>
+    function showChart() {
+        $("#chartDetails").show();
+        $("#studentDetails").hide();
+        document.getElementById("chartDetails").classList.add("animate");
+        $("#chartBtn").css("background-color", "white");
+        $("#chartBtn").css("color", "#11467b");
+        $("#chartBtn").css("box-shadow", "5px 5px");
+
+        $("#studentBtn").css("background-color", "#11467b");
+        $("#studentBtn").css("color", "white");
+        $("#studentBtn").css("box-shadow", "none");
+    }
+    function showStudent() {
+        $("#chartDetails").hide();
+        $("#studentDetails").show();
+        document.getElementById("studentDetails").classList.add("animate");
+        $("#chartBtn").css("background-color", "#11467b");
+        $("#chartBtn").css("color", "white");
+        $("#chartBtn").css("box-shadow", "none");
+
+        $("#studentBtn").css("background-color", "white");
+        $("#studentBtn").css("color", "#11467b");
+        $("#studentBtn").css("box-shadow", "5px 5px");
+    }
+
+    $(document).ready(() => {
+        console.log("hello");
+        var myTable;
+
+        myTable = $("#datatable").DataTable({
+            pagingType: "simple_numbers",
+            language: {
+                paginate: {
+                    previous: "<",
+                    next: ">",
+                },
+            },
+            columnDefs: [
+                // Center align the header content of column 1
+                { className: "dt-head-center", targets: [0, 1] },
+            ],
+        });
+        $("#chartBtn").click();
+        var myTable1;
+
+        myTable1 = $("#datatable1").DataTable({
+            pagingType: "simple_numbers",
+            language: {
+                paginate: {
+                    previous: "<",
+                    next: ">",
+                },
+            },
+            columnDefs: [
+                // Center align the header content of column 1
+                { className: "dt-head-center", targets: [0, 1] },
+            ],
+        });
+    });
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        console.log(chartDetails);
+        var data = google.visualization.arrayToDataTable([
+          ['Student Status', 'Number of students'],
+          ['Submitted',     chartDetails.submitted],
+          ['Absent',    chartDetails.absent],
+          ['Pending',  chartDetails.pending],
+          ['Disqualify', chartDetails.disqualify],
+          
+        ]);
+
+        var options = {
+          title: 'Student Status'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    
+</script>
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

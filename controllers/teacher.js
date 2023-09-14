@@ -411,7 +411,16 @@ async function generateReport(req, res) {
     let fileName = report[2];
     xlsx.utils.book_append_sheet(newBook, newSheet, "Report");
     await xlsx.writeFile(newBook, `./public/files/reports/${fileName}.xlsx`);
-    res.download(`./public/files/reports/${fileName}.xlsx`)
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let chart = await teacherServices.chartDetails(quizId);
+    console.log(chart);
+
+    res.render("./teacher/reportPage",{errors,chart})
+    // res.download(`./public/files/reports/${fileName}.xlsx`)
 }
 module.exports = {
     login,

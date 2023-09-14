@@ -323,7 +323,36 @@ async function fetchStudents() {
     console.log(student_data);
     return student_data;
 }
-
+async function chartDetails(quizId){
+    let quiz = await quizzes.findOne({_id:quizId}).populate({path:"group_id",populate:{path:"students",model:"students"}})
+    let students = quiz.group_id.students;
+    let session = await sessions
+        .find({
+            quiz_id: quizId,
+            student_id: { $in: students },
+            start_time: { $gte: quiz.valid_from },
+            end_time: { $lte: quiz.valid_to },
+        })
+        console.log(session);
+    let pending=0,submitted=0,disqualify=0;
+    session.forEach(ele=>{
+        if(ele.status==0)
+        {
+            pending++;
+        }
+        else if(ele.status==1)
+        {
+            submitted++;
+        }
+        else if(ele.status==2)
+        {
+            disqualify++;
+        }
+       
+    })
+    let absent = students.length - (pending+submitted+disqualify);
+    return {pending,submitted,disqualify,absent}
+}
 async function generateReport(quizId) {
     let quiz = await quizzes
         .findOne({ _id: quizId })
@@ -461,4 +490,5 @@ module.exports = {
     fetchStudents,
     getAllQuiz,
     generateReport,
+    chartDetails
 };
