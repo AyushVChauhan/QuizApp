@@ -4,10 +4,12 @@
 <%- include('../partials/footer')-%>
 <script>
     //evaa badha count je extra chhe
-    let marks_questions = JSON.parse('<%- JSON.stringify(marks_questions) %>');
+    let marks_questions = JSON.parse(`<%- JSON.stringify(marks_questions) %>`);
+    console.log(marks_questions);
 
     //badhaa questions
-    let allQuestions = JSON.parse('<%- JSON.stringify(allQuestions) %>');
+    let allQuestions = JSON.parse(`<%- JSON.stringify(allQuestions) %>`);
+    console.log(allQuestions);
 </script>
 
 <style>

@@ -124,12 +124,16 @@
         <!-- FOOTER BUTTONS -->
         <div class="footer-buttons box-shadow">
           <div class="footer-buttonsEnd">
-            <button type="reset" id="clear" onclick="resetAnswer()" class="btn btn-dark">Clear</button>
+            <button type="button" id="back" class="btn btn-warning" onclick="backQuestion(this)">
+             <i class="fa-solid fa-caret-left"></i> Back
+            </button>
             <button type="button" id="next" class="btn btn-warning" onclick="nextQuestion(this)">
-              Next
+              Next <i class="fa-solid fa-caret-right"></i>
             </button>
           </div>
           <div class="footer-buttonsEnd">
+            <button type="reset" id="clear" onclick="resetAnswer()" class="btn btn-dark">Clear</button>
+
             <button type="button" id="saveandnext" class="btn btn-success" onclick="saveAndNext()">
               Save and Next
             </button>

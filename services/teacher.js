@@ -550,7 +550,7 @@ async function generateReport(quizId) {
             }
         });
         let remark=null;
-        if(status==0){
+        if(element.status==0){
             remark="Pending";
         }
         generateReportArray.set(studentsMap.get(element.student_id.toString()), {totalMarks,cos,remark});

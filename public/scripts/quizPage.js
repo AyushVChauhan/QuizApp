@@ -28,6 +28,19 @@ function nextQuestion(e) {
         e.style.display = "inline";
     }
 }
+function backQuestion(e) {
+    currentQuestion--;
+    if (allQuestions[currentQuestion - 1].question == null) {
+        getQuestion(allQuestions[currentQuestion - 1].questionId);
+    }
+    showQuestion();
+
+    if (currentQuestion == 1) {
+        e.style.display = "none";
+    } else {
+        e.style.display = "inline";
+    }
+}
 function answerSelect(e) {
     let optionValue = e.value;
     allQuestions.forEach((ele) => {
@@ -57,6 +70,11 @@ function showQuestion() {
         document.getElementById("next").style.display = "none";
     } else {
         document.getElementById("next").style.display = "inline";
+    }
+    if (currentQuestion == 1) {
+        document.getElementById("back").style.display = "none";
+    } else {
+        document.getElementById("back").style.display = "inline";
     }
     let notVisited = allQuestions.length;
     let notAnswered = 0;
@@ -114,18 +132,18 @@ function showQuestion() {
                 allQuestions[currentQuestion - 1].answer == element.option
             ) {
                 temp = index + 1;
+               
             }
-            optionBody += `<label ><input type="radio" name="${id}" value="${element.option
-                }" id="option-${index + 1
-                }" data-id="${id}" onchange="answerSelect(this)" ${temp}/><span>${element.option
-                }</span></label>`;
+            optionBody += `<label for="option-${index + 1}" id="option2-${index+1}" ><input type="radio" name="${id}" value="${element.option}" id="option-${index + 1}" data-id="${id}" onchange="answerSelect(this)" `;
+            if(temp){
+                optionBody+= "checked ";
+               
+            }
+            optionBody+= `/><span>${element.option}</span></label>`
+            temp=null;
         }
-        optionBody += `</form>`;
-
         
-        if (temp) {
-            $(`#option-${temp}`).trigger("click");
-        }
+        optionBody += `</form>`;
     }
     else if(allQuestions[currentQuestion - 1].type == 2){
         optionBody=`<input type="text" class="form-control" placeholder="Answer" oninput="answerSet(this)" value="${allQuestions[currentQuestion-1].answer  != null?allQuestions[currentQuestion-1].answer : ""}"/>`
@@ -243,6 +261,8 @@ async function activate(ele) {
         await ele.requestFullscreen();
         $("#staticBackdrop").modal("hide");
         clickQuestion(document.getElementById("1"));
+       
+
     }
 }
 document.documentElement.addEventListener("fullscreenchange", (e) => {
