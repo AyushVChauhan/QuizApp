@@ -304,15 +304,20 @@ async function getAllQuiz(data, id) {
         .populate("created_by");
     return quiz;
 }
-async function quizDetails(data){
-    let quiz=await quizzes.findOne({_id:data}).populate("random_questions.question").populate("compulsary_questions.question").populate("subject_id").populate({
-        path: "group_id",
-        model: "groups",
-        populate: {
-            path: "students",
-            model: "students",
-        },
-    });
+async function quizDetails(data) {
+    let quiz = await quizzes
+        .findOne({ _id: data })
+        .populate("random_questions.question")
+        .populate("compulsary_questions.question")
+        .populate("subject_id")
+        .populate({
+            path: "group_id",
+            model: "groups",
+            populate: {
+                path: "students",
+                model: "students",
+            },
+        });
     console.log(quiz);
     return quiz;
 }
@@ -323,79 +328,137 @@ async function fetchStudents() {
     console.log(student_data);
     return student_data;
 }
-async function chartDetails(quizId){
-    let quiz = await quizzes.findOne({_id:quizId}).populate({path:"group_id",populate:{path:"students",model:"students"}})
-    let students = quiz.group_id.students;
-    let session = await sessions
-        .find({
-            quiz_id: quizId,
-            student_id: { $in: students },
-            start_time: { $gte: quiz.valid_from },
-            end_time: { $lte: quiz.valid_to },
+async function chartDetails(quizId) {
+    let quiz = await quizzes
+        .findOne({ _id: quizId })
+        .populate({
+            path: "group_id",
+            populate: { path: "students", model: "students" },
         })
-        console.log(session);
-    let pending=0,submitted=0,disqualify=0;
-    session.forEach(ele=>{
-        if(ele.status==0)
-        {
+        .populate("compulsary_questions.question")
+        .populate("random_questions.question");
+    let students = quiz.group_id.students;
+    let random_questions =
+        quiz.random_questions != undefined ? quiz.random_questions : [];
+    let compulsary_questions =
+        quiz.compulsary_questions != undefined ? quiz.compulsary_questions : [];
+    let session = await sessions.find({
+        quiz_id: quizId,
+        student_id: { $in: students },
+        start_time: { $gte: quiz.valid_from },
+        end_time: { $lte: quiz.valid_to },
+    }).populate("student_id");
+    console.log(session);
+    let pending = 0,
+        submitted = 0,
+        disqualify = 0,
+        student = [];
+       
+    session.forEach((ele) => {
+        let  totalMarks = 0;
+        if (ele.status == 0) {
             pending++;
-        }
-        else if(ele.status==1)
-        {
+        } else if (ele.status == 1) {
             submitted++;
-        }
-        else if(ele.status==2)
-        {
+            ele.questions_answers.forEach((question) => {
+                let compulsaryQuestion = compulsary_questions.find(
+                    (compQues) => {
+                        return (
+                            compQues.question._id.toString() ==
+                            question.question.toString()
+                        );
+                    }
+                );
+                if (compulsaryQuestion) {
+                    if (compulsaryQuestion.question.answer == question.answer) {
+                        question.marks = compulsaryQuestion.marks;
+                    } else {
+                        question.marks = 0;
+                    }
+
+                    totalMarks += question.marks;
+                }
+                let randomQuestion = random_questions.find((randQues) => {
+                    return (
+                        randQues.question._id.toString() ==
+                        question.question.toString()
+                    );
+                });
+                if (randomQuestion) {
+                    if (randomQuestion.question.answer == question.answer) {
+                        question.marks = randomQuestion.marks;
+                    } else {
+                        question.marks = 0;
+                    }
+
+                    totalMarks += question.marks;
+                }
+            });
+            student.push({enrollment:ele.student_id.enrollment, totalMarks})
+        } else if (ele.status == 2) {
             disqualify++;
         }
-       
-    })
-    let absent = students.length - (pending+submitted+disqualify);
-    return {pending,submitted,disqualify,absent}
+    });
+    // console.log(student);
+    let absent = students.length - (pending + submitted + disqualify);
+    return { pending, submitted, disqualify, absent, student };
 }
 async function generateReport(quizId) {
     let quiz = await quizzes
         .findOne({ _id: quizId })
-        .populate({path:"group_id",populate:{path:"students",model:"students"}})
-        .populate({path:"compulsary_questions.question",populate:{path:"course_outcome_id",model:"course_outcomes"}})
-        .populate({path:"random_questions.question",populate:{path:"course_outcome_id",model:"course_outcomes"}})
-    let random_questions = quiz.random_questions != undefined ? quiz.random_questions : [];
-    let compulsary_questions = quiz.compulsary_questions != undefined ? quiz.compulsary_questions : [];
+        .populate({
+            path: "group_id",
+            populate: { path: "students", model: "students" },
+        })
+        .populate({
+            path: "compulsary_questions.question",
+            populate: { path: "course_outcome_id", model: "course_outcomes" },
+        })
+        .populate({
+            path: "random_questions.question",
+            populate: { path: "course_outcome_id", model: "course_outcomes" },
+        });
+    let random_questions =
+        quiz.random_questions != undefined ? quiz.random_questions : [];
+    let compulsary_questions =
+        quiz.compulsary_questions != undefined ? quiz.compulsary_questions : [];
     let students = quiz.group_id.students;
     let studentsMap = new Map();
     let allCos = new Set();
-    random_questions.forEach(ele=>{
-        allCos.add(ele.question.course_outcome_id[0].course_outcome)
-    })
-    compulsary_questions.forEach(ele=>{
-        allCos.add(ele.question.course_outcome_id[0].course_outcome)
-    })
+    random_questions.forEach((ele) => {
+        allCos.add(ele.question.course_outcome_id[0].course_outcome);
+    });
+    compulsary_questions.forEach((ele) => {
+        allCos.add(ele.question.course_outcome_id[0].course_outcome);
+    });
     allCos = new Set([...allCos].sort());
-    students.forEach(ele=>{
-        studentsMap.set(ele._id.toString(),ele.enrollment);
-    })
-    let session = await sessions
-        .find({
-            quiz_id: quizId,
-            student_id: { $in: students },
-            start_time: { $gte: quiz.valid_from },
-            end_time: { $lte: quiz.valid_to },
-        })
+    students.forEach((ele) => {
+        studentsMap.set(ele._id.toString(), ele.enrollment);
+    });
+    let session = await sessions.find({
+        quiz_id: quizId,
+        student_id: { $in: students },
+        start_time: { $gte: quiz.valid_from },
+        end_time: { $lte: quiz.valid_to },
+    });
 
     let generateReportArray = new Map();
-    
+
     // console.log(session);
     session.forEach((element) => {
         let cos = new Map();
-        allCos.forEach(ele=>{
-            cos.set(ele,{totalMarks:0,marks:0});
-        })
+        allCos.forEach((ele) => {
+            cos.set(ele, { totalMarks: 0, marks: 0 });
+        });
         let totalMarks = 0;
         // let cos = [{co:1,totalMarks:10,marks:5}];
         element.questions_answers.forEach((question) => {
             let compulsaryQuestion = compulsary_questions.find((compQues) => {
                 // console.log(compQues);
-                return compQues.question._id.toString() == question.question.toString();
+                return (
+                    compQues.question._id.toString() ==
+                    question.question.toString()
+                );
             });
             if (compulsaryQuestion) {
                 // console.log(compulsaryQuestion.question.answer);
@@ -405,14 +468,33 @@ async function generateReport(quizId) {
                 } else {
                     question.marks = 0;
                 }
-                console.log(compulsaryQuestion.question.course_outcome_id[0].course_outcome);
-                let tempGet = cos.get(compulsaryQuestion.question.course_outcome_id[0].course_outcome);
-                if(tempGet)
-                {
-                    cos.set(compulsaryQuestion.question.course_outcome_id[0].course_outcome,{totalMarks:tempGet.totalMarks+compulsaryQuestion.marks, marks:tempGet.marks + question.marks});
-                }
-                else{
-                    cos.set(compulsaryQuestion.question.course_outcome_id[0].course_outcome,{totalMarks:compulsaryQuestion.marks,marks:question.marks});
+                console.log(
+                    compulsaryQuestion.question.course_outcome_id[0]
+                        .course_outcome
+                );
+                let tempGet = cos.get(
+                    compulsaryQuestion.question.course_outcome_id[0]
+                        .course_outcome
+                );
+                if (tempGet) {
+                    cos.set(
+                        compulsaryQuestion.question.course_outcome_id[0]
+                            .course_outcome,
+                        {
+                            totalMarks:
+                                tempGet.totalMarks + compulsaryQuestion.marks,
+                            marks: tempGet.marks + question.marks,
+                        }
+                    );
+                } else {
+                    cos.set(
+                        compulsaryQuestion.question.course_outcome_id[0]
+                            .course_outcome,
+                        {
+                            totalMarks: compulsaryQuestion.marks,
+                            marks: question.marks,
+                        }
+                    );
                 }
                 totalMarks += question.marks;
                 // console.log(totalMarks);
@@ -420,7 +502,10 @@ async function generateReport(quizId) {
             }
             //3 : totalmarks : 8, marks: 3,
             let randomQuestion = random_questions.find((randQues) => {
-                return randQues.question._id.toString() == question.question.toString();
+                return (
+                    randQues.question._id.toString() ==
+                    question.question.toString()
+                );
             });
             // console.log(randomQuestion);
             if (randomQuestion) {
@@ -433,33 +518,57 @@ async function generateReport(quizId) {
                 } else {
                     question.marks = 0;
                 }
-                console.log(randomQuestion.question.course_outcome_id[0].course_outcome);
-                let tempGet = cos.get(randomQuestion.question.course_outcome_id[0].course_outcome);
-                if(tempGet)
-                {
-                    cos.set(randomQuestion.question.course_outcome_id[0].course_outcome,{totalMarks:tempGet.totalMarks+randomQuestion.marks, marks:tempGet.marks + question.marks});
-                }
-                else{
-                    cos.set(randomQuestion.question.course_outcome_id[0].course_outcome,{totalMarks:randomQuestion.marks,marks:question.marks});
+                console.log(
+                    randomQuestion.question.course_outcome_id[0].course_outcome
+                );
+                let tempGet = cos.get(
+                    randomQuestion.question.course_outcome_id[0].course_outcome
+                );
+                if (tempGet) {
+                    cos.set(
+                        randomQuestion.question.course_outcome_id[0]
+                            .course_outcome,
+                        {
+                            totalMarks:
+                                tempGet.totalMarks + randomQuestion.marks,
+                            marks: tempGet.marks + question.marks,
+                        }
+                    );
+                } else {
+                    cos.set(
+                        randomQuestion.question.course_outcome_id[0]
+                            .course_outcome,
+                        {
+                            totalMarks: randomQuestion.marks,
+                            marks: question.marks,
+                        }
+                    );
                 }
                 totalMarks += question.marks;
                 // console.log(totalMarks);
                 return;
             }
         });
-        generateReportArray.set(studentsMap.get(element.student_id.toString()), {totalMarks,cos});
+        generateReportArray.set(
+            studentsMap.get(element.student_id.toString()),
+            { totalMarks, cos }
+        );
     });
     let cos = new Map();
-    allCos.forEach(ele=>{
-        cos.set(ele,{totalMarks:0,marks:0});
-    })
-    students.forEach(ele=>{
-        if(generateReportArray.get(ele.enrollment) == undefined)
-        {
-            generateReportArray.set(ele.enrollment , {totalMarks:0, cos:cos});
+    allCos.forEach((ele) => {
+        cos.set(ele, { totalMarks: 0, marks: 0 });
+    });
+    students.forEach((ele) => {
+        if (generateReportArray.get(ele.enrollment) == undefined) {
+            generateReportArray.set(ele.enrollment, {
+                totalMarks: 0,
+                cos: cos,
+            });
         }
-    })
-    const sortedMap = Array.from(generateReportArray).sort((a,b)=>a[0]-b[0]);
+    });
+    const sortedMap = Array.from(generateReportArray).sort(
+        (a, b) => a[0] - b[0]
+    );
     return [sortedMap, quiz.marks, quiz.name];
 }
 
@@ -490,5 +599,5 @@ module.exports = {
     fetchStudents,
     getAllQuiz,
     generateReport,
-    chartDetails
+    chartDetails,
 };

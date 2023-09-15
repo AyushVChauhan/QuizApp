@@ -5,6 +5,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
+
 </script>
 <style>
     #datatable_wrapper {
@@ -83,6 +84,8 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
 
         <div class="row " id="chartDetails">
             <div id="piechart" class="col-6" style=" height: 400px;"></div>
+            <div id="histogram" class="col-6" style=" height: 400px;"></div>
+
         </div>
         <div class="row" id="studentDetails"></div>
         <!-- End Main -->
@@ -171,7 +174,36 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
 
         chart.draw(data, options);
       }
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawHistogram);
+      function drawHistogram() {
+        var data = google.visualization.arrayToDataTable([
+          [{type:'string',label:'enrollment'},{type:'number',label:'Marks'}],
+          ]);
+       
+         chartDetails.student.forEach(function(element,index,array){
+            data.addRow( [element.enrollment , element.totalMarks])
+           
+         })
+      
+        var options = {
+          title: 'Marks wise students',
+          legend: { position: 'none' },
+          colors: ['#e7711c'],
+          hAxis: {
+          title: 'Total Marks'
+        },
+        vAxis: {
+          title: 'Number of Students'
+        },
+        };
+
+        var chart = new google.visualization.Histogram(document.getElementById('histogram'));
+        chart.draw(data, options);
+      }
     
+   
+     
 </script>
 <!-- <script src="/scripts/addSubject.js"></script> -->
 <%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
