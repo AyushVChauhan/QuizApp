@@ -276,6 +276,28 @@ async function submitQuiz(req, res) {
         res.json({ error: "Invalid Request" });
     }
 }
+
+async function history(req, res) {
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let token = req.cookies.auth;
+    let student_data = jwt.verify(token, process.env.JWT_SECRET);
+    let studentId = student_data["_id"];
+
+    let quizzes = await studentServices.history(studentId);
+
+    res.render("./student/history",{errors, quizzes});
+
+}
+
+async function quizHistory(req, res)
+{
+    let studentId = req.params.sessionId;
+}
+
 module.exports = {
     login,
     loginPage,
@@ -289,4 +311,6 @@ module.exports = {
     otherQuiz,
     getQuestion,
     submitQuiz,
+    history,
+    quizHistory,
 };

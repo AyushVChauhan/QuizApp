@@ -232,6 +232,11 @@ async function otherQuiz(studentId) {
     }
     return quizData;
 }
+
+async function history(studentId) {
+    let session = await sessions.find({student_id:studentId}).populate({path:"quiz_id",populate:{path:"subject_id",model:"subjects"}}).populate("questions_answers.question");
+    return session;
+}
 module.exports = {
     loginFetch,
     loginCheck,
@@ -244,5 +249,6 @@ module.exports = {
     submitQuiz, upcomingQuiz,
     availableQuiz,
     otherQuiz,
-    getOtherQuizSession
+    getOtherQuizSession,
+    history
 };

@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
             res.redirect("/admin");
         }
     } else {
-        res.redirect("/admin");
+        res.redirect("/student/login");
     }
 });
 const studentRoutes = require("./routes/student");
@@ -69,6 +69,10 @@ const teacherRoutes = require("./routes/teacher");
 app.use("/teacher", teacherRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
+
+app.get("*",(req,res)=>{
+    res.render("./partials/errorPage");
+})
 
 app.listen(process.env.PORT, () => {
     console.log("http://localhost:3000");

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const adminControllers = require("../controllers/admin");
-const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -12,7 +11,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 15000000 } });
 
-// router.use(middleware);
+router.use(middleware);
 router.get("/", adminControllers.adminDashboard);
 router.post("/addDepartment", adminControllers.addDepartment);
 router.get("/departments/delete/:id", adminControllers.deleteDepartment);

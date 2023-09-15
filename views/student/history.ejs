@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<%- include('../partials/footer') -%>
+<script>
+    let quizzes = JSON.parse(`<%- JSON.stringify(quizzes) %>`);
+</script>
+<script src="/scripts/history.js"></script>
+<div class="grid-container">
+    <!-- Header -->
+
+    <%- include("./studentHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./studentSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="main-title">
+            <div class="h1 ps-5 pe-5 dboard">History</div>
+        </div>
+        <table
+            class="uk-table uk-table-hover uk-table-striped text-center"
+            id="datatable"
+        >
+            <thead>
+                <th class="text-center">Sr no.</th>
+                <th class="text-center">Quiz Title</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Subject</th>
+                <th class="text-center">Result</th>
+                <th class="text-center">View</th>
+            </thead>
+            <tbody>
+                <% quizzes.forEach((element,index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= element.quiz_id.name %></td>
+                    <td><%- ((new Date(element.start_time)).toLocaleString('en-GB').split(','))[0] %></td>
+                    <td><%= element.quiz_id.subject_id.name %></td>
+                    <td><span id="<%= element._id %>"></span></td>
+                    <td><a style="text-decoration: none;" href="/student/history/<%= element._id %>"><i class="fa-solid fa-eye text-primary"></i></a></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </main>
+    <!-- End Main -->
+</div>
+<script src="/scripts/studentSidebar.js"></script>
+
+<%- include('../partials/footer2') -%>

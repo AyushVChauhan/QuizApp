@@ -8,16 +8,18 @@ router.post("/login", studentControllers.login);
 router.get('/login', studentControllers.loginPage);
 router.get('/forgetPassword', studentControllers.forgetPage);
 router.post('/forgetPassword', studentControllers.forgetPassword);
+router.use(middleware)
+
 router.get('/upcomingQuiz', studentControllers.upcomingQuiz);
 router.get('/availableQuiz', studentControllers.availableQuiz);
 router.get('/otherQuiz', studentControllers.otherQuiz);
 
-
+router.get("/history", studentControllers.history);
+router.get("/history/:sessionId", studentControllers.quizHistory);
 // router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
 // router.post("/enrollmentcheck", studentControllers.enrollment_check);
 // router.get("/register", studentControllers.register_page);
 // router.post("/register", studentControllers.enrollment_check);
-router.use(middleware)
 router.get("/instructions/:quizId", studentControllers.instructions);
 router.get("/takeQuiz",studentControllers.takeQuiz);
 router.post("/getQuestion",studentControllers.getQuestion);
@@ -31,11 +33,11 @@ function middleware(req, res, next) {
       next();
     }
     else {
-        res.redirect("/teacher/login");
+        res.redirect("/student/login");
       }
   } 
   else {
-    res.redirect("/teacher/login");
+    res.redirect("/student/login");
   }
 }
 
