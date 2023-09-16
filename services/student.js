@@ -6,6 +6,7 @@ const commonServices = require("../services/common");
 const mailer = require("../controllers/mailer");
 const md5 = require("md5");
 const { default: mongoose } = require("mongoose");
+const session = require("express-session");
 
 async function loginFetch(username, password) {
     let data = await students.findOne({
@@ -237,6 +238,12 @@ async function history(studentId) {
     let session = await sessions.find({student_id:studentId}).populate({path:"quiz_id",populate:{path:"subject_id",model:"subjects"}}).populate("questions_answers.question");
     return session;
 }
+
+async function quizHistory(studentId, sessionId) {
+    let session = await sessions.findOne({_id:sessionId,student_id:studentId}).populate("questions_answers.question").populate("quiz_id");
+    return session;
+}
+
 module.exports = {
     loginFetch,
     loginCheck,
@@ -250,5 +257,6 @@ module.exports = {
     availableQuiz,
     otherQuiz,
     getOtherQuizSession,
-    history
+    history,
+    quizHistory,
 };

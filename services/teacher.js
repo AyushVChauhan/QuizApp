@@ -272,9 +272,11 @@ async function getMyQuiz(data, id) {
             : { subject_id: data.subject };
     let createdbyquery = { created_by: id };
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
-    let quiz = await quizzes.find({
-        $and: [subjectquery, datequery, createdbyquery],
-    }).sort({"createdAt":-1});
+    let quiz = await quizzes
+        .find({
+            $and: [subjectquery, datequery, createdbyquery],
+        })
+        .sort({ createdAt: -1 });
     return quiz;
 }
 async function getAllQuiz(data, id) {
@@ -301,7 +303,8 @@ async function getAllQuiz(data, id) {
     // let quiz=await quizzes.find({$and:[{subject_id:subject},{date}]});
     let quiz = await quizzes
         .find({ $and: [subjectquery, datequery] })
-        .populate("created_by").sort({"createdAt":-1});
+        .populate("created_by")
+        .sort({ createdAt: -1 });
     return quiz;
 }
 async function quizDetails(data) {
@@ -342,20 +345,22 @@ async function chartDetails(quizId) {
         quiz.random_questions != undefined ? quiz.random_questions : [];
     let compulsary_questions =
         quiz.compulsary_questions != undefined ? quiz.compulsary_questions : [];
-    let session = await sessions.find({
-        quiz_id: quizId,
-        student_id: { $in: students },
-        start_time: { $gte: quiz.valid_from },
-        end_time: { $lte: quiz.valid_to },
-    }).populate("student_id");
+    let session = await sessions
+        .find({
+            quiz_id: quizId,
+            student_id: { $in: students },
+            start_time: { $gte: quiz.valid_from },
+            end_time: { $lte: quiz.valid_to },
+        })
+        .populate("student_id");
     console.log(session);
     let pending = 0,
         submitted = 0,
         disqualify = 0,
         student = [];
-       
+
     session.forEach((ele) => {
-        let  totalMarks = 0;
+        let totalMarks = 0;
         if (ele.status == 0) {
             pending++;
         } else if (ele.status == 1) {
@@ -394,7 +399,7 @@ async function chartDetails(quizId) {
                     totalMarks += question.marks;
                 }
             });
-            student.push({enrollment:ele.student_id.enrollment, totalMarks})
+            student.push({ enrollment: ele.student_id.enrollment, totalMarks });
         } else if (ele.status == 2) {
             disqualify++;
         }
@@ -468,34 +473,21 @@ async function generateReport(quizId) {
                 } else {
                     question.marks = 0;
                 }
-                console.log(
-                    compulsaryQuestion.question.course_outcome_id[0]
-                        .course_outcome
-                );
                 let tempGet = cos.get(
                     compulsaryQuestion.question.course_outcome_id[0]
                         .course_outcome
                 );
-                if (tempGet) {
-                    cos.set(
-                        compulsaryQuestion.question.course_outcome_id[0]
-                            .course_outcome,
-                        {
-                            totalMarks:
-                                tempGet.totalMarks + compulsaryQuestion.marks,
-                            marks: tempGet.marks + question.marks,
-                        }
-                    );
-                } else {
-                    cos.set(
-                        compulsaryQuestion.question.course_outcome_id[0]
-                            .course_outcome,
-                        {
-                            totalMarks: compulsaryQuestion.marks,
-                            marks: question.marks,
-                        }
-                    );
-                }
+
+                cos.set(
+                    compulsaryQuestion.question.course_outcome_id[0]
+                        .course_outcome,
+                    {
+                        totalMarks:
+                            tempGet.totalMarks + compulsaryQuestion.marks,
+                        marks: tempGet.marks + question.marks,
+                    }
+                );
+
                 totalMarks += question.marks;
                 // console.log(totalMarks);
                 return;
@@ -518,56 +510,60 @@ async function generateReport(quizId) {
                 } else {
                     question.marks = 0;
                 }
-                console.log(
-                    randomQuestion.question.course_outcome_id[0].course_outcome
-                );
+
                 let tempGet = cos.get(
                     randomQuestion.question.course_outcome_id[0].course_outcome
                 );
-                if (tempGet) {
-                    cos.set(
-                        randomQuestion.question.course_outcome_id[0]
-                            .course_outcome,
-                        {
-                            totalMarks:
-                                tempGet.totalMarks + randomQuestion.marks,
-                            marks: tempGet.marks + question.marks,
-                        }
-                    );
-                } else {
-                    cos.set(
-                        randomQuestion.question.course_outcome_id[0]
-                            .course_outcome,
-                        {
-                            totalMarks: randomQuestion.marks,
-                            marks: question.marks,
-                        }
-                    );
-                }
+
+                cos.set(
+                    randomQuestion.question.course_outcome_id[0].course_outcome,
+                    {
+                        totalMarks: tempGet.totalMarks + randomQuestion.marks,
+                        marks: tempGet.marks + question.marks,
+                    }
+                );
+
                 totalMarks += question.marks;
-                // console.log(totalMarks);
                 return;
             }
         });
-        let remark=null;
-        if(element.status==0){
-            remark="Pending";
+        let remark = null;
+        if (element.status == 0) {
+            remark = "Pending";
         }
-        generateReportArray.set(studentsMap.get(element.student_id.toString()), {totalMarks,cos,remark});
+        generateReportArray.set(
+            studentsMap.get(element.student_id.toString()),
+            {
+                totalMarks,
+                cos,
+                remark,
+                start_time: element.start_time,
+                end_time: element.end_time,
+                evaluated: element.is_evaluated,
+                sessionId : element._id,
+            }
+        );
     });
     let cos = new Map();
-    allCos.forEach(ele=>{
-        cos.set(ele,{totalMarks:0,marks:0});
-    })
-    students.forEach(ele=>{
-        if(generateReportArray.get(ele.enrollment) == undefined)
-        {
-            generateReportArray.set(ele.enrollment , {totalMarks:0, cos:cos,remark:"Absent"});
+    allCos.forEach((ele) => {
+        cos.set(ele, { totalMarks: 0, marks: 0 });
+    });
+    students.forEach((ele) => {
+        if (generateReportArray.get(ele.enrollment) == undefined) {
+            generateReportArray.set(ele.enrollment, {
+                totalMarks: 0,
+                cos: cos,
+                remark: "Absent",
+                start_time: "Absent",
+                end_time: "Absent",
+            });
         }
-    })
-    
+    });
+
     //["Enrollment",{totalmarks,cos=(Array[co no.,{totalmarks,marks}]),remarks]
-    const sortedMap = Array.from(generateReportArray).sort((a,b)=>a[0]-b[0]);
+    const sortedMap = Array.from(generateReportArray).sort(
+        (a, b) => a[0] - b[0]
+    );
     return [sortedMap, quiz.marks, quiz.name];
 }
 

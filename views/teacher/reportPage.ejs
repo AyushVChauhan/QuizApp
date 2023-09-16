@@ -2,10 +2,12 @@
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 <link rel="stylesheet" href="/stylesheets/datatables.css" />
 <%- include('../partials/footer') -%>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+></script>
 <script>
-let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
-
+    let chartDetails = JSON.parse(`<%- JSON.stringify(chart) %>`);
 </script>
 <style>
     #datatable_wrapper {
@@ -30,7 +32,15 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
     .animate {
         animation: fadeIn 1s linear forwards;
     }
-
+    #downloadReport {
+        transition: all 0.5s;
+    }
+    #downloadReport:hover {
+        background-color: white;
+        color: #11467b;
+        box-shadow: 5px 5px;
+        border: none;
+    }
     @keyframes fadeIn {
         0% {
             opacity: 0;
@@ -61,7 +71,7 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
             <div class="col h1">Quiz Details</div>
         </div>
         <div class="row text-center mb-5">
-            <div class="col-5 me-1">
+            <div class="col-4">
                 <button
                     class="btn rounded-pill"
                     style="background-color: blue"
@@ -71,7 +81,7 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
                     Chart Analysis
                 </button>
             </div>
-            <div class="col-5">
+            <div class="col-4">
                 <button
                     class="btn rounded-pill"
                     id="studentBtn"
@@ -80,14 +90,68 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
                     Student Details
                 </button>
             </div>
+            <div class="col-4">
+                <button
+                    class="btn btn-primary rounded-pill"
+                    id="downloadReport"
+                    onclick="window.open('/files/reports/<%= fileName %>.xlsx', '_blank')"
+                >
+                    Download Report
+                </button>
+            </div>
         </div>
 
-        <div class="row " id="chartDetails">
-            <div id="piechart" class="col-6" style=" height: 400px;"></div>
-            <div id="histogram" class="col-6" style=" height: 400px;"></div>
-
+        <div class="row" id="chartDetails">
+            <div id="piechart" class="col-6" style="height: 400px"></div>
+            <div id="histogram" class="col-6" style="height: 400px"></div>
         </div>
-        <div class="row" id="studentDetails"></div>
+        <div class="row" id="studentDetails">
+            <!-- srno
+            student
+            Status
+            Marks -->
+            <table
+                class="uk-table uk-table-hover uk-table-striped text-center"
+                id="datatable"
+            >
+                <thead>
+                    <th class="text-center">Sr no.</th>
+                    <th class="text-center">Enrollment No.</th>
+                    <th class="text-center">Date Given</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Marks</th>
+                    <th class="text-center">Evaluate</th>
+                </thead>
+                <tbody>
+                    <% studentDetails.forEach((element,index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= element[0] %></td>
+                        <td>
+                            <%- element[1].start_time == "Absent" ? "Absent" :
+                            (new
+                            Date(element[1].start_time)).toLocaleString('en-GB').split(",")[0]
+                            %>
+                        </td>
+                        <td>
+                            <%- element[1].remark == null ? "Submitted" :
+                            element[1].remark %>
+                        </td>
+                        <td><%= element[1].totalMarks %></td>
+                        <% if (element[1].remark == null) { %>
+                        <td>
+                            <%- element[1].evaluate == 0 ? `<a href="/teacher/evaluate/${element[1].sessionId}" ><i class="fa-solid fa-clipboard-list fa-lg text-warning ms-3" title="Evaluate" ></i></a>` : `<a href="/teacher/evaluate/${element[1].sessionId}" ><i class="fa-solid fa-clipboard-list fa-lg text-success ms-3" title="Evaluate" ></i></a>` %>
+                        </td>
+                        <% } else { %> 
+                        <td>
+                            <i class='fa-solid fa-clipboard-list fa-lg text-danger ms-3' title='Evaluate'></i>
+                        </td> 
+                        <% } %>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
         <!-- End Main -->
     </main>
 </div>
@@ -118,7 +182,6 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
     }
 
     $(document).ready(() => {
-        console.log("hello");
         var myTable;
 
         myTable = $("#datatable").DataTable({
@@ -129,10 +192,6 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
                     next: ">",
                 },
             },
-            columnDefs: [
-                // Center align the header content of column 1
-                { className: "dt-head-center", targets: [0, 1] },
-            ],
         });
         $("#chartBtn").click();
         var myTable1;
@@ -152,58 +211,60 @@ let chartDetails = JSON.parse('<%- JSON.stringify(chart) %>')
         });
     });
 
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+    function drawChart() {
         console.log(chartDetails);
         var data = google.visualization.arrayToDataTable([
-          ['Student Status', 'Number of students'],
-          ['Submitted',     chartDetails.submitted],
-          ['Absent',    chartDetails.absent],
-          ['Pending',  chartDetails.pending],
-          ['Disqualify', chartDetails.disqualify],
-          
+            ["Student Status", "Number of students"],
+            ["Submitted", chartDetails.submitted],
+            ["Absent", chartDetails.absent],
+            ["Pending", chartDetails.pending],
+            ["Disqualify", chartDetails.disqualify],
         ]);
 
         var options = {
-          title: 'Student Status'
+            title: "Student Status",
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.visualization.PieChart(
+            document.getElementById("piechart")
+        );
 
         chart.draw(data, options);
-      }
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawHistogram);
-      function drawHistogram() {
+    }
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawHistogram);
+    function drawHistogram() {
         var data = google.visualization.arrayToDataTable([
-          [{type:'string',label:'enrollment'},{type:'number',label:'Marks'}],
-          ]);
-       
-         chartDetails.student.forEach(function(element,index,array){
-            data.addRow( [element.enrollment , element.totalMarks])
-           
-         })
-      
+            [
+                { type: "string", label: "enrollment" },
+                { type: "number", label: "Marks" },
+            ],
+        ]);
+
+        chartDetails.student.forEach(function (element, index, array) {
+            data.addRow([element.enrollment, element.totalMarks]);
+        });
+
         var options = {
-          title: 'Marks wise students',
-          legend: { position: 'none' },
-          colors: ['#4D3C77'],
-          hAxis: {
-          title: 'Total Marks'
-        },
-        vAxis: {
-          title: 'Number of Students'
-        },
+            title: "Marks wise students",
+            legend: { position: "none" },
+            colors: ["#4D3C77"],
+            hAxis: {
+                title: "Total Marks",
+            },
+            vAxis: {
+                title: "Number of Students",
+            },
         };
 
-        var chart = new google.visualization.Histogram(document.getElementById('histogram'));
+        var chart = new google.visualization.Histogram(
+            document.getElementById("histogram")
+        );
         chart.draw(data, options);
-      }
-    
-   
-     
+    }
 </script>
 <!-- <script src="/scripts/addSubject.js"></script> -->
 <%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

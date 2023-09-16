@@ -422,8 +422,8 @@ async function generateReport(req, res) {
     }
     let chart = await teacherServices.chartDetails(quizId);
     console.log(chart);
-
-    res.render("./teacher/reportPage",{errors,chart})
+    let studentDetails = report[0];
+    res.render("./teacher/reportPage",{errors,chart,fileName,studentDetails})
     // res.download(`./public/files/reports/${fileName}.xlsx`)
 }
 module.exports = {

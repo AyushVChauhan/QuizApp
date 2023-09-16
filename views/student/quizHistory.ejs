@@ -1,0 +1,72 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<%- include('../partials/footer') -%>
+<div class="grid-container">
+    <!-- Header -->
+
+    <%- include("./studentHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./studentSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="main-title">
+            <div class="h1 pe-5 dboard"><%= questions.quiz_id.name %></div>
+        </div>
+        <div class="accordion" id="questions">
+            <% questions.questions_answers.forEach((element,index) => { %>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button
+                        class="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#<%= element.question._id %>"
+                        aria-expanded="false"
+                        aria-controls="<%= element.question._id %>"
+                    >
+                    <div class="row">
+                        <div class="col-auto">
+                            <%= index + 1 %>.)
+                        </div>
+                        <div class="col-auto">
+                            <%- element.question.question %>
+                        </div>
+                    </div>
+                    </button>
+                </h2>
+                <div
+                    id="<%= element.question._id %>"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#questions"
+                >
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-10" style="line-break: anywhere;">
+                                Selected Answer: <%= element.answer %>
+                            </div>
+                            <div class="col-2 text-end">
+                                Marks: <%= element.question.marks %>
+                            </div>
+                            <div class="col-10 mt-2">
+                                Correct Answer: <%= element.question.answer %>
+                            </div>
+                            <div class="col-2 text-end mt-2">
+                                Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </main>
+    <xyz> asdas </xyz>
+    <!-- End Main -->
+</div>
+<script src="/scripts/studentSidebar.js"></script>
+
+<%- include('../partials/footer2') -%>
