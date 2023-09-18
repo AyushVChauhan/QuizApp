@@ -73,6 +73,8 @@ router.post("/addQuestion/getQuestion", teacherControllers.getQuestion);
 router.post("/questionDetail", teacherControllers.questionDetail);
 // router.post("/addQuestion/topics", teacherControllers.addQue_subSelect);
 router.get("/generateReport/:quizId", teacherControllers.generateReport);
+router.get("/evaluate/:sessionId", teacherControllers.evaluate)
+router.post("/evaluate", teacherControllers.evaluatePost);
 function questionMiddleware(req, res, next) {
     if (req.session.topics) {
         next();

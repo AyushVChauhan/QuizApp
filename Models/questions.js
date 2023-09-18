@@ -6,7 +6,7 @@ const questionsSchema = new mongoose.Schema({
     created_by: {type:mongoose.SchemaTypes.ObjectId, ref: "teachers"},
     updated_by : {type:mongoose.SchemaTypes.ObjectId, ref: "teachers"},
     marks: Number,
-    type: Number,
+    type: Number, //1-MCQ , 2-ONE_WORD , 3-DESCRIPTIVE
     files: [{ description: String, file: String }],
     difficulty: Number,
     options: [{ option: String, file: String }],

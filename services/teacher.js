@@ -468,9 +468,9 @@ async function generateReport(quizId) {
             if (compulsaryQuestion) {
                 // console.log(compulsaryQuestion.question.answer);
                 // console.log(question.answer);
-                if (compulsaryQuestion.question.answer == question.answer) {
+                if (compulsaryQuestion.question.answer == question.answer && compulsaryQuestion.question.type != 3) {
                     question.marks = compulsaryQuestion.marks;
-                } else {
+                } else if(compulsaryQuestion.question.type != 3) {
                     question.marks = 0;
                 }
                 let tempGet = cos.get(
@@ -505,9 +505,9 @@ async function generateReport(quizId) {
                 // console.log(randomQuestion.question.answer);
                 // console.log(question.answer);
 
-                if (randomQuestion.question.answer == question.answer) {
+                if (randomQuestion.question.answer == question.answer && randomQuestion.question.type != 3) {
                     question.marks = randomQuestion.marks;
-                } else {
+                } else if(randomQuestion.question.type != 3) {
                     question.marks = 0;
                 }
 
@@ -539,10 +539,11 @@ async function generateReport(quizId) {
                 remark,
                 start_time: element.start_time,
                 end_time: element.end_time,
-                evaluated: element.is_evaluated,
+                evaluate: element.is_evaluated,
                 sessionId : element._id,
             }
         );
+        element.save();
     });
     let cos = new Map();
     allCos.forEach((ele) => {
@@ -565,6 +566,45 @@ async function generateReport(quizId) {
         (a, b) => a[0] - b[0]
     );
     return [sortedMap, quiz.marks, quiz.name];
+}
+
+async function evaluate(sessionId, teacherId) {
+    let session = await sessions.findOne({_id:sessionId}).populate("questions_answers.question");
+    if(session == null)
+    {
+        return 0;
+    }
+    let quiz = await quizzes.findOne({_id:session.quiz_id, created_by:teacherId},{_id:1});
+    if(quiz == null)
+    {
+        return 0;
+    }
+    return [session,quiz._id];
+}
+
+async function evaluatePost(details, sessionId, teacherId) {
+    let session = await sessions.findOne({_id:sessionId});
+    if(session == null)
+    {
+        return 0;
+    }
+    let quiz = await quizzes.findOne({_id:session.quiz_id, created_by:teacherId},{_id:1});
+    if(quiz == null)
+    {
+        return 0;
+    }
+    session.questions_answers.forEach(question=>{
+        details.forEach(detail => {
+            if(question.question == detail.questionId)
+            {
+                question.marks = detail.marks;
+                return;
+            }
+        })
+    })
+    session.is_evaluated = 1;
+    await session.save();
+    return 1;
 }
 
 module.exports = {
@@ -595,4 +635,6 @@ module.exports = {
     getAllQuiz,
     generateReport,
     chartDetails,
+    evaluate,
+    evaluatePost,
 };

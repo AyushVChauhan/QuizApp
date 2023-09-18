@@ -1,0 +1,138 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<%- include('../partials/footer') -%>
+<script>
+    let quizId = `<%= quizId %>`;
+</script>
+<div class="grid-container">
+    <!-- Header -->
+
+    <%- include("./teacherHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./teacherSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="main-title">
+            <div class="h1 pe-5 dboard">Evaluate</div>
+        </div>
+        <div class="accordion" id="questions">
+            <% details.questions_answers.forEach((element,index) => { %>
+                <% if (element.question.type == 3) { %>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button
+                                class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#<%= element.question._id %>"
+                                aria-expanded="false"
+                                aria-controls="<%= element.question._id %>"
+                            >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <%= index + 1 %>.)
+                                </div>
+                                <div class="col-auto">
+                                    <span id="span<%= element.question._id %>"><i class="fa-regular fa-clock"></i></span>
+                                </div>
+                                <div class="col-auto">
+                                    <%- element.question.question %>
+                                </div>
+                            </div>
+                            </button>
+                        </h2>
+                        <div
+                            id="<%= element.question._id %>"
+                            class="accordion-collapse collapse"
+                            data-bs-parent="#questions"
+                        >
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-10" style="line-break: anywhere;">
+                                        Selected Answer: <%= element.answer %>
+                                    </div>
+                                    <div class="col-2 text-end">
+                                        Marks: <%= element.question.marks %>
+                                    </div>
+                                    <div class="col-9 mt-2">
+                                        
+                                    </div>
+                                    <div class="col-3 text-end mt-2">
+                                        <div class="row">
+                                            <div class="col-auto d-flex align-items-center">
+                                                <label for="evaluate<%= element.question._id %>">Obtained Marks:</label>
+                                            </div>
+                                            <div class="col">
+                                                <input type="number" class="form-control eval" data-id="<%= element.question._id %>" id="evaluate<%= element.question._id %>" value="<%= element.marks %>" oninput="evaluateInput(this, `<%= element.question.marks %>`)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% }) %>
+            <% details.questions_answers.forEach((element,index) => { %>
+                <% if (element.question.type != 3) { %>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button
+                                class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#<%= element.question._id %>"
+                                aria-expanded="false"
+                                aria-controls="<%= element.question._id %>"
+                            >
+                            <div class="row">
+                                <div class="col-auto">
+                                    <%= index + 1 %>.)
+                                </div>
+                                <div class="col-auto">
+                                    <%- element.question.question %>
+                                </div>
+                            </div>
+                            </button>
+                        </h2>
+                        <div
+                            id="<%= element.question._id %>"
+                            class="accordion-collapse collapse"
+                            data-bs-parent="#questions"
+                        >
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-10" style="line-break: anywhere;">
+                                        Selected Answer: <%= element.answer %>
+                                    </div>
+                                    <div class="col-2 text-end">
+                                        Marks: <%= element.question.marks %>
+                                    </div>
+                                    <div class="col-10 mt-2">
+                                        Correct Answer: <%= element.question.answer %>
+                                    </div>
+                                    <div class="col-2 text-end mt-2">
+                                        Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% }) %>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-end">
+                <button class="btn btn-primary btn-lg rounded-pill" onclick="submitEvaluate()">Evaluate</button>
+            </div>
+        </div>
+    </main>
+    <!-- End Main -->
+</div>
+<script src="/scripts/teacherSidebar.js"></script>
+<script src="/scripts/evaluate.js"></script>
+<%- include('../partials/footer2') -%>

@@ -12,15 +12,15 @@ async function viewGroup(req, res) {
 function logout(req, res) {
     let token = jwt.sign(
         {
-            username: '',
-            password: '',
-            id: '',
-            role: '',
+            username: "",
+            password: "",
+            id: "",
+            role: "",
         },
         process.env.JWT_SECRET
     );
     res.cookie("auth", token);
-    res.redirect("/teacher/login")
+    res.redirect("/teacher/login");
 }
 async function login(req, res) {
     let data = await teacherServices.loginFetch(
@@ -117,7 +117,7 @@ async function addQuestion(req, res) {
         course_outcome_id.push(new mongoose.Types.ObjectId(ele["_id"]));
     });
     let type = req.body.type;
-    if (type==1) {
+    if (type == 1) {
         req.body.options.forEach((ele) => {
             options.push({ option: ele, file: null });
         });
@@ -130,7 +130,8 @@ async function addQuestion(req, res) {
         type: req.body.type,
         difficulty: req.body.difficulty,
         options: options,
-        answer: type==1 ?  req.body.options[req.body.answer - 1]: req.body.answer,
+        answer:
+            type == 1 ? req.body.options[req.body.answer - 1] : req.body.answer,
         is_active: 1,
         created_by: data.id,
     };
@@ -279,7 +280,10 @@ async function setQuestions(req, res) {
     if (myArr.length == 0) {
         let myIds = [];
         selectedQuestions.forEach((ele) => {
-            myIds.push({ question: new mongoose.Types.ObjectId(ele._id), marks: ele.marks });
+            myIds.push({
+                question: new mongoose.Types.ObjectId(ele._id),
+                marks: ele.marks,
+            });
         });
         await teacherServices.setQuestions(myIds, req.session.quizId);
         res.json({ next_page: 0 });
@@ -301,9 +305,15 @@ async function setCompulsaryQuestionsPost(req, res) {
     let randomQuestions = [];
     selectedQuestions.forEach((element) => {
         if (element.random == 0) {
-            compulsaryQuestions.push({ question: new mongoose.Types.ObjectId(element._id), marks: element.marks });
+            compulsaryQuestions.push({
+                question: new mongoose.Types.ObjectId(element._id),
+                marks: element.marks,
+            });
         } else {
-            randomQuestions.push({ question: new mongoose.Types.ObjectId(element._id), marks: element.marks });
+            randomQuestions.push({
+                question: new mongoose.Types.ObjectId(element._id),
+                marks: element.marks,
+            });
         }
     });
     await teacherServices.setCompulsaryQuestionsPost(
@@ -339,13 +349,13 @@ async function getMyQuiz(req, res) {
     let cookie = req.cookies.auth;
     let data = jwt.verify(cookie, process.env.JWT_SECRET);
     let quizData = await teacherServices.getMyQuiz(req.body, data.id);
-    res.json({ success: 1, quizData: quizData })
+    res.json({ success: 1, quizData: quizData });
 }
 async function getAllQuiz(req, res) {
     console.log(req.body);
 
     let quizData = await teacherServices.getAllQuiz(req.body);
-    res.json({ success: 1, quizData: quizData })
+    res.json({ success: 1, quizData: quizData });
 }
 async function quizDetails(req, res) {
     // console.log(req.params.quizId);
@@ -378,10 +388,10 @@ async function generateReport(req, res) {
     // let toSheet = [{enrollment,co1,co2,co3,totalmarks}]
     let toSheet = [[" "]];
     let AllCOS = Array.from(report[0][0][1].cos);
-    AllCOS.forEach(ele=>{
+    AllCOS.forEach((ele) => {
         toSheet[0].push("CO-" + ele[0]);
         toSheet[0].push(" ");
-    })
+    });
     toSheet[0].push(" ");
     toSheet.push(["Enrollment Number"]);
     for (let index = 0; index < AllCOS.length; index++) {
@@ -390,19 +400,19 @@ async function generateReport(req, res) {
     }
     toSheet[1].push("Total Marks/" + report[1]);
     toSheet[1].push("Remaks");
-    report[0].forEach(element => {
+    report[0].forEach((element) => {
         let myObject = [];
         let enrollment = element[0];
         let totalMarks = element[1].totalMarks;
-        let remark=element[1].remark;
+        let remark = element[1].remark;
         let allCos = Array.from(element[1].cos);
         // console.log(allCos);
         myObject.push(enrollment);
-        allCos.forEach(ele=>{
-            myObject.push(ele[1].totalMarks)
-            myObject.push(ele[1].marks)
+        allCos.forEach((ele) => {
+            myObject.push(ele[1].totalMarks);
+            myObject.push(ele[1].marks);
             // myObject["CO-"+ele[0]] = ele[1].marks;
-        })
+        });
 
         myObject.push(totalMarks);
         myObject.push(remark);
@@ -423,9 +433,52 @@ async function generateReport(req, res) {
     let chart = await teacherServices.chartDetails(quizId);
     console.log(chart);
     let studentDetails = report[0];
-    res.render("./teacher/reportPage",{errors,chart,fileName,studentDetails})
+    res.render("./teacher/reportPage", {
+        errors,
+        chart,
+        fileName,
+        studentDetails,
+    });
     // res.download(`./public/files/reports/${fileName}.xlsx`)
 }
+
+async function evaluate(req, res) {
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let sessionId = req.params.sessionId;
+    let token = req.cookies.auth;
+    let teacherId = jwt.verify(token, process.env.JWT_SECRET)["id"];
+    let details = await teacherServices.evaluate(sessionId, teacherId);
+    if (details) {
+        res.render("./teacher/evaluate", {
+            errors,
+            details: details[0],
+            quizId: details[1],
+        });
+    } else {
+        res.redirect("/myQuiz");
+    }
+}
+
+async function evaluatePost(req, res){
+    let details = req.body.data;
+    let sessionId = req.body.sessionId;
+    let token = req.cookies.auth;
+    let teacherId = jwt.verify(token, process.env.JWT_SECRET)["id"];
+    let evaluateFlag = await teacherServices.evaluatePost(details, sessionId, teacherId);
+    if(evaluateFlag)
+    {
+        res.json({success:1})
+    }
+    else
+    {
+        res.json({error:1})
+    }
+}
+
 module.exports = {
     login,
     loginGet,
@@ -462,4 +515,6 @@ module.exports = {
     subjects,
     logout,
     generateReport,
+    evaluate,
+    evaluatePost,
 };
