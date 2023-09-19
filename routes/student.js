@@ -16,6 +16,7 @@ router.get('/otherQuiz', studentControllers.otherQuiz);
 
 router.get("/history", studentControllers.history);
 router.get("/history/:sessionId", studentControllers.quizHistory);
+router.get("/analysis/:sessionId", studentControllers.quizAnalysis);
 // router.get("/enrollmentcheck", studentControllers.enrollment_confirmation_page);
 // router.post("/enrollmentcheck", studentControllers.enrollment_check);
 // router.get("/register", studentControllers.register_page);

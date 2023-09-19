@@ -1,0 +1,470 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="/stylesheets/style_temp.css" />
+<link rel="stylesheet" href="/stylesheets/datatables.css" />
+<%- include('../partials/footer') -%>
+<script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"
+></script>
+<script>
+    let difficultyDetails = JSON.parse(`<%- JSON.stringify(difficulty) %>`);
+    let topicDetails = JSON.parse(`<%- JSON.stringify(topics) %>`);
+    console.log(difficultyDetails);
+    console.log(topicDetails);
+    console.log(`<%= myMarks %>`);
+</script>
+<style>
+    #datatable_wrapper {
+        margin: 0;
+    }
+    #datatable1_wrapper {
+        margin: 0;
+    }
+    .expandingDiv {
+        margin-top: -100%;
+        transition: all 1s;
+    }
+    #chartDetails {
+        opacity: 0;
+    }
+    #studentDetails {
+        opacity: 0;
+    }
+    #questionDetails {
+        opacity: 0;
+    }
+    .animate {
+        animation: fadeIn 1s linear forwards;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+<%- include('../partials/footer') -%>
+<link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,1000&display=swap"
+    rel="stylesheet"
+/>
+
+<div class="grid-container">
+    <!-- Header -->
+    <%- include("./studentHeader") %>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <%- include("./studentSidebar") %>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+        <div class="row mb-3">
+            <div class="col h1">Quiz Analysis</div>
+        </div>
+        <div class="row text-center mb-5">
+            <div class="col-4">
+                <button
+                    class="btn rounded-pill"
+                    style="background-color: blue"
+                    id="chartBtn"
+                    onclick="showChart()"
+                >
+                    Difficulty
+                </button>
+            </div>
+            <div class="col-4">
+                <button
+                    class="btn rounded-pill"
+                    id="studentBtn"
+                    onclick="showStudent()"
+                >
+                    Topic
+                </button>
+            </div>
+            <div class="col-4">
+                <button
+                    class="btn btn-primary rounded-pill"
+                    id="questionBtn"
+                    onclick="showQuestion()"
+                >
+                    Questions
+                </button>
+            </div>
+        </div>
+
+        <div class="row" id="chartDetails">
+            <div id="difficultyMarks" class="col-6" style="height: 400px"></div>
+            <div id="difficultyTime" class="col-6" style="height: 400px"></div>
+            <div
+                id="difficultyMarksPerformance"
+                class="col-6"
+                style="height: 400px"
+            ></div>
+            <div
+                id="difficultyTimePerformance"
+                class="col-6"
+                style="height: 400px"
+            ></div>
+        </div>
+
+        <div class="row" id="studentDetails">
+            <div id="topicMarks" class="col-6" style="height: 400px"></div>
+            <div id="topicTime" class="col-6" style="height: 400px"></div>
+            <div
+                id="topicMarksPerformance"
+                class="col-6"
+                style="height: 400px"
+            ></div>
+            <div
+                id="topicTimePerformance"
+                class="col-6"
+                style="height: 400px"
+            ></div>
+        </div>
+
+        <div class="row" id="questionDetails">
+            <div id="piechart" class="col-6" style="height: 400px"></div>
+            <div id="histogram" class="col-6" style="height: 400px"></div>
+        </div>
+        <!-- End Main -->
+    </main>
+</div>
+<script>
+    function showChart() {
+        $("#chartDetails").show();
+        document.getElementById("chartDetails").classList.add("animate");
+        $("#studentDetails").hide();
+        $("#questionDetails").hide();
+        $("#chartBtn").css("background-color", "white");
+        $("#chartBtn").css("color", "#11467b");
+        $("#chartBtn").css("box-shadow", "5px 5px");
+        $("#studentBtn").css("background-color", "#11467b");
+        $("#studentBtn").css("color", "white");
+        $("#studentBtn").css("box-shadow", "none");
+
+        $("#questionBtn").css("background-color", "#11467b");
+        $("#questionBtn").css("color", "white");
+        $("#questionBtn").css("box-shadow", "none");
+
+        difficultyMarks();
+        difficultyTime();
+        difficultyMarksPerformance();
+        difficultyTimePerformance();
+    }
+    function showStudent() {
+        $("#chartDetails").hide();
+        $("#studentDetails").show();
+        document.getElementById("studentDetails").classList.add("animate");
+        $("#questionDetails").hide();
+        $("#chartBtn").css("background-color", "#11467b");
+        $("#chartBtn").css("color", "white");
+        $("#chartBtn").css("box-shadow", "none");
+
+        $("#studentBtn").css("background-color", "white");
+        $("#studentBtn").css("color", "#11467b");
+        $("#studentBtn").css("box-shadow", "5px 5px");
+
+        $("#questionBtn").css("background-color", "#11467b");
+        $("#questionBtn").css("color", "white");
+        $("#questionBtn").css("box-shadow", "none");
+
+        topicTime();
+        topicMarks();
+        topicMarksPerformance();
+    }
+    function showQuestion() {
+        $("#chartDetails").hide();
+        $("#studentDetails").hide();
+        $("#questionDetails").show();
+        document.getElementById("questionDetails").classList.add("animate");
+        $("#chartBtn").css("background-color", "#11467b");
+        $("#chartBtn").css("color", "white");
+        $("#chartBtn").css("box-shadow", "none");
+
+        $("#studentBtn").css("background-color", "#11467b");
+        $("#studentBtn").css("color", "white");
+        $("#studentBtn").css("box-shadow", "none");
+
+        $("#questionBtn").css("background-color", "white");
+        $("#questionBtn").css("color", "#11467b");
+        $("#questionBtn").css("box-shadow", "5px 5px");
+    }
+
+    $(document).ready(() => {
+        var myTable;
+
+        myTable = $("#datatable").DataTable({
+            pagingType: "simple_numbers",
+            language: {
+                paginate: {
+                    previous: "<",
+                    next: ">",
+                },
+            },
+        });
+        $("#chartBtn").click();
+        var myTable1;
+
+        myTable1 = $("#datatable1").DataTable({
+            pagingType: "simple_numbers",
+            language: {
+                paginate: {
+                    previous: "<",
+                    next: ">",
+                },
+            },
+            columnDefs: [
+                // Center align the header content of column 1
+                { className: "dt-head-center", targets: [0, 1] },
+            ],
+        });
+    });
+
+    google.charts.load("current", { packages: ["corechart", "bar"] });
+    google.charts.setOnLoadCallback(drawCharts);
+    function drawCharts() {
+        difficultyMarks();
+        difficultyTime();
+        difficultyMarksPerformance();
+        difficultyTimePerformance();
+        topicMarks();
+        topicTime();
+        topicMarksPerformance();
+    }
+    function topicMarksPerformance() {
+        let topicData = [["Topic", "Obtained Marks", "Total Marks"]];
+        topicDetails.forEach(ele=>{
+            topicData.push([ele[0], ele[1].marks, ele[1].totalMarks - ele[1].marks]);
+        });
+        var data = google.visualization.arrayToDataTable(topicData);
+
+        var options = {
+            colors: ["#00ff00", "#ff0000"],
+            isStacked: true,
+        };
+
+        var chart = new google.visualization.ColumnChart(
+            document.getElementById("topicMarksPerformance")
+        );
+        chart.draw(data, options);
+    }
+    function topicMarks() {
+        let topicData = [["Topic", "Marks"]];
+        topicDetails.forEach(ele=>{
+            topicData.push([ele[0], ele[1].marks]);
+        });
+        console.log(topicData);
+        var data = google.visualization.arrayToDataTable(topicData);
+
+        var options = {
+            title: "Marks Wise",
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById("topicMarks")
+        );
+        chart.draw(data, options);
+    }
+    function topicTime() {
+        let topicData = [["Topic", "Marks"]];
+        topicDetails.forEach(ele=>{
+            topicData.push([ele[0], ele[1].timeSpent]);
+        });
+        console.log(topicData);
+        var data = google.visualization.arrayToDataTable(topicData);
+
+        var options = {
+            title: "Time Wise",
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById("topicTime")
+        );
+        chart.draw(data, options);
+    }
+    function difficultyMarks() {
+        var data = google.visualization.arrayToDataTable([
+            ["Difficulty", "Marks"],
+            ["Easy", difficultyDetails[0][1].marks],
+            ["Medium", difficultyDetails[1][1].marks],
+            ["Hard", difficultyDetails[2][1].marks],
+        ]);
+
+        var options = {
+            title: "Marks Wise",
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById("difficultyMarks")
+        );
+        chart.draw(data, options);
+    }
+    function difficultyTime() {
+        var data = google.visualization.arrayToDataTable([
+            ["Difficulty", "Marks"],
+            ["Easy", difficultyDetails[0][1].timeSpent],
+            ["Medium", difficultyDetails[1][1].timeSpent],
+            ["Hard", difficultyDetails[2][1].timeSpent],
+        ]);
+
+        var options = {
+            title: "Time Wise",
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById("difficultyTime")
+        );
+        chart.draw(data, options);
+    }
+    function difficultyMarksPerformance() {
+        var data = google.visualization.arrayToDataTable([
+            ["Difficulty", "Obtained Marks", "Total Marks"],
+            [
+                "Easy",
+                difficultyDetails[0][1].marks,
+                difficultyDetails[0][1].totalMarks -
+                    difficultyDetails[0][1].marks,
+            ], // RGB value
+            [
+                "Medium",
+                difficultyDetails[1][1].marks,
+                difficultyDetails[1][1].totalMarks -
+                    difficultyDetails[1][1].marks,
+            ], // English color name
+            [
+                "Hard",
+                difficultyDetails[2][1].marks,
+                difficultyDetails[2][1].totalMarks -
+                    difficultyDetails[2][1].marks,
+            ],
+        ]);
+
+        var options = {
+            colors: ["#00ff00", "#ff0000"],
+            isStacked: true,
+        };
+
+        var chart = new google.visualization.ColumnChart(
+            document.getElementById("difficultyMarksPerformance")
+        );
+        chart.draw(data, options);
+    }
+    function difficultyTimePerformance() {
+        let easyprfm = null;
+        let medprfm = null;
+        let hardprfm = null;
+        if (
+            difficultyDetails[0][1].timeSpent <=
+                difficultyDetails[0][1].timeRequired * 1.2 &&
+            difficultyDetails[0][1].timeSpent >=
+                difficultyDetails[0][1].timeRequired * 0.8
+        ) {
+            easyprfm = "Average";
+        } else if (
+            difficultyDetails[0][1].timeSpent <=
+                difficultyDetails[0][1].timeRequired * 1.6 &&
+            difficultyDetails[0][1].timeSpent >
+                difficultyDetails[0][1].timeRequired * 1.2
+        ) {
+            easyprfm = "More";
+        } else if (
+            difficultyDetails[0][1].timeSpent >
+            difficultyDetails[0][1].timeRequired * 1.6
+        ) {
+            easyprfm = "Very Much";
+        } else if (
+            difficultyDetails[0][1].timeSpent >=
+                difficultyDetails[0][1].timeRequired * 0.4 &&
+            difficultyDetails[0][1].timeSpent <
+                difficultyDetails[0][1].timeRequired * 0.8
+        ) {
+            easyprfm = "Less";
+        } else {
+            easyprfm = "Very Less";
+        }
+        if (
+            difficultyDetails[1][1].timeSpent <=
+                difficultyDetails[1][1].timeRequired * 1.2 &&
+            difficultyDetails[1][1].timeSpent >=
+                difficultyDetails[1][1].timeRequired * 0.8
+        ) {
+            medprfm = "Average";
+        } else if (
+            difficultyDetails[1][1].timeSpent <=
+                difficultyDetails[1][1].timeRequired * 1.6 &&
+            difficultyDetails[1][1].timeSpent >
+                difficultyDetails[1][1].timeRequired * 1.2
+        ) {
+            medprfm = "More";
+        } else if (
+            difficultyDetails[1][1].timeSpent >
+            difficultyDetails[1][1].timeRequired * 1.6
+        ) {
+            medprfm = "Very Much";
+        } else if (
+            difficultyDetails[1][1].timeSpent >=
+                difficultyDetails[1][1].timeRequired * 0.4 &&
+            difficultyDetails[1][1].timeSpent <
+                difficultyDetails[1][1].timeRequired * 0.8
+        ) {
+            medprfm = "Less";
+        } else {
+            medprfm = "Very Less";
+        }
+        if (
+            difficultyDetails[2][1].timeSpent <=
+                difficultyDetails[2][1].timeRequired * 1.2 &&
+            difficultyDetails[2][1].timeSpent >=
+                difficultyDetails[2][1].timeRequired * 0.8
+        ) {
+            hardprfm = "Average";
+        } else if (
+            difficultyDetails[2][1].timeSpent <=
+                difficultyDetails[2][1].timeRequired * 1.6 &&
+            difficultyDetails[2][1].timeSpent >
+                difficultyDetails[2][1].timeRequired * 1.2
+        ) {
+            hardprfm = "More";
+        } else if (
+            difficultyDetails[2][1].timeSpent >
+            difficultyDetails[2][1].timeRequired * 1.6
+        ) {
+            hardprfm = "Very Much";
+        } else if (
+            difficultyDetails[2][1].timeSpent >=
+                difficultyDetails[2][1].timeRequired * 0.4 &&
+            difficultyDetails[2][1].timeSpent <
+                difficultyDetails[2][1].timeRequired * 0.8
+        ) {
+            hardprfm = "Less";
+        } else {
+            hardprfm = "Very Less";
+        }
+        var data = google.visualization.arrayToDataTable([
+            ["Difficulty", "Time Spent"],
+            ["Easy", easyprfm],
+            ["Medium", medprfm],
+            ["Hard", hardprfm],
+        ]);
+
+        var options = {
+            
+        };
+
+        var chart = new google.charts.Bar(
+            document.getElementById("difficultyTimePerformance")
+        );
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+</script>
+<!-- <script src="/scripts/addSubject.js"></script> -->
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>

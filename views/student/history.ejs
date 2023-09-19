@@ -30,6 +30,7 @@
                 <th class="text-center">Quiz Title</th>
                 <th class="text-center">Date</th>
                 <th class="text-center">Subject</th>
+                <th class="text-center">Status</th>
                 <th class="text-center">Result</th>
                 <th class="text-center">View</th>
             </thead>
@@ -40,8 +41,27 @@
                     <td><%= element.quiz_id.name %></td>
                     <td><%- ((new Date(element.start_time)).toLocaleString('en-GB').split(','))[0] %></td>
                     <td><%= element.quiz_id.subject_id.name %></td>
+                    <% if (element.status == 0) { %>
+                        <td>Pending</td>
+                    <% } else if (element.status == 2) { %>
+                        <td>Disqualified</td>
+                    <% } else if (element.status == 1 && element.is_evaluated == 0) { %>
+                        <td>Not Evaluated</td>
+                    <% } else if (element.status == 1 && element.is_evaluated == 1) { %>
+                        <td>Evaluated</td>
+                    <% } %>
                     <td><span id="<%= element._id %>"></span></td>
-                    <td><a style="text-decoration: none;" href="/student/history/<%= element._id %>"><i class="fa-solid fa-eye text-primary"></i></a></td>
+                    <td>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <a style="text-decoration: none;" href="/student/history/<%= element._id %>"><i class="fa-solid fa-lg fa-eye text-primary"></i></a>
+                            </div>
+                            <div class="col-6 text-center">
+                                <a style="text-decoration: none;" href="/student/analysis/<%= element._id %>"><i class="fa-solid fa-lg fa-square-poll-vertical text-success"></i></a>
+                            </div>
+                        </div>
+                    
+                    </td>
                 </tr>
                 <% }) %>
             </tbody>

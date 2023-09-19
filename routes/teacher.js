@@ -21,7 +21,7 @@ const questionStorage = multer.diskStorage({
 const questionUpload = multer({ storage: questionStorage });
 router.post("/login", teacherControllers.login);
 router.get("/login", teacherControllers.loginGet);
-router.get("/logout", teacherControllers.logout);
+// router.get("/logout", teacherControllers.logout);
 
 router.use(middleware);
 

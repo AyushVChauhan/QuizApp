@@ -253,6 +253,29 @@ async function quizDetails(data) {
         });
     return quiz;
 }
+
+async function fetchGroups() {
+    var group_data = await groups.find({ is_active: 1, is_shown: 1 });
+    return group_data;
+}
+
+async function addGroup(groupName, obj) {
+    let student_ids = [];
+    for (let index = 0; index < obj.length; index++) {
+        const element = obj[index];
+        let id = await getStudentId(element["Enrollment No"]);
+        student_ids.push(id._id);
+    }
+    let group = new groups({
+        is_active: 1,
+        name: groupName,
+        students: student_ids,
+        is_shown: 1,
+    });
+    await group.save();
+    return group._id;
+}
+
 module.exports = {
     departmentFetch,
     newDepartment,
@@ -275,7 +298,9 @@ module.exports = {
     getQuiz,
     quizDetails,
     deleteSubject,
-    deleteStudent
+    deleteStudent,
+    fetchGroups,
+    addGroup,
 };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit

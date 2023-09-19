@@ -12,6 +12,7 @@ questionsId.forEach((element) => {
         files: null,
         answer: null,
         saved: 0,
+        time_spent : 0,
     });
 });
 
@@ -225,6 +226,8 @@ function clickQuestion(e) {
 let countDownDate = new Date();
 countDownDate.setTime(countDownDate.getTime() + duration * 60 * 1000);
 var x = setInterval(function () {
+    allQuestions[currentQuestion - 1].time_spent++;
+
     // Get today's date and time
     var now = new Date().getTime();
 

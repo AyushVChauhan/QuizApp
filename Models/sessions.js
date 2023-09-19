@@ -16,6 +16,7 @@ const sessionSchema = new mongoose.Schema(
                 },
                 answer: String,
                 marks: Number,
+                time_spent: Number, //Seconds
             },
         ],
         is_evaluated: { type: Number, default: 0 },

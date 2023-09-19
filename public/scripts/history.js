@@ -7,7 +7,13 @@ $(document).ready(function () {
                 totalMarks += question.question.marks;
             }
         });
-        $(`#${element._id}`).html(totalMarks + "/" + element.quiz_id.marks);
+        if(questionAnswers.length != 0)
+        {
+            $(`#${element._id}`).html(totalMarks + "/" + element.quiz_id.marks);
+        }
+        else {
+            $(`#${element._id}`).html("Pending");
+        }
     });
 
     var myTable;

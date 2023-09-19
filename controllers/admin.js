@@ -216,6 +216,42 @@ async function quizDetails(req, res) {
     let quiz = await adminServices.quizDetails(req.params.quizId);
     res.render("./admin/quizDetails", { quiz: quiz, errors: errors });
 }
+
+async function getGroups(req, res) {
+    let dept_data = await adminServices.fetchDepartments();
+    let group_data = await adminServices.fetchGroups();
+    res.render("./admin/groups", {
+        dept_data: dept_data,
+        group_data: group_data,
+    });
+}
+
+async function addGroup(req, res) {
+    let mySheet = xlsx.readFile("./public/files/schema.xlsx");
+    let sheets = mySheet.SheetNames;
+    let obj = xlsx.utils.sheet_to_json(mySheet.Sheets[sheets[0]]);
+    if (obj[0]["Enrollment No"] === undefined) {
+        req.session.errors = {
+            text: "No (Enrollment No) field",
+            icon: "warning",
+        };
+    } else {
+        let group = await adminServices.addGroup(req.body.group, obj);
+        if (group === 1) {
+            req.session.errors = {
+                text: `Group Created Successfully`,
+                icon: "success",
+            };
+        } else {
+            req.session.errors = {
+                text: "File Error",
+                icon: "error",
+            };
+        }
+    }
+    res.redirect("/admin/groups");
+}
+
 module.exports = {
     addDepartment,
     adminDashboard,
@@ -234,5 +270,7 @@ module.exports = {
     getQuiz,
     quizDetails,
     deleteSubject,
-    deleteStudent
+    deleteStudent,
+    getGroups,
+    addGroup,
 };

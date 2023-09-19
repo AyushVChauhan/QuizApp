@@ -70,6 +70,11 @@ app.use("/teacher", teacherRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
+app.get("/logout", (req, res)=>{
+    res.clearCookie("auth");
+    res.redirect("/");
+})
+
 app.get("*",(req,res)=>{
     res.render("./partials/errorPage");
 })

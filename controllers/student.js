@@ -260,6 +260,7 @@ async function submitQuiz(req, res) {
         questions_answers.forEach(ele => {
             if (ele.questionId == element.question) {
                 element.answer = ele.answer;
+                element.time_spent = ele.time_spent;
                 return;
             }
         })
@@ -319,6 +320,29 @@ async function quizHistory(req, res)
     }
 }
 
+async function quizAnalysis(req, res) {
+    let errors = null;
+    if (req.session.errors) {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
+    let sessionId = req.params.sessionId;
+    let token = req.cookies.auth;
+    let studentId = jwt.verify(token, process.env.JWT_SECRET)["_id"];
+    let analysis = await studentServices.quizAnalysis(sessionId, studentId);
+    if(analysis)
+    {
+        let [myMarks, totalMarks, inTop, difficulty, topics] = analysis;
+        difficulty = Array.from(difficulty);
+        topics = Array.from(topics);
+        console.log(topics);
+        res.render("./student/analysis", {errors, myMarks, totalMarks, inTop, difficulty, topics});
+    }
+    else {
+        res.redirect("/history");
+    }
+}
+
 module.exports = {
     login,
     loginPage,
@@ -334,4 +358,5 @@ module.exports = {
     submitQuiz,
     history,
     quizHistory,
+    quizAnalysis,
 };

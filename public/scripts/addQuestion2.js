@@ -133,7 +133,7 @@ function addQuestion() {
     let marks = $("#marks").val();
     let type = $("#type").val();
     let difficulty = $('input[name="opt"]:checked').val();
-
+    let time_required = $("#time_required").val();
     let allOptions = [];
     for (let index = 1; index < count; index++) {
         const element = options["option" + index];
@@ -156,6 +156,7 @@ function addQuestion() {
             difficulty: difficulty,
             options: allOptions,
             answer: answer,
+            time_required : time_required,
         },
         success: function (response) {
             if (

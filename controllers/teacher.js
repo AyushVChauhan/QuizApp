@@ -134,6 +134,7 @@ async function addQuestion(req, res) {
             type == 1 ? req.body.options[req.body.answer - 1] : req.body.answer,
         is_active: 1,
         created_by: data.id,
+        time_required : req.body.time_required,
     };
     let questionId = await teacherServices.addQuestion(question);
     console.log(questionId);

@@ -12,6 +12,7 @@ const questionsSchema = new mongoose.Schema({
     options: [{ option: String, file: String }],
     answer: String,
     is_active: Number,
+    time_required : Number, //Seconds
 },{timestamps:true});
 
 const questionsModel = mongoose.model("questions", questionsSchema);
