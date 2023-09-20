@@ -65,13 +65,15 @@
     <!-- Main -->
     <main class="main-container">
         <div class="row mb-3">
-            <div class="col h1">Quiz Analysis</div>
+            <div class="col-3 h1 text-start">Quiz Analysis</div>
+            <div class="col-6 d-flex align-items-center justify-content-center h3">You scored <%=myMarks%> out of <%=totalMarks%></div>
+            <div class="col-3 d-flex align-items-center justify-content-end h4">You are in top <%-inTop.toFixed(0)%>%</div>
         </div>
 
         <div class="row text-center mb-5">
-            <div class="col-4">
+            <div class="col-6 h1">
                 <button
-                    class="btn rounded-pill"
+                    class="btn rounded-pill btn-lg"
                     style="background-color: blue"
                     id="chartBtn"
                     onclick="showChart()"
@@ -79,33 +81,33 @@
                     Difficulty
                 </button>
             </div>
-            <div class="col-4">
+            <div class="col-6 h1">
                 <button
-                    class="btn rounded-pill"
+                    class="btn rounded-pill btn-lg"
                     id="studentBtn"
                     onclick="showStudent()"
                 >
                     Topic
                 </button>
             </div>
-            <div class="col-4">
+            <!-- <div class="col-4 h1">
                 <button
-                    class="btn btn-primary rounded-pill"
+                    class="btn btn-primary rounded-pill btn-lg"
                     id="questionBtn"
                     onclick="showQuestion()"
                 >
                     Questions
                 </button>
-            </div>
+            </div> -->
         </div>
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col h3 offset-1">
                 You are in top <%-inTop.toFixed(0)%>%
             </div>
             <div class="col h3 offset-1">
                 You scored <%=myMarks%> out of <%=totalMarks%>
             </div>
-        </div>
+        </div> -->
         <div id="chartDetails">
             <div class="h3 text-center">Marks Wise Analysis</div>
             <div class="row" style="border: 1px solid">
@@ -1084,9 +1086,11 @@
         });
         let difficultySeries = [];
         let difficultySeries2 = [];
+        let difficultySeries3 = [];
         difficultyDetails.forEach((ele) => {
             difficultySeries.push(ele[1].timeRequired);
             difficultySeries2.push(ele[1].timeSpent);
+            
         });
         var options = {
             series: [

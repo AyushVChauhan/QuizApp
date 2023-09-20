@@ -54,11 +54,13 @@
                             <div class="col-2 text-end">
                                 Marks: <%= element.question.marks %>
                             </div>
-                            <div class="col-10 mt-2">
+                            <div class="col-9 mt-2">
                                 Correct Answer: <%= element.question.answer %>
                             </div>
-                            <div class="col-2 text-end mt-2">
-                                Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %>
+                            <div class="col-3 text-end mt-2">
+                                <p>Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %></p>
+                                <p>Time Spent: <%= element.time_spent %> Seconds<br>
+                                Time Expected: <%= element.question.time_required %> Seconds</p>
                             </div>
                         </div>
                     </div>
