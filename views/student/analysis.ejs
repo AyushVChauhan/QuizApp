@@ -6,12 +6,13 @@
     type="text/javascript"
     src="https://www.gstatic.com/charts/loader.js"
 ></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     let difficultyDetails = JSON.parse(`<%- JSON.stringify(difficulty) %>`);
     let topicDetails = JSON.parse(`<%- JSON.stringify(topics) %>`);
-    console.log(difficultyDetails);
-    console.log(topicDetails);
-    console.log(`<%= myMarks %>`);
+    let f1 = false;
+    let f2 = false;
+    let f3 = false;
 </script>
 <style>
     #datatable_wrapper {
@@ -66,6 +67,7 @@
         <div class="row mb-3">
             <div class="col h1">Quiz Analysis</div>
         </div>
+        
         <div class="row text-center mb-5">
             <div class="col-4">
                 <button
@@ -96,13 +98,17 @@
                 </button>
             </div>
         </div>
-
+        <div class="row mb-3" >
+            <div class="col h3 offset-1">You are in top <%-inTop.toFixed(0)%>% </div>
+            <div class="col h3 offset-1">You scored <%=myMarks%> out of <%=totalMarks%> </div>
+            
+        </div>
         <div class="row" id="chartDetails">
             <div id="difficultyMarks" class="col-6" style="height: 400px"></div>
             <div id="difficultyTime" class="col-6" style="height: 400px"></div>
             <div
                 id="difficultyMarksPerformance"
-                class="col-6"
+                class="col-6 mt-5"
                 style="height: 400px"
             ></div>
             <div
@@ -117,7 +123,7 @@
             <div id="topicTime" class="col-6" style="height: 400px"></div>
             <div
                 id="topicMarksPerformance"
-                class="col-6"
+                class="col-6 mt-5"
                 style="height: 400px"
             ></div>
             <div
@@ -135,6 +141,7 @@
     </main>
 </div>
 <script>
+    
     function showChart() {
         $("#chartDetails").show();
         document.getElementById("chartDetails").classList.add("animate");
@@ -150,11 +157,16 @@
         $("#questionBtn").css("background-color", "#11467b");
         $("#questionBtn").css("color", "white");
         $("#questionBtn").css("box-shadow", "none");
-
-        difficultyMarks();
-        difficultyTime();
-        difficultyMarksPerformance();
-        difficultyTimePerformance();
+        if(f1 == false)
+        {
+            
+            fl = true;
+            console.log(f1);
+            difficultyMarks();
+            difficultyTime();
+            difficultyMarksPerformance();
+        }
+        //difficultyTimePerformance();
     }
     function showStudent() {
         $("#chartDetails").hide();
@@ -172,10 +184,13 @@
         $("#questionBtn").css("background-color", "#11467b");
         $("#questionBtn").css("color", "white");
         $("#questionBtn").css("box-shadow", "none");
-
-        topicTime();
-        topicMarks();
-        topicMarksPerformance();
+        if(f2== 0)
+        {
+            topicTime();
+            topicMarks();
+            topicMarksPerformance();
+        }
+        f2 = 1;
     }
     function showQuestion() {
         $("#chartDetails").hide();
@@ -226,20 +241,102 @@
     });
 
     google.charts.load("current", { packages: ["corechart", "bar"] });
-    google.charts.setOnLoadCallback(drawCharts);
-    function drawCharts() {
-        difficultyMarks();
-        difficultyTime();
-        difficultyMarksPerformance();
-        difficultyTimePerformance();
-        topicMarks();
-        topicTime();
-        topicMarksPerformance();
-    }
+    //google.charts.setOnLoadCallback(drawCharts);
     function topicMarksPerformance() {
+        let topic = [];
+        topicDetails.forEach((ele) => {
+            topic.push(ele[0]);
+        });
+
+        let topicSeries = [];
+        let topicSeries2 = [];
+        topicDetails.forEach((ele) => {
+            topicSeries.push(ele[1].marks);
+            topicSeries2.push(ele[1].totalMarks - ele[1].marks);
+        });
+        var options = {
+            series: [
+                {
+                    name: "Correct Marks",
+                    data: topicSeries,
+                },
+                {
+                    name: "Wrong Marks",
+                    data: topicSeries2,
+                },
+            ],
+            chart: {
+                type: "bar",
+                height: 350,
+                stacked: true,
+                toolbar: {
+                    show: false,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        options: {
+                            chart: {
+                                width: 500,
+                            },
+                            legend: {
+                                position: "bottom",
+                            },
+                        },
+                    },
+                },
+            ],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    borderRadius: 10,
+                    dataLabels: {
+                        total: {
+                            enabled: true,
+                            style: {
+                                fontSize: "13px",
+                                fontWeight: 900,
+                            },
+                        },
+                    },
+                },
+            },
+            xaxis: {
+                type: "string",
+                categories: topic,
+            },
+            fill: {
+                opacity: 1,
+            },
+            title: {
+                text: "Marks Wise Performance",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#topicMarksPerformance"), options);
+        chart.render();
+    }
+    function topicMarksPerformancet() {
         let topicData = [["Topic", "Obtained Marks", "Total Marks"]];
-        topicDetails.forEach(ele=>{
-            topicData.push([ele[0], ele[1].marks, ele[1].totalMarks - ele[1].marks]);
+        topicDetails.forEach((ele) => {
+            topicData.push([
+                ele[0],
+                ele[1].marks,
+                ele[1].totalMarks - ele[1].marks,
+            ]);
         });
         var data = google.visualization.arrayToDataTable(topicData);
 
@@ -253,12 +350,76 @@
         );
         chart.draw(data, options);
     }
+    
     function topicMarks() {
-        let topicData = [["Topic", "Marks"]];
-        topicDetails.forEach(ele=>{
-            topicData.push([ele[0], ele[1].marks]);
+        let topicLabels = [];
+        topicDetails.forEach((ele) => {
+            topicLabels.push(ele[0]);
         });
-        console.log(topicData);
+        let topicSeries = [];
+        topicDetails.forEach((ele) => {
+            topicSeries.push(ele[1].marks);
+        });
+        var options = {
+            labels: topicLabels,
+            series: topicSeries,
+            chart: {
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: "Total",
+                            },
+                        },
+                        size: "40%",
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                        legend: {
+                            position: "bottom",
+                        },
+                    },
+                },
+            ],
+            title: {
+                text: "Marks Wise",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#topicMarks"),
+            options
+        );
+        chart.render();
+    }
+    function topicMarkst() {
+        let topicData = [["Topic", "Marks"]];
+        topicDetails.forEach((ele) => {
+            topicData.push([ele[0], 0]);
+        });
         var data = google.visualization.arrayToDataTable(topicData);
 
         var options = {
@@ -270,10 +431,107 @@
             document.getElementById("topicMarks")
         );
         chart.draw(data, options);
+        let currValues = [["Topic", "Marks"]];
+        topicDetails.forEach((ele) => {
+            currValues.push([ele[0], 0]);
+        });
+
+        var handler = setInterval(function () {
+            for (let index = 1; index < currValues.length; index++) {
+                if (currValues[index][1] < topicDetails[index - 1][1].marks) {
+                    currValues[index][1] +=
+                        topicDetails[index - 1][1].marks * 0.1;
+                    currValues[index][1] = parseFloat(
+                        currValues[index][1].toPrecision(2)
+                    );
+                }
+            }
+
+            console.log(currValues);
+
+            var data = google.visualization.arrayToDataTable(currValues);
+            // update the pie
+            chart.draw(data, options);
+            // check if we have reached the desired value
+            let flag = topicDetails.length;
+            for (let index = 1; index < currValues.length; index++) {
+                if (currValues[index][1] >= topicDetails[index - 1][1].marks) {
+                    flag--;
+                }
+            }
+            if (flag <= 0) {
+                clearInterval(handler);
+            }
+        }, 50);
     }
+    
     function topicTime() {
+        let topicLabels = [];
+        topicDetails.forEach((ele) => {
+            topicLabels.push(ele[0]);
+        });
+        let topicSeries = [];
+        topicDetails.forEach((ele) => {
+            topicSeries.push(ele[1].timeSpent);
+        });
+        var options = {
+            labels: topicLabels,
+            series: topicSeries,
+            chart: {
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: "Total(sec)",
+                            },
+                        },
+                        size: "40%",
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                        legend: {
+                            position: "bottom",
+                        },
+                    },
+                },
+            ],
+            title: {
+                text: "Time Wise",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#topicTime"),
+            options
+        );
+        chart.render();
+    }
+    function topicTimet() {
         let topicData = [["Topic", "Marks"]];
-        topicDetails.forEach(ele=>{
+        topicDetails.forEach((ele) => {
             topicData.push([ele[0], ele[1].timeSpent]);
         });
         console.log(topicData);
@@ -289,7 +547,72 @@
         );
         chart.draw(data, options);
     }
+    
     function difficultyMarks() {
+        let difficulty = [];
+        difficultyDetails.forEach((ele) => {
+            difficulty.push(ele[0]);
+        });
+        let difficultySeries = [];
+        difficultyDetails.forEach((ele) => {
+            difficultySeries.push(ele[1].marks);
+        });
+        var options = {
+            labels: difficulty,
+            series: difficultySeries,
+            chart: {
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: "Total",
+                            },
+                        },
+                        size: "40%",
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                        legend: {
+                            position: "bottom",
+                        },
+                    },
+                },
+            ],
+            title: {
+                text: "Marks Wise",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyMarks"),
+            options
+        );
+        chart.render();
+    }
+    function difficultyMarkst() {
         var data = google.visualization.arrayToDataTable([
             ["Difficulty", "Marks"],
             ["Easy", difficultyDetails[0][1].marks],
@@ -306,8 +629,102 @@
             document.getElementById("difficultyMarks")
         );
         chart.draw(data, options);
+        let currValues = [0, 0, 0];
+        var handler = setInterval(function () {
+            if (currValues[0] < difficultyDetails[0][1].marks) {
+                currValues[0] += difficultyDetails[0][1].marks * 0.1;
+                currValues[0] = parseFloat(currValues[0].toPrecision(2));
+            } else if (currValues[1] < difficultyDetails[1][1].marks) {
+                currValues[1] += difficultyDetails[1][1].marks * 0.1;
+                currValues[1] = parseFloat(currValues[1].toPrecision(2));
+            } else if (currValues[2] < difficultyDetails[2][1].marks) {
+                currValues[2] += difficultyDetails[2][1].marks * 0.1;
+                currValues[2] = parseFloat(currValues[2].toPrecision(2));
+            }
+            var data = google.visualization.arrayToDataTable([
+                ["Difficulty", "Marks"],
+                ["Easy", currValues[0]],
+                ["Medium", currValues[1]],
+                ["Hard", currValues[2]],
+            ]);
+            // update the pie
+            chart.draw(data, options);
+            // check if we have reached the desired value
+            if (
+                currValues[0] >= difficultyDetails[0][1].marks &&
+                currValues[1] >= difficultyDetails[1][1].marks &&
+                currValues[2] >= difficultyDetails[2][1].marks
+            ) {
+                clearInterval(handler);
+            }
+        }, 50);
     }
+
     function difficultyTime() {
+        let difficultyLabels = [];
+        difficultyDetails.forEach((ele) => {
+            difficultyLabels.push(ele[0]);
+        });
+        let difficultySeries = [];
+        difficultyDetails.forEach((ele) => {
+            difficultySeries.push(ele[1].timeSpent);
+        });
+        var options = {
+            labels: difficultyLabels,
+            series: difficultySeries,
+            chart: {
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: "Total(sec)",
+                            },
+                        },
+                        size: "40%",
+                    },
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        chart: {
+                            width: 500,
+                        },
+                        legend: {
+                            position: "bottom",
+                        },
+                    },
+                },
+            ],
+            title: {
+                text: "Time Wise",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyTime"),
+            options
+        );
+        chart.render();
+    }
+    function difficultyTimet() {
         var data = google.visualization.arrayToDataTable([
             ["Difficulty", "Marks"],
             ["Easy", difficultyDetails[0][1].timeSpent],
@@ -324,8 +741,131 @@
             document.getElementById("difficultyTime")
         );
         chart.draw(data, options);
+
+        let currValues = [0, 0, 0];
+        var handler = setInterval(function () {
+            console.log(currValues);
+            if (currValues[0] < difficultyDetails[0][1].timeSpent) {
+                currValues[0] += difficultyDetails[0][1].timeSpent * 0.1;
+                currValues[0] = parseFloat(currValues[0].toPrecision(2));
+            } else if (currValues[1] < difficultyDetails[1][1].timeSpent) {
+                currValues[1] += difficultyDetails[1][1].timeSpent * 0.1;
+                currValues[1] = parseFloat(currValues[1].toPrecision(2));
+            } else if (currValues[2] < difficultyDetails[2][1].timeSpent) {
+                currValues[2] += difficultyDetails[2][1].timeSpent * 0.1;
+                currValues[2] = parseFloat(currValues[2].toPrecision(2));
+            }
+            var data = google.visualization.arrayToDataTable([
+                ["Difficulty", "Time Spent"],
+                ["Easy", currValues[0]],
+                ["Medium", currValues[1]],
+                ["Hard", currValues[2]],
+            ]);
+            // update the pie
+            chart.draw(data, options);
+            // check if we have reached the desired value
+            if (
+                currValues[0] >= difficultyDetails[0][1].timeSpent &&
+                currValues[1] >= difficultyDetails[1][1].timeSpent &&
+                currValues[2] >= difficultyDetails[2][1].timeSpent
+            ) {
+                clearInterval(handler);
+            }
+        }, 50);
     }
+
     function difficultyMarksPerformance() {
+        let difficulty = [];
+        difficultyDetails.forEach((ele) => {
+            difficulty.push(ele[0]);
+        });
+        let difficultySeries = [];
+        let difficultySeries2 = [];
+        difficultyDetails.forEach((ele) => {
+            difficultySeries.push(ele[1].marks);
+            difficultySeries2.push(ele[1].totalMarks - ele[1].marks);
+        });
+        var options = {
+            series: [
+                {
+                    name: "Correct Marks",
+                    data: difficultySeries,
+                },
+                {
+                    name: "Wrong Marks",
+                    data: difficultySeries2,
+                },
+            ],
+            chart: {
+                type: "bar",
+                height: 350,
+                stacked: true,
+                toolbar: {
+                    show: false,
+                },
+            },
+            responsive: [
+                {
+                    breakpoint: 2000,
+                    options: {
+                        options: {
+                            chart: {
+                                width: 500,
+                            },
+                            legend: {
+                                position: "bottom",
+                            },
+                        },
+                    },
+                },
+            ],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    borderRadius: 10,
+                    dataLabels: {
+                        total: {
+                            enabled: true,
+                            style: {
+                                fontSize: "13px",
+                                fontWeight: 900,
+                            },
+                        },
+                    },
+                },
+            },
+            xaxis: {
+                type: "string",
+                categories: [
+                    "Easy",
+                    "Medium",
+                    "Hard",
+                ],
+            },
+            fill: {
+                opacity: 1,
+            },
+            title: {
+                text: "Marks Wise Performance",
+                align: 'center',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                style: {
+                  fontSize:  '14px',
+                  fontWeight:  'bold',
+                  fontFamily:  undefined,
+                  color:  '#263238'
+                },
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#difficultyMarksPerformance"), options);
+        chart.render();
+    }
+    function difficultyMarksPerformancet() {
+
         var data = google.visualization.arrayToDataTable([
             ["Difficulty", "Obtained Marks", "Total Marks"],
             [
@@ -351,6 +891,10 @@
         var options = {
             colors: ["#00ff00", "#ff0000"],
             isStacked: true,
+            animation: {
+                duration: 1000,
+                startup: true,
+            },
         };
 
         var chart = new google.visualization.ColumnChart(
@@ -358,6 +902,7 @@
         );
         chart.draw(data, options);
     }
+    
     function difficultyTimePerformance() {
         let easyprfm = null;
         let medprfm = null;
@@ -456,9 +1001,7 @@
             ["Hard", hardprfm],
         ]);
 
-        var options = {
-            
-        };
+        var options = {};
 
         var chart = new google.charts.Bar(
             document.getElementById("difficultyTimePerformance")
