@@ -586,9 +586,9 @@
     function difficultyMarks() {
         var options = {
             series: [
-                (difficultyDetails[0][1].marks /
+                parseFloat(((difficultyDetails[0][1].marks /
                     difficultyDetails[0][1].totalMarks) *
-                    100,
+                    100).toFixed(2)),
             ],
             chart: {
                 height: 220,
@@ -611,9 +611,9 @@
         chart.render();
         var options = {
             series: [
-                (difficultyDetails[1][1].marks /
+            parseFloat(((difficultyDetails[1][1].marks /
                     difficultyDetails[1][1].totalMarks) *
-                    100,
+                    100).toFixed(2)),
             ],
             chart: {
                 height: 220,
@@ -636,9 +636,9 @@
         chart.render();
         var options = {
             series: [
-                (difficultyDetails[2][1].marks /
+            parseFloat(((difficultyDetails[2][1].marks /
                     difficultyDetails[2][1].totalMarks) *
-                    100,
+                    100).toFixed(2)),
             ],
             chart: {
                 height: 220,

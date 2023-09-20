@@ -18,21 +18,24 @@
         </div>
         <div class="accordion" id="questions">
             <% questions.questions_answers.forEach((element,index) => { %>
-            <div class="accordion-item">
+            <div class="accordion-item ">
                 <h2 class="accordion-header">
                     <button
-                        class="accordion-button"
+                        class="accordion-button collapsed "
                         type="button"
                         data-bs-toggle="collapse"
+                      
                         data-bs-target="#<%= element.question._id %>"
                         aria-expanded="false"
                         aria-controls="<%= element.question._id %>"
+                        
                     >
                     <div class="row">
                         <div class="col-auto">
-                            <%= index + 1 %>.)
+                            <%= index + 1 %>).
+                            <%- (element.marks == 0 ? ((element.question.answer == element.answer) ? '&nbsp;&nbsp;&#x2714;' : '&nbsp;&nbsp;&#x274C') : '&nbsp;&nbsp;&#x2714;') %>
                         </div>
-                        <div class="col-auto">
+                        <div class="col-auto <%- (element.marks == 0 ? ((element.question.answer == element.answer) ? 'text-success' : 'text-danger') : 'text-success') %>">
                             <%- element.question.question %>
                         </div>
                     </div>
