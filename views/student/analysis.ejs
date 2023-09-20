@@ -67,7 +67,7 @@
         <div class="row mb-3">
             <div class="col h1">Quiz Analysis</div>
         </div>
-        
+
         <div class="row text-center mb-5">
             <div class="col-4">
                 <button
@@ -98,39 +98,73 @@
                 </button>
             </div>
         </div>
-        <div class="row mb-3" >
-            <div class="col h3 offset-1">You are in top <%-inTop.toFixed(0)%>% </div>
-            <div class="col h3 offset-1">You scored <%=myMarks%> out of <%=totalMarks%> </div>
-            
+        <div class="row mb-3">
+            <div class="col h3 offset-1">
+                You are in top <%-inTop.toFixed(0)%>%
+            </div>
+            <div class="col h3 offset-1">
+                You scored <%=myMarks%> out of <%=totalMarks%>
+            </div>
         </div>
-        <div class="row" id="chartDetails">
-            <div id="difficultyMarks" class="col-6" style="height: 400px"></div>
-            <div id="difficultyTime" class="col-6" style="height: 400px"></div>
-            <div
-                id="difficultyMarksPerformance"
-                class="col-6 mt-5"
-                style="height: 400px"
-            ></div>
-            <div
-                id="difficultyTimePerformance"
-                class="col-6"
-                style="height: 400px"
-            ></div>
+        <div id="chartDetails">
+            <div class="h3 text-center">Marks Wise Analysis</div>
+            <div class="row" style="border: 1px solid">
+                <div id="difficultyMarks" class="col-4">
+                    <div class="row">
+                        <div class="col-6" id="difficultyMarksEasy"></div>
+                        <div class="col-6" id="difficultyMarksMedium"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6" id="difficultyMarksHard"></div>
+                    </div>
+                </div>
+                <div
+                    id="difficultyMarksPerformance"
+                    class="col-4"
+                    style="height: 400px"
+                ></div>
+                <div
+                    id="difficultyMarksDonut"
+                    class="col-4 d-flex align-items-center"
+                ></div>
+            </div>
+            <div class="h3 text-center mt-5">Time Wise Analysis</div>
+
+            <div class="row" style="border: 1px solid">
+                <div
+                    id="difficultyTime"
+                    class="col-6"
+                    style="height: 400px"
+                ></div>
+                <div
+                    id="difficultyTimePerformance"
+                    class="col-6"
+                    style="height: 400px"
+                ></div>
+            </div>
         </div>
 
-        <div class="row" id="studentDetails">
-            <div id="topicMarks" class="col-6" style="height: 400px"></div>
-            <div id="topicTime" class="col-6" style="height: 400px"></div>
-            <div
-                id="topicMarksPerformance"
-                class="col-6 mt-5"
-                style="height: 400px"
-            ></div>
-            <div
-                id="topicTimePerformance"
-                class="col-6"
-                style="height: 400px"
-            ></div>
+        <div  id="studentDetails">
+            <div class="h3 text-center">Marks Wise Analysis</div>
+            <div class="row" style="border: 1px solid">
+                <div id="topicMarks" class="col-6 " ></div>
+                <div
+                    id="topicMarksPerformance"
+                    class="col-6"
+                    style="height: 400px"
+                ></div>
+            </div>
+            <div class="h3 text-center mt-5">Time Wise Analysis</div>
+
+            <div class="row" style="border: 1px solid">
+                <div id="topicTime" class="col-6" style="height: 400px"></div>
+                <div
+                    id="topicTimePerformance"
+                    class="col-6"
+                    style="height: 400px"
+                ></div>
+            </div>
         </div>
 
         <div class="row" id="questionDetails">
@@ -141,7 +175,6 @@
     </main>
 </div>
 <script>
-    
     function showChart() {
         $("#chartDetails").show();
         document.getElementById("chartDetails").classList.add("animate");
@@ -157,16 +190,15 @@
         $("#questionBtn").css("background-color", "#11467b");
         $("#questionBtn").css("color", "white");
         $("#questionBtn").css("box-shadow", "none");
-        if(f1 == false)
-        {
-            
+        if (f1 == false) {
             fl = true;
             console.log(f1);
             difficultyMarks();
+            difficultyMarks2();
             difficultyTime();
             difficultyMarksPerformance();
         }
-        //difficultyTimePerformance();
+        difficultyTimePerformance();
     }
     function showStudent() {
         $("#chartDetails").hide();
@@ -184,11 +216,11 @@
         $("#questionBtn").css("background-color", "#11467b");
         $("#questionBtn").css("color", "white");
         $("#questionBtn").css("box-shadow", "none");
-        if(f2== 0)
-        {
+        if (f2 == 0) {
             topicTime();
             topicMarks();
             topicMarksPerformance();
+            topicTimePerformance();
         }
         f2 = 1;
     }
@@ -312,21 +344,24 @@
             },
             title: {
                 text: "Marks Wise Performance",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
-        var chart = new ApexCharts(document.querySelector("#topicMarksPerformance"), options);
+        var chart = new ApexCharts(
+            document.querySelector("#topicMarksPerformance"),
+            options
+        );
         chart.render();
     }
     function topicMarksPerformancet() {
@@ -350,7 +385,7 @@
         );
         chart.draw(data, options);
     }
-    
+
     function topicMarks() {
         let topicLabels = [];
         topicDetails.forEach((ele) => {
@@ -395,18 +430,18 @@
             ],
             title: {
                 text: "Marks Wise",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
         var chart = new ApexCharts(
@@ -464,7 +499,7 @@
             }
         }, 50);
     }
-    
+
     function topicTime() {
         let topicLabels = [];
         topicDetails.forEach((ele) => {
@@ -509,18 +544,18 @@
             ],
             title: {
                 text: "Time Wise",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
         var chart = new ApexCharts(
@@ -547,8 +582,86 @@
         );
         chart.draw(data, options);
     }
-    
+
     function difficultyMarks() {
+        var options = {
+            series: [
+                (difficultyDetails[0][1].marks /
+                    difficultyDetails[0][1].totalMarks) *
+                    100,
+            ],
+            chart: {
+                height: 220,
+                type: "radialBar",
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: "70%",
+                    },
+                },
+            },
+            labels: ["Easy"],
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyMarksEasy"),
+            options
+        );
+        chart.render();
+        var options = {
+            series: [
+                (difficultyDetails[1][1].marks /
+                    difficultyDetails[1][1].totalMarks) *
+                    100,
+            ],
+            chart: {
+                height: 220,
+                type: "radialBar",
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: "70%",
+                    },
+                },
+            },
+            labels: ["Medium"],
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyMarksMedium"),
+            options
+        );
+        chart.render();
+        var options = {
+            series: [
+                (difficultyDetails[2][1].marks /
+                    difficultyDetails[2][1].totalMarks) *
+                    100,
+            ],
+            chart: {
+                height: 220,
+                type: "radialBar",
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: "70%",
+                    },
+                },
+            },
+            labels: ["Hard"],
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyMarksHard"),
+            options
+        );
+        chart.render();
+    }
+    function difficultyMarks2() {
+        let totalQuestion;
         let difficulty = [];
         difficultyDetails.forEach((ele) => {
             difficulty.push(ele[0]);
@@ -582,7 +695,7 @@
                     breakpoint: 2000,
                     options: {
                         chart: {
-                            width: 500,
+                            width: 400,
                         },
                         legend: {
                             position: "bottom",
@@ -592,22 +705,22 @@
             ],
             title: {
                 text: "Marks Wise",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
         var chart = new ApexCharts(
-            document.querySelector("#difficultyMarks"),
+            document.querySelector("#difficultyMarksDonut"),
             options
         );
         chart.render();
@@ -704,18 +817,18 @@
             ],
             title: {
                 text: "Time Wise",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
         var chart = new ApexCharts(
@@ -773,7 +886,63 @@
             }
         }, 50);
     }
+    function topicTimePerformance() {
+        let topic = [];
+        topicDetails.forEach((ele) => {
+            topic.push(ele[0]);
+        });
+        let topicSeries = [];
+        let topicSeries2 = [];
+        topicDetails.forEach((ele) => {
+            topicSeries.push(ele[1].timeRequired);
+            topicSeries2.push(ele[1].timeSpent);
+        });
+        var options = {
+            series: [
+                {
+                    name: "Expected Time",
+                    data: topicSeries,
+                },
+                {
+                    name: "Time Spent",
+                    data: topicSeries2,
+                },
+            ],
+            chart: {
+                type: "bar",
+                height: 430,
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    dataLabels: {
+                        position: "top",
+                    },
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: "12px",
+                    colors: ["#fff"],
+                },
+            },
+            stroke: {
+                show: true,
+                width: 1,
+                colors: ["#fff"],
+            },
+            xaxis: {
+                categories: topic,
+            },
+        };
 
+        var chart = new ApexCharts(
+            document.querySelector("#topicTimePerformance"),
+            options
+        );
+        chart.render();
+    }
     function difficultyMarksPerformance() {
         let difficulty = [];
         difficultyDetails.forEach((ele) => {
@@ -836,36 +1005,34 @@
             },
             xaxis: {
                 type: "string",
-                categories: [
-                    "Easy",
-                    "Medium",
-                    "Hard",
-                ],
+                categories: ["Easy", "Medium", "Hard"],
             },
             fill: {
                 opacity: 1,
             },
             title: {
                 text: "Marks Wise Performance",
-                align: 'center',
+                align: "center",
                 margin: 10,
                 offsetX: 0,
                 offsetY: 0,
                 floating: false,
                 style: {
-                  fontSize:  '14px',
-                  fontWeight:  'bold',
-                  fontFamily:  undefined,
-                  color:  '#263238'
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
                 },
-            }
+            },
         };
 
-        var chart = new ApexCharts(document.querySelector("#difficultyMarksPerformance"), options);
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyMarksPerformance"),
+            options
+        );
         chart.render();
     }
     function difficultyMarksPerformancet() {
-
         var data = google.visualization.arrayToDataTable([
             ["Difficulty", "Obtained Marks", "Total Marks"],
             [
@@ -902,8 +1069,65 @@
         );
         chart.draw(data, options);
     }
-    
+
     function difficultyTimePerformance() {
+        let difficulty = [];
+        difficultyDetails.forEach((ele) => {
+            difficulty.push(ele[0]);
+        });
+        let difficultySeries = [];
+        let difficultySeries2 = [];
+        difficultyDetails.forEach((ele) => {
+            difficultySeries.push(ele[1].timeRequired);
+            difficultySeries2.push(ele[1].timeSpent);
+        });
+        var options = {
+            series: [
+                {
+                    name: "Expected Time",
+                    data: difficultySeries,
+                },
+                {
+                    name: "Time Spent",
+                    data: difficultySeries2,
+                },
+            ],
+            chart: {
+                type: "bar",
+                height: 430,
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    dataLabels: {
+                        position: "top",
+                    },
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: "12px",
+                    colors: ["#fff"],
+                },
+            },
+            stroke: {
+                show: true,
+                width: 1,
+                colors: ["#fff"],
+            },
+            xaxis: {
+                categories: difficulty,
+            },
+        };
+
+        var chart = new ApexCharts(
+            document.querySelector("#difficultyTimePerformance"),
+            options
+        );
+        chart.render();
+    }
+    function difficultyTimePerformancet() {
         let easyprfm = null;
         let medprfm = null;
         let hardprfm = null;
