@@ -1,14 +1,14 @@
 <div
 	class="modal fade"
-	id="deptModal"
+	id="timmerModal"
 	tabindex="-1"
-	aria-labelledby="deptModalLabel"
+	aria-labelledby="quizTimmerModal"
 	aria-hidden="true"
 >
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="deptModalLabel">Quiz</h5>
+				<h5 class="modal-title h3" id="quizTimmerModal"></h5>
 				<button
 					type="button"
 					class="btn-close"
@@ -16,16 +16,10 @@
 					aria-label="Close"
 				></button>
 			</div>
-			<form action="/admin/addDepartment" method="POST">
 				<div class="modal-body">
 					<div class="container">
-                        <div id="countdown">
-                          <ul>
-                            <li><span id="days"></span>days</li>
-                            <li><span id="hours"></span>Hours</li>
-                            <li><span id="minutes"></span>Minutes</li>
-                            <li><span id="seconds"></span>Seconds</li>
-                          </ul>
+                        <div id="countdown" class="h3">
+							<h5>Available Soon</h5>
                         </div>
                       </div>
 				</div>
@@ -39,32 +33,6 @@
 					</button>
 					
 				</div>
-			</form>
 		</div>
 	</div>
 </div>
-<script>
-    
-  //I'm adding this section so I don't have to keep updating this pen every year :-)
-  //remove this if you don't need it
-  let countDownDate = new Date();
-countDownDate.setTime(countDownDate.getTime() + );
-var x = setInterval(function () {
-    // Get today's date and time
-    var now = new Date().getTime();
-
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now;
-
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Display the result in the element with id="demo"
-    document.getElementById("remTime").innerHTML =
-        "Remaining Time - " + hours + ":" + minutes + ":" + seconds;
-})
-</script>

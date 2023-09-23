@@ -32,145 +32,177 @@
 
   <div class="main-container">
     <div class="main-title">
-        <div class="h1 ps-3 pe-5">Upcoming Quiz</div>
+      <div class="h1 ps-3 pe-5">Upcoming Quiz</div>
     </div>
     <section>
       <div class="container-lg py-4">
         <div class="row">
           <% quizData.forEach(element => { %>
-            
-            <% if(element.valid_from.getDate() == element.valid_to.getDate()){%>
-              <div class="col-sm-12 col-md-4 mb-4">
-              <div class="card box-5 shadow-sm ">
-                <div class="card-body position-relative">
-                      <div class="row text-end">
-                        <div class="col">
-                          <%= element.subject_id.name %>
 
-                      </div></div>
-                      <% let validFromDate = ("0" + element.valid_from.getDate()).slice(-2);
+          <% if(element.valid_from.getDate() == element.valid_to.getDate()){%>
+          <div class="col-sm-12 col-md-4 mb-4">
+            <div class="card box-5 shadow-sm ">
+              <div class="card-body position-relative" onclick="quizTimmer('<%=element.valid_from%>','<%=element.name%>')">
+
+
+                <div class="row text-end">
+                  <div class="col">
+                    <%= element.subject_id.name %>
+
+                  </div>
+                </div>
+                <% let validFromDate = ("0" + element.valid_from.getDate()).slice(-2);
                       let validFromMonth = element.valid_from.toLocaleString('en-US',{month:'short'})
                       let validFromYear = element.valid_from.getFullYear()
                       
                       %>
-                      <div class="row mt-3">
-                        <div class="card-title d-flex mb-2 col-auto ">
-                          <span class="day" style="font-size: 3.5rem"><%= validFromDate %></span>
-                          <div class="row mt-3">
-                            <div
-                              class="col-auto vstack ms-1"
-                              style="border-right: 1px solid #000000; height: 50px"
-                            >
-                              <span class="month text-uppercase"><%= validFromMonth %></span
-                              ><span class="year text-uppercase"><%= validFromYear %></span>
-                            </div>
-                            <!-- <div class="col-auto "><span>12:00 </span></div> -->
-                          </div>
-                        </div>
-                        <div class="card-title d-flex mb-2 col-auto">
-                          <% let validFromTimeH = ("0" + element.valid_from.getHours()).slice(-2);
+                <div class="row mt-3">
+                  <div class="card-title d-flex mb-2 col-auto ">
+                    <span class="day" style="font-size: 3.5rem"><%= validFromDate %></span>
+                    <div class="row mt-3">
+                      <div class="col-auto vstack ms-1" style="border-right: 1px solid #000000; height: 50px">
+                        <span class="month text-uppercase"><%= validFromMonth %></span><span class="year text-uppercase"><%= validFromYear %></span>
+                      </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                  <div class="card-title d-flex mb-2 col-auto">
+                    <% let validFromTimeH = ("0" + element.valid_from.getHours()).slice(-2);
                           let validFromTimeM = ("0" + element.valid_from.getMinutes()).slice(-2);
                           let validToTimeH = ("0" + element.valid_to.getHours()).slice(-2);
                           let validToTimeM = ("0" + element.valid_to.getMinutes()).slice(-2);
                          %>
-                          <div class="row mt-3">
-                            <div class="col-auto vstack ms-1">
-                              <span class="month text-uppercase">&nbsp;</span
-                              ><span class="year text-uppercase"><%= validFromTimeH %>:<%= validFromTimeM %>-<%= validToTimeH %>:<%= validToTimeM %></span>
-                            </div>
-                            <!-- <div class="col-auto "><span>12:00 </span></div> -->
-                          </div>
-                        </div>
+                    <div class="row mt-3">
+                      <div class="col-auto vstack ms-1">
+                        <span class="month text-uppercase">&nbsp;</span><span class="year text-uppercase"><%= validFromTimeH %>:<%= validFromTimeM %>-<%= validToTimeH %>:<%= validToTimeM %></span>
                       </div>
-      
-                      <div class="quizname h4 mt-4"><%= element.name %></div>
-                      <div class="quizmark"><%=element.marks %> marks</div>
-                      <div><i class="fas fa-stopwatch me-1"></i><%=element.duration %> minutes</div>
-      
-                   
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
                     </div>
                   </div>
                 </div>
-            
-             
-           
-            <%} else{%>
 
-              <div class="col-sm-12 col-md-4 mb-4">
-                <div class="card box-5 shadow-sm">
-                  <div class="card-body position-relative">
-                   
-                    <div class="row text-end" style="min-height:20%">
-                      <div class="col">
-                        <%= element.subject_id.name %>
+                <div class="quizname h4 mt-4"><%= element.name %></div>
+                <div class="quizmark"><%=element.marks %> marks</div>
+                <div><i class="fas fa-stopwatch me-1"></i><%=element.duration %> minutes</div>
 
-                    </div></div>
-                    <% let validFromDate = ("0" + element.valid_from.getDate()).slice(-2);
+
+              </div>
+            </div>
+          </div>
+
+
+
+          <%} else{%>
+
+          <div class="col-sm-12 col-md-4 mb-4">
+            <div class="card box-5 shadow-sm">
+              <div class="card-body position-relative" onclick="quizTimmer('<%=element.valid_from%>','<%=element.name%>')">
+
+                <div class="row text-end" style="min-height:20%">
+                  <div class="col">
+                    <%= element.subject_id.name %>
+
+                  </div>
+                </div>
+                <% let validFromDate = ("0" + element.valid_from.getDate()).slice(-2);
                        let validFromMonth = element.valid_from.toLocaleString('en-US',{month:'short'})
                        let validFromYear = element.valid_from.getFullYear()
                        
                     %>
+                <div class="row mt-3">
+                  <div class="card-title d-flex  col-auto">
+                    <span style="font-size: 3.5rem"><%= validFromDate %></span>
                     <div class="row mt-3">
-                      <div class="card-title d-flex  col-auto" >
-                        <span style="font-size: 3.5rem"><%= validFromDate %></span>
-                        <div class="row mt-3">
-                          <div
-                            class="col-auto vstack ms-1"
-                            style="border-right: 1px solid #000000; height: 50px"
-                          >
-                            <span class="month text-uppercase"><%= validFromMonth %></span
-                            ><span class="year text-uppercase"><%= validFromYear %></span>
-                          </div>
-                          <!-- <div class="col-auto "><span>12:00 </span></div> -->
-                        </div>
+                      <div class="col-auto vstack ms-1" style="border-right: 1px solid #000000; height: 50px">
+                        <span class="month text-uppercase"><%= validFromMonth %></span><span class="year text-uppercase"><%= validFromYear %></span>
                       </div>
-                      <% let validToDate = ("0" + element.valid_to.getDate()).slice(-2);
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
+                    </div>
+                  </div>
+                  <% let validToDate = ("0" + element.valid_to.getDate()).slice(-2);
         
                       let validToMonth = element.valid_to.toLocaleString('en-US',{month:'short'})
                          let validToYear = element.valid_to.getFullYear()
                       %>
-                      <div class="card-title d-flex col-auto" >
-                        <span class="day" style="font-size: 3.5rem"><%= validToDate %></span>
-                        <div class="row mt-3">
-                          <div class="col-auto vstack ms-1">
-                            <span class="month text-uppercase"><%= validToMonth %></span
-                            ><span class="year text-uppercase"><%= validToYear %></span>
-                          </div>
-                          <!-- <div class="col-auto "><span>12:00 </span></div> -->
-                        </div>
+                  <div class="card-title d-flex col-auto">
+                    <span class="day" style="font-size: 3.5rem"><%= validToDate %></span>
+                    <div class="row mt-3">
+                      <div class="col-auto vstack ms-1">
+                        <span class="month text-uppercase"><%= validToMonth %></span><span class="year text-uppercase"><%= validToYear %></span>
                       </div>
+                      <!-- <div class="col-auto "><span>12:00 </span></div> -->
                     </div>
-                    <% let validFromTimeH = ("0" + element.valid_from.getHours()).slice(-2);
+                  </div>
+                </div>
+                <% let validFromTimeH = ("0" + element.valid_from.getHours()).slice(-2);
                         let validFromTimeM = ("0" + element.valid_from.getMinutes()).slice(-2);
                         let validToTimeH = ("0" + element.valid_to.getHours()).slice(-2);
                         let validToTimeM = ("0" + element.valid_to.getMinutes()).slice(-2);
                        %>
-                    <div class="row " style="position: relative; bottom: 25px;">
-                        <div class="col-auto ms-1 me-5"><%= validFromTimeH %>:<%= validFromTimeM %></div>
-                        <div class="col-auto ms-4"><%= validToTimeH %>:<%= validToTimeM %></div>  
-                    </div>
-    
-                    
-                    <div class="quizname h4"> <%=element.name %></div>
-                    <div class="quizmark"><%=element.marks %> marks</div>
-                    <div><i class="fas fa-stopwatch me-1"></i><%=element.duration %> minutes</div>
-                  
-                  </div>
-    
-                  </div>
-                   <!-- <div class="card-footer"><span class="badge rounded-pill" style="background-color:rgb(0, 56, 101); font-size: 14px;"><i class="far fa-clock "></i>  &nbsp; Starts in 2 Hrs 23 Minutes 2 Secs
-            </span><span></span></div> -->
+                <div class="row " style="position: relative; bottom: 25px;">
+                  <div class="col-auto ms-1 me-5"><%= validFromTimeH %>:<%= validFromTimeM %></div>
+                  <div class="col-auto ms-4"><%= validToTimeH %>:<%= validToTimeM %></div>
                 </div>
-            
-            <%}%>
+
+
+                <div class="quizname h4"> <%=element.name %></div>
+                <div class="quizmark"><%=element.marks %> marks</div>
+                <div><i class="fas fa-stopwatch me-1"></i><%=element.duration %> minutes</div>
+
+              </div>
+
+            </div>
+            <!-- <div class="card-footer"><span class="badge rounded-pill" style="background-color:rgb(0, 56, 101); font-size: 14px;"><i class="far fa-clock "></i>  &nbsp; Starts in 2 Hrs 23 Minutes 2 Secs
+            </span><span></span></div> -->
+          </div>
+
+          <%}%>
 
             <% }) %>
-          </div>
-    </div>
-  </section>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!--MAIN-->
 </div>
-<!--MAIN-->
-</div>
+<%- include("./upcomingQuizTimmer") %>
 <script src="/scripts/studentSidebar.js"></script>
+<script>
+  //I'm adding this section so I don't have to keep updating this pen every year :-)
+  //remove this if you don't need it
+  var timmer=null;
+  function quizTimmer(time, name) {
 
+    let countDownDate = new Date();
+    let validtime = new Date(time).getTime();
+    countDownDate.setTime(countDownDate.getTime() + validtime);
+    if(timmer!=null){
+          clearInterval(timmer);
+          timmer=null;
+        }
+     timmer = setInterval(function() {
+      // Get today's date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = validtime - now;
+      // Time calculations for days, hours, minutes and seconds
+      var days=Math.floor(
+        (distance /(1000*60*60*24))
+      );
+      var hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Display the result in the element with id="demo"
+      document.getElementById("countdown").innerHTML =
+        "Quiz will be activated in " + days + ":" + hours + ":" + minutes + ":" + seconds;
+
+    }, 1000)
+    $('#timmerModal').modal('show');
+    document.getElementById("quizTimmerModal").innerHTML = name;
+  }
+</script>
 <%- include('../partials/footer2') -%>
