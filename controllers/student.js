@@ -18,7 +18,6 @@ async function login(req, res) {
         req.body.password
     );
     if (data != null) {
-        req.session.errors = { text: "Logged in", icon: "success" };
         let token = jwt.sign(
             {
                 _id: data._id,

@@ -218,11 +218,18 @@ async function quizDetails(req, res) {
 }
 
 async function getGroups(req, res) {
+    let errors = null;
+    if(req.session.errors)
+    {
+        errors = req.session.errors;
+        req.session.errors = null;
+    }
     let dept_data = await adminServices.fetchDepartments();
     let group_data = await adminServices.fetchGroups();
     res.render("./admin/groups", {
         dept_data: dept_data,
         group_data: group_data,
+        errors
     });
 }
 
@@ -237,7 +244,7 @@ async function addGroup(req, res) {
         };
     } else {
         let group = await adminServices.addGroup(req.body.group, obj);
-        if (group === 1) {
+        if (group) {
             req.session.errors = {
                 text: `Group Created Successfully`,
                 icon: "success",
@@ -251,7 +258,11 @@ async function addGroup(req, res) {
     }
     res.redirect("/admin/groups");
 }
+async function viewGroup(req, res) {
+    let students = await adminServices.viewGroup(req.body.group);
 
+    res.json(students.students);
+}
 module.exports = {
     addDepartment,
     adminDashboard,
@@ -273,4 +284,5 @@ module.exports = {
     deleteStudent,
     getGroups,
     addGroup,
+    viewGroup,
 };

@@ -4,6 +4,7 @@ const subjects = require("../models/subjects");
 const teachers = require("../models/teachers");
 const students = require("../models/students");
 const quizzes = require("../models/quizzes");
+const groups = require("../models/groups");
 const mailer = require("../controllers/mailer");
 const md5 = require("md5");
 
@@ -259,10 +260,20 @@ async function fetchGroups() {
     return group_data;
 }
 
+async function getStudentId(enrollment) {
+    let id = await students.findOne(
+        { enrollment: enrollment, is_active: 1 },
+        { _id: 1 }
+    );
+    console.log(id);
+    return id;
+}
+
 async function addGroup(groupName, obj) {
     let student_ids = [];
     for (let index = 0; index < obj.length; index++) {
         const element = obj[index];
+        console.log(element);
         let id = await getStudentId(element["Enrollment No"]);
         student_ids.push(id._id);
     }
@@ -275,7 +286,12 @@ async function addGroup(groupName, obj) {
     await group.save();
     return group._id;
 }
-
+async function viewGroup(group_id) {
+    let group = await groups
+        .findOne({ _id: group_id })
+        .populate("students", "enrollment");
+    return group;
+}
 module.exports = {
     departmentFetch,
     newDepartment,
@@ -301,6 +317,7 @@ module.exports = {
     deleteStudent,
     fetchGroups,
     addGroup,
+    viewGroup,
 };
 //Role=0 Teacher accept
 //Add subject,Delete,Edit

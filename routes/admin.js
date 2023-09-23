@@ -25,7 +25,10 @@ router.get("/students", adminControllers.students);
 router.get("/quiz", adminControllers.quiz);
 router.post("/getQuiz", adminControllers.getQuiz);
 router.get("/quiz/quizDetails/:quizId",adminControllers.quizDetails);
+
 router.get("/groups", adminControllers.getGroups);
+router.post("/addGroup" , upload.single("excel") , adminControllers.addGroup);
+router.post("/viewGroup" , adminControllers.viewGroup);
 
 router.post("/addTeacher", adminControllers.addTeacher);
 router.get("/teachers", adminControllers.teachers);
