@@ -1,3 +1,24 @@
+<style>
+	li {
+  display: inline-block;
+  font-size: 1.5em;
+  list-style-type: none;
+  padding: 0.6em;
+  text-transform: uppercase;
+  background-color: rgb(248, 244, 238);
+}
+
+li span {
+	color: red;
+	text-align: center;
+  display: block;
+  font-size: 2.5rem;
+}
+
+
+
+</style>
+
 <div
 	class="modal fade"
 	id="timmerModal"
@@ -5,7 +26,7 @@
 	aria-labelledby="quizTimmerModal"
 	aria-hidden="true"
 >
-	<div class="modal-dialog modal-dialog-centered">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title h3" id="quizTimmerModal"></h5>
@@ -19,7 +40,13 @@
 				<div class="modal-body">
 					<div class="container">
                         <div id="countdown" class="h3">
-							<h5>Available Soon</h5>
+							<h3 class="text-center"><b>Quiz will be activated in</b></h3>
+							<ul>
+								<li><span id="days"></span>day</li>
+								<li><span id="hours"></span>Hrs</li>
+								<li><span id="minutes"></span>Min</li>
+								<li><span id="seconds"></span>Sec</li>
+							  </ul>
                         </div>
                       </div>
 				</div>

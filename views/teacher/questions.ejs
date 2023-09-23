@@ -196,7 +196,9 @@
                         topicqdetail.forEach(ele=>{
                             html+=`<li>${ele}</li>`;
                         });
-                        html+="</ul></div></div></div><div><div class='modalQuestion me-2'><h4><b>Created By :</b></h4></div><div class='modalQuestion'>"+
+                        html+="</ul></div></div></div><div><div class='modalQuestion me-2'><h4><b>Time required(in Seconds) :</b></h4></div><div class='modalQuestion'>"+
+                        data.time_required
+                        html+="</div></div></div><div><div class='modalQuestion me-2'><h4><b>Created By :</b></h4></div><div class='modalQuestion'>"+
                         data.created_by.username +
                         "</div></div></div>";
                     $(".modal-body").html(html);

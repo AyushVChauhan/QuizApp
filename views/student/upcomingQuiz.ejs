@@ -197,12 +197,17 @@
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       // Display the result in the element with id="demo"
-      document.getElementById("countdown").innerHTML =
-        "Quiz will be activated in " + days + ":" + hours + ":" + minutes + ":" + seconds;
+    //   document.getElementById("countdown").innerHTML =
+    //     "Quiz will be activated in " + days + ":" + hours + ":" + minutes + ":" + seconds;
 
-    }, 1000)
+    document.getElementById("days").innerText = days;
+    document.getElementById("hours").innerText = hours;
+    document.getElementById("minutes").innerText = minutes;
+    document.getElementById("seconds").innerText = seconds;
+  }, 1000)
     $('#timmerModal').modal('show');
     document.getElementById("quizTimmerModal").innerHTML = name;
   }
+
 </script>
 <%- include('../partials/footer2') -%>
