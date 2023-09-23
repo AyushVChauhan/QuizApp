@@ -289,8 +289,10 @@ async function history(req, res) {
     let studentId = student_data["_id"];
 
     let quizzes = await studentServices.history(studentId);
-
-    res.render("./student/history",{errors, quizzes});
+    
+    let stringified=JSON.stringify(quizzes);
+    stringified= Buffer.from(JSON.stringify(quizzes)).toString('base64') 
+    res.render("./student/history",{errors, quizzes,stringified});
 
 }
 

@@ -18,21 +18,24 @@
         </div>
         <div class="accordion" id="questions">
             <% questions.questions_answers.forEach((element,index) => { %>
-            <div class="accordion-item">
+            <div class="accordion-item ">
                 <h2 class="accordion-header">
                     <button
-                        class="accordion-button"
+                        class="accordion-button collapsed "
                         type="button"
                         data-bs-toggle="collapse"
+                      
                         data-bs-target="#<%= element.question._id %>"
                         aria-expanded="false"
                         aria-controls="<%= element.question._id %>"
+                        
                     >
                     <div class="row">
                         <div class="col-auto">
-                            <%= index + 1 %>.)
+                            <%= index + 1 %>).
+                            <%- (element.marks == 0 ? ((element.question.answer == element.answer) ? '&nbsp;&nbsp;&#x2714;' : '&nbsp;&nbsp;&#x274C') : '&nbsp;&nbsp;&#x2714;') %>
                         </div>
-                        <div class="col-auto">
+                        <div class="col-auto <%- (element.marks == 0 ? ((element.question.answer == element.answer) ? 'text-success' : 'text-danger') : 'text-success') %>">
                             <%- element.question.question %>
                         </div>
                     </div>
@@ -51,11 +54,30 @@
                             <div class="col-2 text-end">
                                 Marks: <%= element.question.marks %>
                             </div>
-                            <div class="col-10 mt-2">
+                            <div class="col-9 mt-2">
                                 Correct Answer: <%= element.question.answer %>
                             </div>
-                            <div class="col-2 text-end mt-2">
+                            <div class="col-3 text-end mt-2">
                                 Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %>
+                               
+                            </div>
+                            <% let dif="" %>
+                            <% if (element.question.difficulty==1) { %>
+                                <% dif="Easy" %>
+                            <% } %>
+                            <% if (element.question.difficulty==2) { %>
+                                <% dif="Medium" %>
+                            <% } %>
+                            <% if (element.question.difficulty==3) { %>
+                                <% dif="Hard" %>
+                            <% } %>
+                            <div class="col-8 mt-2" style="line-break: anywhere;">
+                                Difficulty: <%= dif %><br>
+                                Topic: <%= element.question.course_outcome_id[0].topic %>
+                            </div>
+                            <div class="col-4 text-end mt-2">
+                                Time Spent: <%= element.time_spent %> Seconds<br>
+                                Time Expected: <%= element.question.time_required %> Seconds
                             </div>
                         </div>
                     </div>

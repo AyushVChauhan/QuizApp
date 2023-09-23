@@ -65,13 +65,18 @@
     <!-- Main -->
     <main class="main-container">
         <div class="row mb-3">
-            <div class="col h1">Quiz Analysis</div>
+            <div class="col-3 h1 text-start">Quiz Analysis</div>
+            <div
+                class="col-6 d-flex align-items-center justify-content-center h3"
+            >
+                You scored <%=myMarks%> out of <%=totalMarks%>
+            </div>
         </div>
 
         <div class="row text-center mb-5">
-            <div class="col-4">
+            <div class="col-6 h1">
                 <button
-                    class="btn rounded-pill"
+                    class="btn rounded-pill btn-lg"
                     style="background-color: blue"
                     id="chartBtn"
                     onclick="showChart()"
@@ -79,33 +84,33 @@
                     Difficulty
                 </button>
             </div>
-            <div class="col-4">
+            <div class="col-6 h1">
                 <button
-                    class="btn rounded-pill"
+                    class="btn rounded-pill btn-lg"
                     id="studentBtn"
                     onclick="showStudent()"
                 >
                     Topic
                 </button>
             </div>
-            <div class="col-4">
+            <!-- <div class="col-4 h1">
                 <button
-                    class="btn btn-primary rounded-pill"
+                    class="btn btn-primary rounded-pill btn-lg"
                     id="questionBtn"
                     onclick="showQuestion()"
                 >
                     Questions
                 </button>
-            </div>
+            </div> -->
         </div>
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col h3 offset-1">
                 You are in top <%-inTop.toFixed(0)%>%
             </div>
             <div class="col h3 offset-1">
                 You scored <%=myMarks%> out of <%=totalMarks%>
             </div>
-        </div>
+        </div> -->
         <div id="chartDetails">
             <div class="h3 text-center">Marks Wise Analysis</div>
             <div class="row" style="border: 1px solid">
@@ -145,10 +150,10 @@
             </div>
         </div>
 
-        <div  id="studentDetails">
+        <div id="studentDetails">
             <div class="h3 text-center">Marks Wise Analysis</div>
             <div class="row" style="border: 1px solid">
-                <div id="topicMarks" class="col-6 " ></div>
+                <div id="topicMarks" class="col-6"></div>
                 <div
                     id="topicMarksPerformance"
                     class="col-6"
@@ -287,6 +292,7 @@
             topicSeries2.push(ele[1].totalMarks - ele[1].marks);
         });
         var options = {
+            colors: ["#00E396", "#C70039"],
             series: [
                 {
                     name: "Correct Marks",
@@ -305,6 +311,7 @@
                     show: false,
                 },
             },
+
             responsive: [
                 {
                     breakpoint: 2000,
@@ -586,9 +593,13 @@
     function difficultyMarks() {
         var options = {
             series: [
-                (difficultyDetails[0][1].marks /
-                    difficultyDetails[0][1].totalMarks) *
-                    100,
+                parseFloat(
+                    (
+                        (difficultyDetails[0][1].marks /
+                            difficultyDetails[0][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -611,9 +622,13 @@
         chart.render();
         var options = {
             series: [
-                (difficultyDetails[1][1].marks /
-                    difficultyDetails[1][1].totalMarks) *
-                    100,
+                parseFloat(
+                    (
+                        (difficultyDetails[1][1].marks /
+                            difficultyDetails[1][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -636,9 +651,13 @@
         chart.render();
         var options = {
             series: [
-                (difficultyDetails[2][1].marks /
-                    difficultyDetails[2][1].totalMarks) *
-                    100,
+                parseFloat(
+                    (
+                        (difficultyDetails[2][1].marks /
+                            difficultyDetails[2][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -955,6 +974,7 @@
             difficultySeries2.push(ele[1].totalMarks - ele[1].marks);
         });
         var options = {
+            colors: ["#00E396", "#C70039"],
             series: [
                 {
                     name: "Correct Marks",
@@ -1077,6 +1097,7 @@
         });
         let difficultySeries = [];
         let difficultySeries2 = [];
+        let difficultySeries3 = [];
         difficultyDetails.forEach((ele) => {
             difficultySeries.push(ele[1].timeRequired);
             difficultySeries2.push(ele[1].timeSpent);

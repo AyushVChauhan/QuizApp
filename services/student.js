@@ -288,12 +288,15 @@ async function otherQuiz(studentId) {
 
 async function history(studentId) {
     let session = await sessions
-        .find({ student_id: studentId })
+        .find({ student_id: studentId ,is_active:1})
         .populate({
             path: "quiz_id",
             populate: { path: "subject_id", model: "subjects" },
         })
-        .populate("questions_answers.question");
+        .populate({
+            path: "questions_answers.question",
+           
+        });
     if (session) {
         let curr_date = new Date();
         for (let index = 0; index < session.length; index++) {
@@ -302,14 +305,19 @@ async function history(studentId) {
                 element.questions_answers = [];
             }
         }
+        
     }
+    console.log(session);
     return session;
 }
 
 async function quizHistory(studentId, sessionId) {
     let session = await sessions
         .findOne({ _id: sessionId, student_id: studentId })
-        .populate("questions_answers.question")
+        .populate({
+            path: "questions_answers.question",
+            populate: { path: "course_outcome_id", model: "course_outcomes" },
+        })
         .populate("quiz_id");
     let curr_date = new Date();
     if (session.quiz_id.valid_to > curr_date) {
