@@ -58,9 +58,26 @@
                                 Correct Answer: <%= element.question.answer %>
                             </div>
                             <div class="col-3 text-end mt-2">
-                                <p>Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %></p>
-                                <p>Time Spent: <%= element.time_spent %> Seconds<br>
-                                Time Expected: <%= element.question.time_required %> Seconds</p>
+                                Obtained Marks: <%= (element.marks == 0 ? ((element.question.answer == element.answer) ? element.question.marks : 0) : element.marks) %>
+                               
+                            </div>
+                            <% let dif="" %>
+                            <% if (element.question.difficulty==1) { %>
+                                <% dif="Easy" %>
+                            <% } %>
+                            <% if (element.question.difficulty==2) { %>
+                                <% dif="Medium" %>
+                            <% } %>
+                            <% if (element.question.difficulty==3) { %>
+                                <% dif="Hard" %>
+                            <% } %>
+                            <div class="col-8 mt-2" style="line-break: anywhere;">
+                                Difficulty: <%= dif %><br>
+                                Topic: <%= element.question.course_outcome_id[0].topic %>
+                            </div>
+                            <div class="col-4 text-end mt-2">
+                                Time Spent: <%= element.time_spent %> Seconds<br>
+                                Time Expected: <%= element.question.time_required %> Seconds
                             </div>
                         </div>
                     </div>

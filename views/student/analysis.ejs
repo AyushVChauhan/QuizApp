@@ -66,8 +66,11 @@
     <main class="main-container">
         <div class="row mb-3">
             <div class="col-3 h1 text-start">Quiz Analysis</div>
-            <div class="col-6 d-flex align-items-center justify-content-center h3">You scored <%=myMarks%> out of <%=totalMarks%></div>
-            <div class="col-3 d-flex align-items-center justify-content-end h4">You are in top <%-inTop.toFixed(0)%>%</div>
+            <div
+                class="col-6 d-flex align-items-center justify-content-center h3"
+            >
+                You scored <%=myMarks%> out of <%=totalMarks%>
+            </div>
         </div>
 
         <div class="row text-center mb-5">
@@ -147,10 +150,10 @@
             </div>
         </div>
 
-        <div  id="studentDetails">
+        <div id="studentDetails">
             <div class="h3 text-center">Marks Wise Analysis</div>
             <div class="row" style="border: 1px solid">
-                <div id="topicMarks" class="col-6 " ></div>
+                <div id="topicMarks" class="col-6"></div>
                 <div
                     id="topicMarksPerformance"
                     class="col-6"
@@ -289,7 +292,7 @@
             topicSeries2.push(ele[1].totalMarks - ele[1].marks);
         });
         var options = {
-            colors:['#00E396','#C70039'],
+            colors: ["#00E396", "#C70039"],
             series: [
                 {
                     name: "Correct Marks",
@@ -307,12 +310,8 @@
                 toolbar: {
                     show: false,
                 },
-                
-                   
-                
             },
-           
-        
+
             responsive: [
                 {
                     breakpoint: 2000,
@@ -594,9 +593,13 @@
     function difficultyMarks() {
         var options = {
             series: [
-                parseFloat(((difficultyDetails[0][1].marks /
-                    difficultyDetails[0][1].totalMarks) *
-                    100).toFixed(2)),
+                parseFloat(
+                    (
+                        (difficultyDetails[0][1].marks /
+                            difficultyDetails[0][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -619,9 +622,13 @@
         chart.render();
         var options = {
             series: [
-            parseFloat(((difficultyDetails[1][1].marks /
-                    difficultyDetails[1][1].totalMarks) *
-                    100).toFixed(2)),
+                parseFloat(
+                    (
+                        (difficultyDetails[1][1].marks /
+                            difficultyDetails[1][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -644,9 +651,13 @@
         chart.render();
         var options = {
             series: [
-            parseFloat(((difficultyDetails[2][1].marks /
-                    difficultyDetails[2][1].totalMarks) *
-                    100).toFixed(2)),
+                parseFloat(
+                    (
+                        (difficultyDetails[2][1].marks /
+                            difficultyDetails[2][1].totalMarks) *
+                        100
+                    ).toFixed(2)
+                ),
             ],
             chart: {
                 height: 220,
@@ -963,7 +974,7 @@
             difficultySeries2.push(ele[1].totalMarks - ele[1].marks);
         });
         var options = {
-            colors:['#00E396','#C70039'],
+            colors: ["#00E396", "#C70039"],
             series: [
                 {
                     name: "Correct Marks",
@@ -1090,7 +1101,6 @@
         difficultyDetails.forEach((ele) => {
             difficultySeries.push(ele[1].timeRequired);
             difficultySeries2.push(ele[1].timeSpent);
-            
         });
         var options = {
             series: [
