@@ -173,7 +173,7 @@ function renderCos(val) {
         allCos.forEach((ele) => {
             if (ele.count > 0) {
                 body += `<div class="accordion-item"><h2 class="accordion-header"><button
-                        class="accordion-button"
+                        class="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#CO${ele.co}"
@@ -500,14 +500,14 @@ function nextPage() {
         marks_questions.forEach((element) => {
             if (ele.marks == element.marks) {
                 if (ele.count < element.count) {
-                    alertMarks += `${element.count - ele.count} questions of ${ele.marks} marks<br>`;
+                    alertMarks += `${element.count - ele.count} questions of ${ele.marks} marks, `;
                 }
             }
         });
     });
     if(alertMarks.length > 1)
     {
-        Swal.fire({title:"Required Questions",text:alertMarks,icon:"warning"});
+        Swal.fire({title:"Required Questions",text:alertMarks.substring(0,alertMarks.length-2),icon:"warning"});
     }
     else
     {
@@ -522,6 +522,7 @@ function nextPage() {
                     window.open("/teacher/addQuiz/setCompulsaryQuestions","_self");
                 }
                 else {
+                    // Swal.fire({icon:"success",text:"Quiz created Successfully"});
                     window.open("/teacher","_self");
                 }
             }

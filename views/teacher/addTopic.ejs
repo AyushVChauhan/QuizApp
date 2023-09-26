@@ -16,9 +16,10 @@
 					aria-label="Close"
 				></button>
 			</div>
-			<form action="/teacher/addTopic" method="POST">
+			<form action="/teacher/addTopic" method="POST" id="topicForm">
 				<div class="modal-body">
 					<select class="form-control" id="subjectModal" name="subject">
+						<option selected>Select Subject</option>
 						<% subData.forEach(element=> { %>
 						<option value="<%= element._id %>">
 							<%= element.code %> : <%=element.name%>
@@ -50,7 +51,7 @@
 					>
 						Close
 					</button>
-					<button type="submit" class="btn btn-primary">
+					<button type="submit" class="btn btn-primary" onclick="addTopic(event)">
 						Save changes
 					</button>
 				</div>
@@ -58,3 +59,14 @@
 		</div>
 	</div>
 </div>
+<script>
+	function addTopic(e){
+		console.log(document.getElementById("subjectModal").value);
+		console.log(document.getElementById("coSelectModal").value);
+		
+		if((document.getElementById("subjectModal").value=="Select Subject") || (document.getElementById("coSelectModal").value=="Select CO")){
+			e.preventDefault();
+			Swal.fire({icon:"error",text:"Please fill all the fields"})
+		}
+	}
+</script>

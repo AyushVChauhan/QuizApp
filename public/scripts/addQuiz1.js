@@ -1,7 +1,22 @@
 let count = 2;
 let sum = 0;
 
+$(document).ready(function () {
+    // console.log(document.getElementById("guest").value);
+    $("#guest").change(function () {
+    if(document.getElementById("guest").checked == true)
+    {
+        let x = document.getElementById("guestDate");
+        x.style.display = "block";
+    }
+    else{
+        let x = document.getElementById("guestDate");
+        x.style.display = "none"; 
+    }
+})
+})
 function nextPage() {
+    let errors ="Please fill out ";
     let marks_questions = [];
     let elements = document.getElementsByClassName("temp");
     for (let index = 0; index < elements.length; index+=2) {
@@ -12,16 +27,21 @@ function nextPage() {
             let marks = element1.value;
             let count = element2.value;
             marks_questions.push({marks:marks,count:count});
+            // console.log(marks_questions);
+        }
+        else{
+            errors+="Marks,No.of Questions, "
         }
     }
+    
     let name = document.getElementById("quizname").value;
+    if(!name){
+        errors+="Quiz Name, "
+    }
     let subject_id = document.getElementById("subject").value;
-    let valid_from = document.getElementById("quizdate_from").value;
-    let valid_to = document.getElementById("quizdate_to").value;
-    let visible_from = document.getElementById("visible_from").value;
-    let visible_to = document.getElementById("visible_to").value;
-    let duration = document.getElementById("duration").value;
-    let marks = document.getElementById("total").innerHTML;
+    if(subject_id=="0"){
+        errors+="Subject, "
+    }
     let guest_flag = 0;
     // console.log(document.getElementById('guest').checked);
     if (document.getElementById("guest").checked == true) {
@@ -29,6 +49,36 @@ function nextPage() {
     } else {
         guest_flag = 0;
     }
+    let valid_from = document.getElementById("quizdate_from").value;
+    if(!valid_from){
+        errors+="Valid Quiz Start Date, "
+    }
+    let valid_to = document.getElementById("quizdate_to").value;
+    
+    if((!valid_to) || (valid_to<valid_from)){
+        errors+="Valid Quiz End Date, "
+    }
+    let visible_from = document.getElementById("visible_from").value;
+    if(!visible_from || (visible_from>valid_from) || (visible_from>valid_to)){
+        errors+="Valid Quiz visible from date(should be less than quiz date), "
+    }
+    let visible_to = document.getElementById("visible_to").value;
+    if((!visible_to || (visible_to<valid_to) || (visible_to<valid_from) || (visible_to<visible_from))&&  guest_flag==1){
+        errors+="Valid Quiz End Date for guests(should be greater than quiz date), "
+    }
+    let duration = document.getElementById("duration").value;
+    if(!duration){
+        errors+="Duration Time, "
+    }
+
+    let marks = document.getElementById("total").innerHTML;
+   
+   console.log();
+    if(errors!="Please fill out ")
+    {
+        Swal.fire({icon:"error",text:errors.substring(0,errors.length-2)})
+    }
+    else{
     $.ajax({
         type: "POST",
         url: "/teacher/addQuiz/setQuiz",
@@ -50,6 +100,7 @@ function nextPage() {
         },
     });
 }
+}
 function show() {
     $("#total").html(sum);
 }
@@ -58,8 +109,8 @@ function disableAdd() {
     let a = document.querySelectorAll(".temp");
     sum = 0;
     console.log(a);
-    for (let i = 0; i <= a.length - 1; i++) {
-        if (!a[i].value) {
+    for (let i = 0; i <= a.length - 1; i=i+2) {
+        if (!a[i].value || (a[i+1].value==null)) {
             document.getElementById("rowAdder").disabled = true;
         } else {
             document.getElementById("rowAdder").disabled = false;

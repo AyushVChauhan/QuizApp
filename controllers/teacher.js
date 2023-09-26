@@ -287,6 +287,8 @@ async function setQuestions(req, res) {
             });
         });
         await teacherServices.setQuestions(myIds, req.session.quizId);
+    req.session.errors = { text: "Quiz created Successfully", icon: "success" };
+
         res.json({ next_page: 0 });
     } else {
         req.session.marks_questions = myArr;
@@ -322,7 +324,7 @@ async function setCompulsaryQuestionsPost(req, res) {
         compulsaryQuestions,
         randomQuestions
     );
-    req.session.errors = { text: "Quiz Added Successfully", icon: "success" };
+    req.session.errors = { text: "Quiz created Successfully", icon: "success" };
     res.json({ success: 1 });
 }
 async function myQuizPage(req, res) {

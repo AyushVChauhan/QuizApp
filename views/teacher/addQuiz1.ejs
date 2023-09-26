@@ -72,11 +72,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="visible" class="form-label">Quiz On Air </label
+                    <label for="visible" class="form-label">Quiz visible from(On student Dashboard) </label
                     ><br />
-                    <!-- The date from student can view quiz -->
-                    <div class="row">
-                        <div class="col-md-6">
+                  
                             <input
                                 type="datetime-local"
                                 class="form-control"
@@ -85,19 +83,7 @@
                                 placeholder="FROM"
                                 required
                             />
-                        </div>
-                        <div class="col-md-6">
-                            <!-- Datetime? -->
-                            <input
-                                type="datetime-local"
-                                class="form-control"
-                                id="visible_to"
-                                name="visible_to"
-                                placeholder="TO"
-                                required
-                            />
-                        </div>
-                    </div>
+                      
                 </div>
                 <div class="mb-3">
                     <label for="duration" class="form-label"
@@ -124,6 +110,19 @@
                     <label class="form-check-label" for="guest"
                         >Guest students allowed</label
                     >
+                </div>
+                <div class="mb-3" id="guestDate">
+                    <label for="visible_to" class="form-label"
+                        >Quiz End Date (For Guests)
+                    </label>
+                    <input
+                        type="datetime-local"
+                        class="form-control"
+                        id="visible_to"
+                        name="visible_to"
+                        placeholder="TO"
+                        required
+                    />
                 </div>
                 <div>
                     <button type="reset" class="btn btn-secondary">

@@ -68,7 +68,7 @@ function disableAdd() {
     if (
         !document.querySelector(
             ".optionAddRemove > div:last-of-type > input:last-child "
-        ).value
+        ).value.trim()
     ) {
         document.getElementById("rowAdder").disabled = true;
     } else {
@@ -130,14 +130,34 @@ function fileChange(e) {
     // fileData += "</tr></table>";
 }
 function addQuestion() {
+    let errors ="Please fill out ";
     let marks = $("#marks").val();
+    if(!marks){
+        errors+="Marks, "
+    }
     let type = $("#type").val();
+    if(type=="Select Question Type"){
+        errors+="Question type, "
+    }
     let difficulty = $('input[name="opt"]:checked').val();
+    if(!difficulty){
+        errors+="Question Difficulty, "
+    }
     let time_required = $("#time_required").val();
+    if(!time_required){
+        errors+="Time required, "
+    }
+    if(!editor.getData()){
+        errors+="Question, "
+    }
     let allOptions = [];
     for (let index = 1; index < count; index++) {
         const element = options["option" + index];
         allOptions.push(element);
+    }
+    console.log(allOptions);
+    if(!allOptions[allOptions.length-1]){
+        errors+="Option, "
     }
     let answer = null;
     if(type==1){
@@ -146,6 +166,14 @@ function addQuestion() {
     else if(type==2){
         answer=$("#answer").val();
     }
+    if((!answer || answer=="Select Answer")&& type!=3){
+        errors+="Answer, "
+    }
+    if(errors!="Please fill out ")
+    {
+        Swal.fire({icon:"error",text:errors.substring(0,errors.length-2)})
+    }
+    else{
     $.ajax({
         type: "post",
         url: "/teacher/addQuestion/question",
@@ -212,6 +240,7 @@ function addQuestion() {
             }
         },
     });
+}
 }
 // FOR PREVIEW
 // TO CREATE ARRAY OF OPTIONS
