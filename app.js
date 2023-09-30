@@ -46,7 +46,7 @@ app.use(
         saveUninitialized: false,
     })
 );
-mongoose.connect("mongodb://0.0.0.0:27017/QuizApp");
+mongoose.connect("mongodb+srv://ayush:Ayush2525@quizapp.lwibz0k.mongodb.net/QuizApp");
 
 app.get("/", (req, res) => {
     let cookie = req.cookies.auth;
