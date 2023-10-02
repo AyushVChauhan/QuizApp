@@ -1,13 +1,13 @@
-const teachers = require("../models/teachers");
-const students = require("../models/students");
-const groups = require("../models/groups");
-const subjects = require("../models/subjects");
-const sessions = require("../models/sessions");
+const teachers = require("../Models/teachers");
+const students = require("../Models/students");
+const groups = require("../Models/groups");
+const subjects = require("../Models/subjects");
+const sessions = require("../Models/sessions");
 
-const departments = require("../models/departments");
-const courseOutcomes = require("../models/courseOutcomes");
-const questions = require("../models/questions");
-const quizzes = require("../models/quizzes");
+const departments = require("../Models/departments");
+const courseOutcomes = require("../Models/courseOutcomes");
+const questions = require("../Models/questions");
+const quizzes = require("../Models/quizzes");
 const { default: mongoose } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");

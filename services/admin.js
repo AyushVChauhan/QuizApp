@@ -1,10 +1,10 @@
 const { default: mongoose } = require("mongoose");
-const departments = require("../models/departments");
-const subjects = require("../models/subjects");
-const teachers = require("../models/teachers");
-const students = require("../models/students");
-const quizzes = require("../models/quizzes");
-const groups = require("../models/groups");
+const departments = require("../Models/departments");
+const subjects = require("../Models/subjects");
+const teachers = require("../Models/teachers");
+const students = require("../Models/students");
+const quizzes = require("../Models/quizzes");
+const groups = require("../Models/groups");
 const mailer = require("../controllers/mailer");
 const md5 = require("md5");
 

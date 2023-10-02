@@ -1,5 +1,5 @@
-const departments = require("../models/departments");
-const students = require("../models/students");
+const departments = require("../Models/departments");
+const students = require("../Models/students");
 
 async function departmentFetch(name) {
     let fetchData = await departments.findOne({name:name});
