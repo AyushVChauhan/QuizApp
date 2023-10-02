@@ -441,6 +441,7 @@ async function generateReport(req, res) {
         chart,
         fileName,
         studentDetails,
+        totalMarks:report[1],
     });
     // res.download(`./public/files/reports/${fileName}.xlsx`)
 }

@@ -1,270 +1,387 @@
 <%- include('../partials/header') %>
-<link rel="stylesheet" href="/stylesheets/style_temp.css" />
-<link rel="stylesheet" href="/stylesheets/datatables.css" />
-<%- include('../partials/footer') -%>
-<script
-    type="text/javascript"
-    src="https://www.gstatic.com/charts/loader.js"
-></script>
-<script>
-    let chartDetails = JSON.parse(`<%- JSON.stringify(chart) %>`);
-</script>
-<style>
-    #datatable_wrapper {
-        margin: 0;
-    }
-    #datatable1_wrapper {
-        margin: 0;
-    }
-    .expandingDiv {
-        margin-top: -100%;
-        transition: all 1s;
-    }
-    #basicDetails {
-        opacity: 0;
-    }
-    #studentDetails {
-        opacity: 0;
-    }
-    #questionDetails {
-        opacity: 0;
-    }
-    .animate {
-        animation: fadeIn 1s linear forwards;
-    }
-    #downloadReport {
-        transition: all 0.5s;
-    }
-    #downloadReport:hover {
-        background-color: white;
-        color: #11467b;
-        box-shadow: 5px 5px;
-        border: none;
-    }
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-</style>
-<%- include('../partials/footer') -%>
-<link
-    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,1000&display=swap"
-    rel="stylesheet"
-/>
+    <link rel="stylesheet" href="/stylesheets/style_temp.css" />
+    <link rel="stylesheet" href="/stylesheets/datatables.css" />
+    <%- include('../partials/footer') -%>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<div class="grid-container">
-    <!-- Header -->
-    <%- include("./teacherHeader") %>
-    <!-- End Header -->
+        <script>
+            let chartDetails = JSON.parse(`<%- JSON.stringify(chart) %>`);
+            let totalMarks = `<%- totalMarks %>`;
+        </script>
+        <style>
+            #datatable_wrapper {
+                margin: 0;
+            }
 
-    <!-- Sidebar -->
-    <%- include("./teacherSidebar") %>
-    <!-- End Sidebar -->
+            #datatable1_wrapper {
+                margin: 0;
+            }
 
-    <!-- Main -->
-    <main class="main-container">
-        <div class="row mb-3">
-            <div class="col h1">Quiz Details</div>
-        </div>
-        <div class="row text-center mb-5">
-            <div class="col-4">
-                <button
-                    class="btn rounded-pill"
-                    style="background-color: blue"
-                    id="chartBtn"
-                    onclick="showChart()"
-                >
-                    Chart Analysis
-                </button>
-            </div>
-            <div class="col-4">
-                <button
-                    class="btn rounded-pill"
-                    id="studentBtn"
-                    onclick="showStudent()"
-                >
-                    Student Details
-                </button>
-            </div>
-            <div class="col-4">
-                <button
-                    class="btn btn-primary rounded-pill"
-                    id="downloadReport"
-                    onclick="window.open('/files/reports/<%= fileName %>.xlsx', '_blank')"
-                >
-                    Download Report
-                </button>
-            </div>
-        </div>
+            .expandingDiv {
+                margin-top: -100%;
+                transition: all 1s;
+            }
 
-        <div class="row" id="chartDetails">
-            <div id="piechart" class="col-6" style="height: 400px"></div>
-            <div id="histogram" class="col-6" style="height: 400px"></div>
-        </div>
-        <div class="row" id="studentDetails">
-            <!-- srno
+            #basicDetails {
+                opacity: 0;
+            }
+
+            #studentDetails {
+                opacity: 0;
+            }
+
+            #questionDetails {
+                opacity: 0;
+            }
+
+            .animate {
+                animation: fadeIn 1s linear forwards;
+            }
+
+            #downloadReport {
+                transition: all 0.5s;
+            }
+
+            #downloadReport:hover {
+                background-color: white;
+                color: #11467b;
+                box-shadow: 5px 5px;
+                border: none;
+            }
+
+            @keyframes fadeIn {
+                0% {
+                    opacity: 0;
+                }
+
+                100% {
+                    opacity: 1;
+                }
+            }
+        </style>
+        <%- include('../partials/footer') -%>
+            <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,1000&display=swap"
+                rel="stylesheet" />
+
+            <div class="grid-container">
+                <!-- Header -->
+                <%- include("./teacherHeader") %>
+                    <!-- End Header -->
+
+                    <!-- Sidebar -->
+                    <%- include("./teacherSidebar") %>
+                        <!-- End Sidebar -->
+
+                        <!-- Main -->
+                        <main class="main-container">
+                            <div class="row mb-3">
+                                <div class="col h1">Quiz Details</div>
+                            </div>
+                            <div class="row text-center mb-5">
+                                <div class="col-4">
+                                    <button class="btn rounded-pill" style="background-color: blue" id="chartBtn"
+                                        onclick="showChart()">
+                                        Chart Analysis
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn rounded-pill" id="studentBtn" onclick="showStudent()">
+                                        Student Details
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-primary rounded-pill" id="downloadReport"
+                                        onclick="window.open('/files/reports/<%= fileName %>.xlsx', '_blank')">
+                                        Download Report
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row" id="chartDetails">
+                                <div id="piechart" class="col-6" style="height: 400px"></div>
+                                <div id="histogram" class="col-6" style="height: 400px"></div>
+                            </div>
+                            <div class="row" id="studentDetails">
+                                <!-- srno
             student
             Status
             Marks -->
-            <table
-                class="uk-table uk-table-hover uk-table-striped text-center"
-                id="datatable"
-            >
-                <thead>
-                    <th class="text-center">Sr no.</th>
-                    <th class="text-center">Enrollment No.</th>
-                    <th class="text-center">Date Given</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Marks</th>
-                    <th class="text-center">Evaluate</th>
-                </thead>
-                <tbody>
-                    <% studentDetails.forEach((element,index) => { %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= element[0] %></td>
-                        <td>
-                            <%- element[1].start_time == "Absent" ? "Absent" :
-                            (new
-                            Date(element[1].start_time)).toLocaleString('en-GB').split(",")[0]
-                            %>
-                        </td>
-                        <td>
-                            <%- element[1].remark == null ? "Submitted" :
-                            element[1].remark %>
-                        </td>
-                        <td><%= element[1].totalMarks %></td>
-                        <% if (element[1].remark == null) { %>
-                        <td>
-                            <%- element[1].evaluate == 0 ? `<a href="/teacher/evaluate/${element[1].sessionId}" ><i class="fa-solid fa-clipboard-list fa-lg text-warning ms-3" title="Evaluate" ></i></a>` : `<a href="/teacher/evaluate/${element[1].sessionId}" ><i class="fa-solid fa-clipboard-list fa-lg text-success ms-3" title="Evaluate" ></i></a>` %>
-                        </td>
-                        <% } else { %> 
-                        <td>
-                            <i class='fa-solid fa-clipboard-list fa-lg text-danger ms-3' title='Evaluate'></i>
-                        </td> 
-                        <% } %>
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
-        <!-- End Main -->
-    </main>
-</div>
-<script>
-    function showChart() {
-        $("#chartDetails").show();
-        $("#studentDetails").hide();
-        document.getElementById("chartDetails").classList.add("animate");
-        $("#chartBtn").css("background-color", "white");
-        $("#chartBtn").css("color", "#11467b");
-        $("#chartBtn").css("box-shadow", "5px 5px");
+                                <table class="uk-table uk-table-hover uk-table-striped text-center" id="datatable">
+                                    <thead>
+                                        <th class="text-center">Sr no.</th>
+                                        <th class="text-center">Enrollment No.</th>
+                                        <th class="text-center">Date Given</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Marks</th>
+                                        <th class="text-center">Evaluate</th>
+                                    </thead>
+                                    <tbody>
+                                        <% studentDetails.forEach((element,index)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= index + 1 %>
+                                                </td>
+                                                <td>
+                                                    <%= element[0] %>
+                                                </td>
+                                                <td>
+                                                    <%- element[1].start_time=="Absent" ? "Absent" : (new
+                                                        Date(element[1].start_time)).toLocaleString('en-GB').split(",")[0]
+                                                        %>
+                                                </td>
+                                                <td>
+                                                    <%- element[1].remark==null ? "Submitted" : element[1].remark %>
+                                                </td>
+                                                <td>
+                                                    <%= element[1].totalMarks %>
+                                                </td>
+                                                <% if (element[1].remark==null) { %>
+                                                    <td>
+                                                        <%- element[1].evaluate==0 ? `<a
+                                                            href="/teacher/evaluate/${element[1].sessionId}"><i
+                                                                class="fa-solid fa-clipboard-list fa-lg text-warning ms-3"
+                                                                title="Evaluate"></i></a>` : `<a
+                                                                href="/teacher/evaluate/${element[1].sessionId}"><i
+                                                                    class="fa-solid fa-clipboard-list fa-lg text-success ms-3"
+                                                                    title="Evaluate"></i></a>` %>
+                                                    </td>
+                                                    <% } else { %>
+                                                        <td>
+                                                            <i class="fa-solid fa-clipboard-list fa-lg text-danger ms-3"
+                                                                title="Evaluate"></i>
+                                                        </td>
+                                                        <% } %>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- End Main -->
+                        </main>
+            </div>
+            <script>
+                function showChart() {
+                    $("#chartDetails").show();
+                    $("#studentDetails").hide();
+                    document.getElementById("chartDetails").classList.add("animate");
+                    $("#chartBtn").css("background-color", "white");
+                    $("#chartBtn").css("color", "#11467b");
+                    $("#chartBtn").css("box-shadow", "5px 5px");
 
-        $("#studentBtn").css("background-color", "#11467b");
-        $("#studentBtn").css("color", "white");
-        $("#studentBtn").css("box-shadow", "none");
-    }
-    function showStudent() {
-        $("#chartDetails").hide();
-        $("#studentDetails").show();
-        document.getElementById("studentDetails").classList.add("animate");
-        $("#chartBtn").css("background-color", "#11467b");
-        $("#chartBtn").css("color", "white");
-        $("#chartBtn").css("box-shadow", "none");
+                    $("#studentBtn").css("background-color", "#11467b");
+                    $("#studentBtn").css("color", "white");
+                    $("#studentBtn").css("box-shadow", "none");
+                    drawChart();
+                    drawHistogram();
+                }
+                function showStudent() {
+                    $("#chartDetails").hide();
+                    $("#studentDetails").show();
+                    document.getElementById("studentDetails").classList.add("animate");
+                    $("#chartBtn").css("background-color", "#11467b");
+                    $("#chartBtn").css("color", "white");
+                    $("#chartBtn").css("box-shadow", "none");
 
-        $("#studentBtn").css("background-color", "white");
-        $("#studentBtn").css("color", "#11467b");
-        $("#studentBtn").css("box-shadow", "5px 5px");
-    }
+                    $("#studentBtn").css("background-color", "white");
+                    $("#studentBtn").css("color", "#11467b");
+                    $("#studentBtn").css("box-shadow", "5px 5px");
+                }
 
-    $(document).ready(() => {
-        var myTable;
+                $(document).ready(() => {
+                    var myTable;
 
-        myTable = $("#datatable").DataTable({
-            pagingType: "simple_numbers",
-            language: {
-                paginate: {
-                    previous: "<",
-                    next: ">",
-                },
-            },
-        });
-        $("#studentBtn").click();
-        var myTable1;
+                    myTable = $("#datatable").DataTable({
+                        pagingType: "simple_numbers",
+                        language: {
+                            paginate: {
+                                previous: "<",
+                                next: ">",
+                            },
+                        },
+                    });
+                    $("#studentBtn").click();
+                    var myTable1;
 
-        myTable1 = $("#datatable1").DataTable({
-            pagingType: "simple_numbers",
-            language: {
-                paginate: {
-                    previous: "<",
-                    next: ">",
-                },
-            },
-            columnDefs: [
-                // Center align the header content of column 1
-                { className: "dt-head-center", targets: [0, 1] },
-            ],
-        });
-    });
+                    myTable1 = $("#datatable1").DataTable({
+                        pagingType: "simple_numbers",
+                        language: {
+                            paginate: {
+                                previous: "<",
+                                next: ">",
+                            },
+                        },
+                        columnDefs: [
+                            // Center align the header content of column 1
+                            { className: "dt-head-center", targets: [0, 1] },
+                        ],
+                    });
+                });
 
-    google.charts.load("current", { packages: ["corechart"] });
-    google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var options = {
+                        series: [
+                            chartDetails.pending,
+                            chartDetails.submitted,
+                            chartDetails.disqualify,
+                            chartDetails.absent,
+                        ],
+                        chart: {
+                            width: 380,
+                            type: "pie",
+                        },
+                        labels: ["Pending", "Submitted", "Disqualify", "Absent"],
+                        responsive: [
+                            {
+                                breakpoint: 2000,
+                                options: {
+                                    chart: {
+                                        width: 500,
+                                    },
+                                    legend: {
+                                        position: "bottom",
+                                    },
+                                },
+                            },
+                        ],
+                    };
 
-    function drawChart() {
-        console.log(chartDetails);
-        var data = google.visualization.arrayToDataTable([
-            ["Student Status", "Number of students"],
-            ["Submitted", chartDetails.submitted],
-            ["Absent", chartDetails.absent],
-            ["Pending", chartDetails.pending],
-            ["Disqualify", chartDetails.disqualify],
-        ]);
+                    var chart = new ApexCharts(
+                        document.querySelector("#piechart"),
+                        options
+                    );
+                    chart.render();
+                }
 
-        var options = {
-            title: "Student Status",
-        };
+                function drawHistogram() {
+                    let arr = [];
+                    totalMarks = 30;
+                    for (let i = 0; i <= 4; i++) {
+                        arr.push({ low: Math.ceil(i * totalMarks / 5.0), high: Math.floor((i + 1) * totalMarks / 5.0), count: 0 });
+                        chartDetails.student.forEach(ele => {
+                            if (totalMarks % 5 == 0) {
+                                if (ele.totalMarks >= Math.ceil(i * totalMarks / 5.0) && ele.totalMarks <= Math.floor((i + 1) * totalMarks / 5.0)) {
+                                    arr[i].count++;
+                                }
+                            }
+                            else {
+                                if (i == 0) {
+                                    if (ele.totalMarks >= Math.ceil(i * totalMarks / 5.0) && ele.totalMarks <= Math.floor((i + 1) * totalMarks / 5.0)) {
+                                        arr[i].count++;
+                                    }
+                                }
+                                else {
+                                    if (ele.totalMarks > Math.ceil(i * totalMarks / 5.0) && ele.totalMarks <= Math.floor((i + 1) * totalMarks / 5.0)) {
+                                        arr[i].count++;
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    var options = {
+                        series: [{
+                            name: 'Number of Students',
+                            data: [...arr.map(ele => ele.count)]
+                        }],
+                        chart: {
+                            type: 'bar',
+                            height: 350,
 
-        var chart = new google.visualization.PieChart(
-            document.getElementById("piechart")
-        );
+                        },
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                legend: {
+                                    position: 'bottom',
+                                    offsetX: -10,
+                                    offsetY: 0
+                                }
+                            }
+                        }],
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                borderRadius: 10,
+                                dataLabels: {
+                                    total: {
+                                        enabled: true,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontWeight: 900
+                                        }
+                                    }
+                                }
+                            },
+                        },
+                        xaxis: {
+                            type: 'string',
+                            categories: [...arr.map(ele => `${ele.low}-${ele.high}`)],
+                        },
+                        legend: {
+                            show: true,
+                            position: 'bottom',
+                        },
+                        fill: {
+                            opacity: 1
+                        }
+                    };
 
-        chart.draw(data, options);
-    }
-    google.charts.load("current", { packages: ["corechart"] });
-    google.charts.setOnLoadCallback(drawHistogram);
-    function drawHistogram() {
-        var data = google.visualization.arrayToDataTable([
-            [
-                { type: "string", label: "enrollment" },
-                { type: "number", label: "Marks" },
-            ],
-        ]);
+                    var chart = new ApexCharts(document.querySelector("#histogram"), options);
+                    chart.render();
 
-        chartDetails.student.forEach(function (element, index, array) {
-            data.addRow([element.enrollment, element.totalMarks]);
-        });
+                }
 
-        var options = {
-            title: "Marks wise students",
-            legend: { position: "none" },
-            colors: ["#4D3C77"],
-            hAxis: {
-                title: "Total Marks",
-            },
-            vAxis: {
-                title: "Number of Students",
-            },
-        };
 
-        var chart = new google.visualization.Histogram(
-            document.getElementById("histogram")
-        );
-        chart.draw(data, options);
-    }
-</script>
-<!-- <script src="/scripts/addSubject.js"></script> -->
-<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
+                function drawChart1() {
+                    console.log(chartDetails);
+                    var data = google.visualization.arrayToDataTable([
+                        ["Student Status", "Number of students"],
+                        ["Submitted", chartDetails.submitted],
+                        ["Absent", chartDetails.absent],
+                        ["Pending", chartDetails.pending],
+                        ["Disqualify", chartDetails.disqualify],
+                    ]);
+
+                    var options = {
+                        title: "Student Status",
+                    };
+
+                    var chart = new google.visualization.PieChart(
+                        document.getElementById("piechart")
+                    );
+
+                    chart.draw(data, options);
+                }
+
+                function drawHistogram2() {
+                    var data = google.visualization.arrayToDataTable([
+                        [
+                            { type: "string", label: "enrollment" },
+                            { type: "number", label: "Marks" },
+                        ],
+                    ]);
+
+                    chartDetails.student.forEach(function (element, index, array) {
+                        data.addRow([element.enrollment, element.totalMarks]);
+                    });
+
+                    var options = {
+                        title: "Marks wise students",
+                        legend: { position: "none" },
+                        colors: ["#4D3C77"],
+                        hAxis: {
+                            title: "Total Marks",
+                        },
+                        vAxis: {
+                            title: "Number of Students",
+                        },
+                    };
+
+                    var chart = new google.visualization.Histogram(
+                        document.getElementById("histogram")
+                    );
+                    chart.draw(data, options);
+                }
+            </script>
+            <!-- <script src="/scripts/addSubject.js"></script> -->
+            <%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
