@@ -28,6 +28,7 @@ async function login(req, res) {
             process.env.JWT_SECRET
         );
         res.cookie("auth", token);
+        res.cookie("username", req.body.username);
         res.redirect("/student");
     } else {
         res.redirect("/student/login");

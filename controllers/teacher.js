@@ -40,6 +40,7 @@ async function login(req, res) {
             process.env.JWT_SECRET
         );
         res.cookie("auth", token);
+        res.cookie("username", req.body.username);
         if (data.role === 0) {
             // console.log("login");
             res.redirect("/teacher");

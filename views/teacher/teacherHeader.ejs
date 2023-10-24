@@ -6,7 +6,13 @@
 	<div class="header-left">
 		<h2 class="mt-3">QuizApp</h2>
 	</div>
-	<div class="header-right">
-		<i class="fa fa-fw fa-user fa-xl"></i>&nbsp;Username
+	<div class="header-right" id="username">
+		<i class="fa fa-fw fa-user fa-xl"></i>&nbsp;
 	</div>
 </header>
+<script>
+	let username=document.cookie;
+	// console.log(username.split(";")[1].split("=")[1]);
+	username = username.split(";")[1].split("=")[1];
+	document.getElementById("username").innerHTML += username;
+</script>
