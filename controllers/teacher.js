@@ -230,7 +230,7 @@ async function setQuiz(req, res) {
 	let data = req.body;
 	data.subject_id = new mongoose.Types.ObjectId(data.subject_id);
 	data.created_by = id.id;
-	console.log(data);
+	data.is_active = 0;
 	let setQuiz = await teacherServices.setQuiz(data);
 	req.session.quizId = setQuiz;
 	res.json({ success: 1 });
