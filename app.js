@@ -10,58 +10,58 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 ["log", "warn", "error"].forEach((methodName) => {
-    const originalMethod = console[methodName];
-    console[methodName] = (...args) => {
-        let initiator = "unknown place";
-        try {
-            throw new Error();
-        } catch (e) {
-            if (typeof e.stack === "string") {
-                let isFirst = true;
-                for (const line of e.stack.split("\n")) {
-                    const matches = line.match(/^\s+at\s+(.*)/);
-                    if (matches) {
-                        if (!isFirst) {
-                            // first line - current function
-                            // second line - caller (what we are looking for)
-                            initiator = matches[1];
-                            break;
-                        }
-                        isFirst = false;
-                    }
-                }
-            }
-        }
-        originalMethod.apply(console, [...args, "\n", `  at ${initiator}`]);
-    };
+	const originalMethod = console[methodName];
+	console[methodName] = (...args) => {
+		let initiator = "unknown place";
+		try {
+			throw new Error();
+		} catch (e) {
+			if (typeof e.stack === "string") {
+				let isFirst = true;
+				for (const line of e.stack.split("\n")) {
+					const matches = line.match(/^\s+at\s+(.*)/);
+					if (matches) {
+						if (!isFirst) {
+							// first line - current function
+							// second line - caller (what we are looking for)
+							initiator = matches[1];
+							break;
+						}
+						isFirst = false;
+					}
+				}
+			}
+		}
+		originalMethod.apply(console, [...args, "\n", `  at ${initiator}`]);
+	};
 });
 app.use(cookieParser());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
-    session({
-        secret: process.env.JWT_SECRET,
-        resave: false,
-        saveUninitialized: false,
-    })
+	session({
+		secret: process.env.JWT_SECRET,
+		resave: false,
+		saveUninitialized: false,
+	})
 );
-mongoose.connect("mongodb+srv://ayush:PASSWORD@quizapp.lwibz0k.mongodb.net/QuizApp");
+mongoose.connect("mongodb+srv://ayush:Ayush2525@quizapp.lwibz0k.mongodb.net/QuizApp");
 
 app.get("/", (req, res) => {
-    let cookie = req.cookies.auth;
-    if (cookie) {
-        let data = jwt.verify(cookie, process.env.JWT_SECRET);
-        if (data.role === 0) {
-            res.redirect("/student");
-        } else if (data.role === 1) {
-            res.redirect("/teacher");
-        } else if (data.role === 2) {
-            res.redirect("/admin");
-        }
-    } else {
-        res.redirect("/student/login");
-    }
+	let cookie = req.cookies.auth;
+	if (cookie) {
+		let data = jwt.verify(cookie, process.env.JWT_SECRET);
+		if (data.role === 0) {
+			res.redirect("/student");
+		} else if (data.role === 1) {
+			res.redirect("/teacher");
+		} else if (data.role === 2) {
+			res.redirect("/admin");
+		}
+	} else {
+		res.redirect("/student/login");
+	}
 });
 const studentRoutes = require("./routes/student");
 app.use("/student", studentRoutes);
@@ -70,17 +70,17 @@ app.use("/teacher", teacherRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
-app.get("/logout", (req, res)=>{
-    res.clearCookie("auth");
-    res.redirect("/");
+app.get("/logout", (req, res) => {
+	res.clearCookie("auth");
+	res.redirect("/");
 })
 
-app.get("*",(req,res)=>{
-    res.render("./partials/errorPage");
+app.get("*", (req, res) => {
+	res.render("./partials/errorPage");
 })
 
 app.listen(process.env.PORT, () => {
-    console.log("http://localhost:3000");
+	console.log("http://localhost:3000");
 });
 
 // run1();
