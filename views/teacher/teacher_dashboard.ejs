@@ -1,4 +1,4 @@
-<%- include('../partials/header') %> 
+<%- include('../partials/header') %>
 <link rel="stylesheet" href="/stylesheets/style_temp.css" />
 
 <div class="grid-container">
@@ -20,20 +20,19 @@
 				<div onclick="window.open('/teacher/myQuiz','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
 					<div class="dashboard-tile-header h4">My Quiz</div>
-					<p>11</p>
-						
+					<p><%= myQuiz %></p>
 				</div>
 				<div class="col-md-1 extraBox"></div>
 				<div onclick="window.open('/teacher/viewQuiz','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
 					<div class="dashboard-tile-header h4">All Quiz</div>
-					<p>11</p>
+					<p><%= allQuiz %></p>
 				</div>
 				<div class="col-md-1 extraBox"></div>
 				<div onclick="window.open('/teacher/questions','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building"></i> -->
 					<div class="dashboard-tile-header h4">Questions</div>
-					<p>11</p>
+					<p><%= questions %></p>
 				</div>
 			</div>
 
@@ -42,13 +41,13 @@
 				<div onclick="window.open('/teacher/students','_self')" class="col-md-3 m-1 box">
 					<!-- <i class="fa-regular fa-building"></i> -->
 					<div class="dashboard-tile-header h4">Students</div>
-					<p>11</p>
+					<p><%= students %></p>
 				</div>
 				<div class="col-md-1 extraBox"></div>
-				<div  onclick="window.open('/teacher/subjects','_self')" class="col-md-3 m-1 box dashboard-tile">
+				<div onclick="window.open('/teacher/subjects','_self')" class="col-md-3 m-1 box dashboard-tile">
 					<!-- <i class="fa-regular fa-building fa-xl"></i> -->
 					<div class="dashboard-tile-header h4">Subjects</div>
-					<p>11</p>
+					<p><%= subjects %></p>
 				</div>
 				<div class="col-md-2 extraBox"></div>
 			</div>
@@ -58,9 +57,7 @@
 </div>
 <%- include('../partials/footer') -%>
 <script>
-	const allSideMenu = document.querySelectorAll(
-		"#sidebar .side-menu.top li a"
-	);
+	const allSideMenu = document.querySelectorAll("#sidebar .side-menu.top li a");
 
 	allSideMenu.forEach((item) => {
 		const li = item.parentElement;
@@ -74,5 +71,4 @@
 	});
 </script>
 <!-- <script src="/scripts/addSubject.js"></script> -->
-<%- include('../partials/sweetalert') %>
-<%- include('../partials/footer2') -%>
+<%- include('../partials/sweetalert') %> <%- include('../partials/footer2') -%>
