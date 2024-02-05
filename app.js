@@ -46,7 +46,6 @@ app.use(
 		saveUninitialized: false,
 	})
 );
-mongoose.connect("mongodb+srv://ayush:Ayush2525@quizapp.lwibz0k.mongodb.net/QuizApp");
 
 app.get("/", (req, res) => {
 	let cookie = req.cookies.auth;
@@ -78,9 +77,10 @@ app.get("/logout", (req, res) => {
 app.get("*", (req, res) => {
 	res.render("./partials/errorPage");
 })
-
-app.listen(process.env.PORT, () => {
-	console.log("http://localhost:3000");
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+	app.listen(process.env.PORT, () => {
+		console.log("http://localhost:3000");
+	});
 });
 
 // run1();
