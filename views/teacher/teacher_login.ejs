@@ -1,95 +1,75 @@
 <%- include('../partials/header') -%>
 <style>
-  .main-container{
-    font-family: "Nunito Sans", sans-serif;
-    background-color: rgb(239, 238, 238);
-  }
-  #sub{
-	background-color: rgb(0, 56, 101);
-}
-#sub:hover{
-	background-color: rgb(255, 255, 255);
-	/* color:  rgb(0, 56, 101); */
-	color: rgb(0, 56, 101);
-	border: 1.5px solid rgb(0, 56, 101);
-}
-#stud_login{
-  color:#ffffff;
-}
-#stud_login:hover{
-  color:#6C757D;
-  background-color: #ffffff;
-}
+	.main-container {
+		font-family: "Nunito Sans", sans-serif;
+		background-color: rgb(239, 238, 238);
+	}
+	#sub {
+		background-color: rgb(0, 56, 101);
+	}
+	#sub:hover {
+		background-color: rgb(255, 255, 255);
+		/* color:  rgb(0, 56, 101); */
+		color: rgb(0, 56, 101);
+		border: 1.5px solid rgb(0, 56, 101);
+	}
+	#stud_login {
+		color: #ffffff;
+	}
+	#stud_login:hover {
+		color: #6c757d;
+		background-color: #ffffff;
+	}
 </style>
 <div class="main-container vh-100">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card" style="border-radius: 1rem">
-          <div class="card-body p-5 text-center">
-            <div class="mb-4" style="font-size: xx-large;color:#11467b">Teacher Login</div>
+	<div class="container py-5 h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 col-md-8 col-lg-6 col-xl-5">
+				<div class="card" style="border-radius: 1rem">
+					<div class="card-body p-5 text-center">
+						<div class="mb-4" style="font-size: xx-large; color: #11467b">Teacher Login</div>
 
-            <form action="/teacher/login" method="POST" id="teacher_login">
-              <div class="form-outline mb-4">
-                <input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Username"
-                  class="form-control form-control-lg"
-                />
-              </div>
+						<form action="/teacher/login" method="POST" id="teacher_login">
+							<div class="form-outline mb-4">
+								<input type="text" name="username" id="username" placeholder="Username" class="form-control form-control-lg" />
+							</div>
 
-              <div class="form-outline mb-4">
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  class="form-control form-control-lg"
-                />
-              </div>
-              <div id="html_element" class="mb-4"></div>
-              
-              <button class="btn btn-primary btn-lg btn-block" id="sub" value="abc" type="button">
-              Login
-              </button>
-              <button class="btn btn-secondary btn-lg " id="stud_login" type="button">
-              Student Login
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+							<div class="form-outline mb-4">
+								<input type="password" name="password" id="password" placeholder="Password" class="form-control form-control-lg" />
+							</div>
+							<div id="html_element" class="mb-4 d-flex justify-content-center"></div>
+
+							<button class="btn btn-primary btn-lg btn-block" id="sub" value="abc" type="button">Login</button>
+							<button class="btn btn-secondary btn-lg" id="stud_login" type="button">Student Login</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<script
-  src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-  async
-  defer
-></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 <script type="text/javascript">
-  var onloadCallback = function () {
-    grecaptcha.render("html_element", {
-      sitekey: "6Ld2GmwoAAAAAPOzh30PbgjdiROXUs4hLgEjcy7c",
-    });
-  };
+	var onloadCallback = function () {
+		grecaptcha.render("html_element", {
+			sitekey: "6Ld2GmwoAAAAAPOzh30PbgjdiROXUs4hLgEjcy7c",
+		});
+	};
 </script>
 <%- include('../partials/footer') -%>
 <script>
-  $(document).ready(function () {
-    $("#sub").click(function (e) {
-      let captcha = grecaptcha.getResponse();
-      if (captcha.length == 0) {
-        e.preventDefault();
-        alert("captcha invalid");
-      } else {
-        $("#teacher_login").submit();
-      }
-    });
-    $("#stud_login").click(function (e) {
-    location.href="/student/login";  
-    });
-  });
+	$(document).ready(function () {
+		$("#sub").click(function (e) {
+			let captcha = grecaptcha.getResponse();
+			if (captcha.length == 0) {
+				e.preventDefault();
+				alert("captcha invalid");
+			} else {
+				$("#teacher_login").submit();
+			}
+		});
+		$("#stud_login").click(function (e) {
+			location.href = "/student/login";
+		});
+	});
 </script>
